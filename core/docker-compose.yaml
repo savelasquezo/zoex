@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # DjangorestFaremwork
+  core:
+    container_name: django
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  # PostgreSQL  
+  db:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: zoex
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 4oPn2655Lmn
+    ports:
+    - 5432:5432
+    volumes:
+      - .dbdata:/var/lib/postgresql
+
+  # Cache 
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379

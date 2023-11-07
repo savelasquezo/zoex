@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/layout.jsx",
+    "src/app/page.tsx"
+, "src/components/tooltip.jsx", "src/components/navbar.jsx", "src/components/navbar/index2.jsx", "src/components/navbar/container.jsx", "src/components/navbar/authentication.jsx", "src/utils/passwordValidation.js", "src/components/navbar/emailConfirmModal.js", "src/app/api/auth/[...nextauth]/route.js", "src/app/api/login/route.js", "src/app/api/images/route.js", "src/components/carousel.jsx"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
