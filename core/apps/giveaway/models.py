@@ -7,8 +7,8 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
-def ImageUploadTo(instance, filename):
-    return f"uploads/banner/{filename}"
+def ImageUploadTo(instance, id):
+    return f"uploads/banner/{id}"
 
 class Giveaway(models.Model):
 
@@ -65,7 +65,7 @@ class Giveaway(models.Model):
 class TicketsGiveaway(models.Model):
     giveaway = models.ForeignKey(Giveaway, on_delete=models.CASCADE)
     email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
-    ticket = models.SmallIntegerField (_("Ticket"), null=False, blank=False, help_text="#Ticket")
+    ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)

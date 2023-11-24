@@ -60,7 +60,7 @@ class Lottery(models.Model):
 class TicketsLottery(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.CASCADE)
     email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
-    ticket = models.SmallIntegerField (_("Ticket"), null=False, blank=False, help_text="#Ticket")
+    ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)

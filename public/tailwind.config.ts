@@ -14,6 +14,21 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        whatsapp: {
+          default: '#25d366',
+          hover: '#128C7E',
+        },
+        facebook: {
+          default: '#1877f2',
+          hover: '#0e5a9b',
+        },
+        instagram: {
+          default: '#e1306c',
+          hover: '#c13584',
+        },
+        bitcoinOrange: '#FF9900',
+      },
     },
   },
   plugins: [

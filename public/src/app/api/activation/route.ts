@@ -22,7 +22,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Server responded with an error' });
     }
   } catch (error) {
-    console.error(error);
     return NextResponse.json({ error: 'There was an error with the network request' });
   }
 }

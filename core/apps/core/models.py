@@ -7,6 +7,7 @@ def ImageUploadTo(instance, id):
 class Core(models.Model):
     default = models.CharField(_("ZoeXConfig"), max_length=32, blank=True, null=True, default="ZoeXConfig")
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
+    hashtag = models.CharField(_("Hashtag"), max_length=16, blank=True, null=True, default="zoexwin")
 
     idx = models.SmallIntegerField(_("Indicativo"), blank=True, null=True, default=57)
     phone = models.CharField(_("Telefono"), max_length=64, blank=True, null=True)
@@ -16,7 +17,7 @@ class Core(models.Model):
 
     twitter = models.URLField(_("Twitter"), max_length=128, blank=True, null=True)
     facebook = models.URLField(_("Facebook"), max_length=128, blank=True, null=True)
-    linkedin = models.URLField(_("Linkedin"), max_length=128, blank=True, null=True)
+    instagram = models.URLField(_("Instagram"), max_length=128, blank=True, null=True)
 
     def __str__(self):
         return f"{self.default}"

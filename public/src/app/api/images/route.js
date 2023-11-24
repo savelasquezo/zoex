@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export const fetchImagenSliders = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fech-sliders/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-sliders/`,
       {
         method: 'GET',
         headers: {

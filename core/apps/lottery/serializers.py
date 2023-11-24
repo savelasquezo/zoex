@@ -5,3 +5,8 @@ class LotterySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Lottery
         fields = '__all__'
+
+class TicketsLotterySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TicketsLottery
+        fields = '__all__'

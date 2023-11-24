@@ -15,13 +15,14 @@ class CoreAdmin(admin.ModelAdmin):
     
     list_display = (
         "default",
+        "hashtag",
         "email",
         "phone",
         "address",
         )
 
     fConfig = {"fields": (
-        ("stream"),
+        ("stream","hashtag"),
         ("idx","phone"),
         ("email","address"),
         )}
@@ -29,7 +30,7 @@ class CoreAdmin(admin.ModelAdmin):
     fSocial = {"fields": (
         "twitter",
         "facebook",
-        "linkedin",
+        "instagram",
         )}
 
     fieldsets = (

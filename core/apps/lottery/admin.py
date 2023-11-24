@@ -19,11 +19,6 @@ class TicketsLotteryInline(admin.StackedInline):
         ),
     )
 
-    def get_readonly_fields(self, request, obj=None):
-        return [field.name for field in self.model._meta.fields]
-
-    def has_add_permission(self, request, obj=None):
-        return False
 
 
 class LotteryAdmin(admin.ModelAdmin):

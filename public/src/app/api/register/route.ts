@@ -6,11 +6,11 @@ interface RequestBody {
   email: string;
   password: string;
   re_password: string;
+  referred: string;
 }
 
 export async function POST(request: Request) {
   const body: RequestBody = await request.json();
-  console.log(body)
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/`, {
       method: 'POST',

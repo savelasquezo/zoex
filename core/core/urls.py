@@ -22,6 +22,7 @@ urlpatterns = [
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
     path("auth/", include("djoser.social.urls")),
+    path("api/user/", include("apps.user.urls")),
     path("api/core/", include("apps.core.urls")),
     path("api/lottery/", include("apps.lottery.urls")),
     path("api/giveaway/", include("apps.giveaway.urls")),

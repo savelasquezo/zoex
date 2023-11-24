@@ -1,7 +1,3 @@
-'use client';
-
-import { ToastError } from '@/components/toast/ToastError';
-import { ToastSuccess } from '@/components/toast/ToastSuccess';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CircleLoader from 'react-spinners/CircleLoader';
@@ -43,11 +39,10 @@ export default function Activation() {
 
     if (res.status !== 204) {
       const data = await res.json();
-      ToastError('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
-      console.log(data.error);
+      console.log('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
     } else {
 
-      ToastSuccess('Tu cuenta ha sido activada, ahora puedes hacer login!');
+      console.log('Tu cuenta ha sido activada, ahora puedes hacer login!');
       setActivated(true);
     }
     setLoading(false);
@@ -77,11 +72,13 @@ export default function Activation() {
           onMouseUp={() => setEffectRegister(false)}
           className={`${
             effectRegister &&
-            'duration-400 animate-click hover:translate-x-0.5  hover:translate-y-0.5 hover:shadow-neubrutalism-sm'
+            'duration-400 animate-click hover:shadow-neubrutalism-sm'
           }
                 text-md 
                 relative
+                uppercase
                 inline-flex
+                rounded-sm
                 w-full 
                 items-center
                 justify-center 
@@ -89,10 +86,10 @@ export default function Activation() {
                 border-dark-bg border-transparent
                 bg-green-500  px-4  py-2  text-sm
                 font-bold
-                text-white shadow-neubrutalism-md transition duration-300 ease-in-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-green-600  hover:shadow-neubrutalism-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
+                text-white shadow-neubrutalism-md transition duration-300 ease-in-out hover:bg-green-600  hover:shadow-neubrutalism-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
             `}
         >
-          Activate account
+          Activar
         </button>
       )}
     </div>

@@ -3,5 +3,6 @@ import apps.lottery.views as view
 
 
 urlpatterns = [
-    path('fech-lottery/', view.fechLottery.as_view(), name='fech-lottery'),
+    path('fetch-lottery/', view.fetchLottery.as_view(), name='fetch-lottery'),
+    path('fetch-lottery-tickets/', view.fetchTicketsLottery.as_view(), name='fetch-lottery-tickets'),
 ]
