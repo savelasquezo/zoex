@@ -4,9 +4,10 @@ import { useSession } from 'next-auth/react';
 
 export default function Page() {
   const { data: session } = useSession();
+
   return (
     <footer>
-      {session && <Footer session={session} />}
+      {session?.user && <Footer session={session} />}
     </footer>
   );
 }

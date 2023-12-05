@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+
 import { Session } from 'next-auth';
 
 import {AiOutlineClose, AiFillLock, AiFillUnlock} from 'react-icons/ai'
@@ -29,6 +30,10 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
     const [activeTab, setActiveTab] = useState('login');
   
     useEffect(() => {
+      if (searchParams.get('login')) {
+        setShowModal(true);
+        setActiveTab('login');
+      }
       if (searchParams.get('singup')) {
         setShowModal(true);
         setActiveTab('singup');
@@ -57,11 +62,11 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
 
     return (
         <main className="inline-flex items-center h-full ml-5 lg:w-2/5 lg:justify-end lg:ml-0 gap-x-3">
-            {session && session.user ? (
+            {session && session?.user? (
               <div className='inline-flex gap-x-4'>
                 <div className='bg-gray-950 shadow-inner rounded-full p-2 px-4 inline-flex items-center justify-between w-40'>
                   <span className='text-2xl text-gray-100 opacity-80'><LuBitcoin/></span>
-                  <p className='text-gray-100'>{session.user.balance}-BTC</p>
+                  <p className='text-gray-100'>{session?.user?.balance || ""}-BTC</p>
                 </div>
                 <button onClick={() => {signOut();}} className="bg-pink-700 hover:bg-pink-900 text-white uppercase text-xs font-semibold py-1 px-4 rounded transition-colors duration-300">Salir</button>
               </div>

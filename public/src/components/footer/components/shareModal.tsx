@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Session } from 'next-auth';
-import { fetchInfo } from '@/app/api/info/route';
+import { fetchInfo } from '@/app/api/images/info/route';
 
 import {
   FacebookShareButton,

@@ -18,12 +18,12 @@ class fetchImagesSlider(generics.ListAPIView):
 class fetchInfo(generics.GenericAPIView):
     serializer_class = serializers.CoreSerializer
     def get(self, request, *args, **kwargs):
-        queryset = models.Core.objects.get(default="ZoeXConfig")
-        if queryset:
+        try:
+            queryset = models.Core.objects.get(default="ZoeXConfig")
             serializer = self.get_serializer(queryset)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response({'detail': 'NotFound ZoeXConfig.'}, status=status.HTTP_404_NOT_FOUND)
 
 class fetchMessage(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):

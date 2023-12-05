@@ -87,7 +87,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
           return;
         }
 
-        const referred = searchParams.get('uuid');
+        const referred = searchParams.get('uuid') ?? 'N/A';
         const res = await fetch('/api/register', {
           method: 'POST',
           headers: {
@@ -112,7 +112,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
           setRegistrationSuccess(true);
         }
         setLoading(false);
-      };
+    };
 
     return (
         <div>

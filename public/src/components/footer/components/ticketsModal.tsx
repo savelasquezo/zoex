@@ -4,6 +4,8 @@ import ReactPaginate from 'react-paginate';
 import { fetchLotteryTickets } from '@/app/api/tickets/lottery/route';
 import { fetchGiveawayTickets } from '@/app/api/tickets/giveaway/route';
 
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+
 type TicketsModalProps = {
   closeModal: () => void;
   session: Session | null | undefined;
@@ -26,7 +28,7 @@ type GiveawayTicketType = {
 const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
   const [showModal, setShowModal] = useState(true);
   const [activeTab, setActiveTab] = useState('lottery-tickets');
-  const [tickets, setTickets] = useState<LotteryTicketType[]>([]);
+  const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketType[]>([]);
   const [giveawayTickets, setGiveawayTickets] = useState<GiveawayTicketType[]>([]);
   const [pageNumber, setPageNumber] = useState(0);
   const ticketsPerPage = 1;
@@ -39,7 +41,7 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
       fetchTickets(accessToken)
         .then((data) => {
           if (activeTab === 'lottery-tickets') {
-            setTickets(data);
+            setLotteryTickets(data);
           } else {
             setGiveawayTickets(data);
           }
@@ -50,73 +52,86 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
     }
   }, [activeTab, session]);
 
-  const pageCount = Math.ceil(activeTab === 'lottery-tickets' ? tickets.length : giveawayTickets.length) / ticketsPerPage;
+  const pageCount = Math.ceil(activeTab === 'lottery-tickets' ? lotteryTickets.length : giveawayTickets.length) / ticketsPerPage;
 
   const changePage = ({ selected }: { selected: number }) => {
     setPageNumber(selected);
   };
 
-  const displayTickets = (activeTab === 'lottery-tickets' ? tickets : giveawayTickets)
-  .slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage)
-  .map((ticket, index) => (
-    <li key={index} className="flex flex-row ticket-item">
-      <p>{activeTab === 'lottery-tickets' ? 'Lottery' : 'Giveaway'}: {activeTab === 'lottery-tickets' ? (ticket as LotteryTicketType).lottery : (ticket as GiveawayTicketType).giveaway}</p>
-      <p>Ticket: {ticket.ticket}</p>
-      <p>Date: {ticket.date}</p>
-      <p>Voucher: {ticket.voucher}</p>
-    </li>
-  ));
+  const displayTickets = (tickets: any[]) => {
+    return tickets.length > 0 ? (
+      <div>
+        <table className="min-w-full text-center text-sm font-light">
+          <thead className="font-medium text-white">
+            <tr className="border-b border-slate-900 uppercase text-xs">
+              <th scope="col" className="px-6 py-2">Lottery</th>
+              <th scope="col" className="px-6 py-2">Ticket</th>
+              <th scope="col" className="px-6 py-2">Date</th>
+              <th scope="col" className="px-6 py-2">Voucher</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tickets.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((ticket: any, index: number) => (
+              <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
+                <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{ticket.id}</td>
+                <td className="whitespace-nowrap px-6 py-2">{ticket.amount}</td>
+                <td className="whitespace-nowrap px-6 py-2">{ticket.date}</td>
+                <td className="whitespace-nowrap px-6 py-2">{ticket.voucher}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <p>No hay datos de retiro disponibles.</p>
+    );
+  };
 
   return (
-    <div>
+    <div className="h-72">
       <div className='absolute top-4 inline-flex gap-x-1 w-full justify-start items-center z-0'>
         <button onClick={() => setActiveTab('lottery-tickets')} className={`text-gray-100 rounded-lg px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'lottery-tickets' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Loteria</button>
         <button onClick={() => setActiveTab('giveaway-tickets')} className={`text-gray-100 rounded-lg px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'giveaway-tickets' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Sorteos</button>
       </div>
-
       {showModal && (
-        <div className="mt-10">
-          <div style={{ display: activeTab === 'lottery-tickets' ? 'block' : 'none' }} className={`tickets-list ${activeTab === 'giveaway-tickets' ? 'hidden' : ''}`}>
-            {tickets.length > 0 ? (
-              <>
-                <ul>{displayTickets}</ul>
-                <ReactPaginate
-                  previousLabel={'Anterior'}
-                  nextLabel={'Siguiente'}
-                  breakLabel={'...'}
-                  breakClassName={'break-me'}
-                  pageCount={pageCount}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={changePage}
-                  containerClassName={'pagination'}
-                  activeClassName={'active'}
-                />
-              </>
-            ) : (
-              <p>Cargando tickets...</p>
-            )}
+        <div className="mt-10 h-full w-full">
+          <div style={{ display: activeTab === 'lottery-tickets' ? 'block' : 'none' }} className={`h-full w-full ${activeTab === 'giveaway-tickets' ? 'hidden' : ''}`}>
+            <div className="relative h-full w-full text-gray-500">
+              <ul>{displayTickets(lotteryTickets)}</ul>
+              <ReactPaginate
+                previousLabel={<MdNavigateBefore/>}
+                nextLabel={<MdNavigateNext/>}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={0}
+                pageRangeDisplayed={5}
+                onPageChange={changePage}
+                className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+                nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+              />
+            </div>
           </div>
-          <div style={{ display: activeTab === 'giveaway-tickets' ? 'block' : 'none' }} className={`tickets-list ${activeTab === 'lottery-tickets' ? 'hidden' : ''}`}>
-            {giveawayTickets.length > 0 ? (
-              <>
-                <ul>{displayTickets}</ul>
-                <ReactPaginate
-                  previousLabel={'Anterior'}
-                  nextLabel={'Siguiente'}
-                  breakLabel={'...'}
-                  breakClassName={'break-me'}
-                  pageCount={Math.ceil(giveawayTickets.length / ticketsPerPage)}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={changePage}
-                  containerClassName={'pagination'}
-                  activeClassName={'active'}
-                />
-              </>
-            ) : (
-              <p>Cargando tickets...</p>
-            )}
+          <div style={{ display: activeTab === 'giveaway-tickets' ? 'block' : 'none' }} className={`h-full w-full ${activeTab === 'lottery-tickets' ? 'hidden' : ''}`}>
+            <div className="relative h-full w-full text-gray-500">
+              <ul>{displayTickets(giveawayTickets)}</ul>
+              <ReactPaginate
+                previousLabel={<MdNavigateBefore/>}
+                nextLabel={<MdNavigateNext/>}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={0}
+                pageRangeDisplayed={5}
+                onPageChange={changePage}
+                className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+                nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+              />
+            </div>
           </div>
         </div>
       )}

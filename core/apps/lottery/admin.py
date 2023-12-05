@@ -12,13 +12,15 @@ class TicketsLotteryInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            ("email","ticket"),
-            ("date","voucher"),
+            ('is_active','ticket','email'),
+            ('date','voucher','method'),
                 )
             }
         ),
     )
 
+    def get_readonly_fields(self, request, obj=None):
+        return ['email','ticket','is_active','date','method','voucher']
 
 
 class LotteryAdmin(admin.ModelAdmin):
@@ -43,7 +45,7 @@ class LotteryAdmin(admin.ModelAdmin):
             }
         ),
         (" ", {"fields": 
-            (("sold","ammount"),
+            (("sold","amount"),
              ("date_results","stream"),)
             }
         ),
@@ -54,7 +56,7 @@ class LotteryAdmin(admin.ModelAdmin):
     
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.id:
-            return ["lottery","prize","price","tickets","sold","ammount","date_results","stream"]
+            return ["lottery","prize","price","tickets","sold","amount","date_results","stream"]
         return []
 
     def get_fieldsets(self, request, obj=None):

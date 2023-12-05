@@ -9,10 +9,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'Animace': ['Animace', 'sans-serif'],
+        'Roboto': ['Roboto', 'sans-serif'],
+        'Montserrat': ['Montserrat', 'sans-serif'],
+        'Courier': ['Courier', 'sans-serif'],
+        'Poppins': ['Poppins', 'sans-serif'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
         whatsapp: {

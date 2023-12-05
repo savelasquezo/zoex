@@ -42,7 +42,7 @@ class GiveawayAdmin(admin.ModelAdmin):
             }
         ),
         (" ", {"fields": 
-            (("sold","ammount"),
+            (("sold","amount"),
              ("date_results","stream"),)
             }
         ),
@@ -53,7 +53,7 @@ class GiveawayAdmin(admin.ModelAdmin):
     
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.id:
-            return ["giveaway","prize","price","tickets","sold","ammount","date_results","stream"]
+            return ["giveaway","prize","price","tickets","sold","amount","date_results","stream"]
         return []
 
     def get_fieldsets(self, request, obj=None):

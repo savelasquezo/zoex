@@ -28,6 +28,11 @@ environ.Env.read_env()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
+CONFIRMO_KEY_DEVS = os.getenv('CONFIRMO_KEY_DEVS')
+CONFIRMO_KEY_TEST = os.getenv('CONFIRMO_KEY_TEST')
+
+APILAYER_KEY = os.getenv('APILAYER_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -241,10 +246,10 @@ AUTHENTICATION_BACKENDS =(
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESFH_TOKENS": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
     "BLACKLIST_AFTER_ROTATION": True,
+    "ROTATE_REFRESFH_TOKENS": True,
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 

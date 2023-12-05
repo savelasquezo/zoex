@@ -16,7 +16,7 @@ import {
 import {CiMail} from 'react-icons/ci'
 import { MdSubject } from "react-icons/md";
 
-import { fetchInfo } from '@/app/api/info/route';
+import { fetchInfo } from '@/app/api/images/info/route';
 
 type SupportModalProps = {
   closeModal: () => void;
@@ -106,7 +106,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
         </Link>
       </div>
       <form onSubmit={onSubmit} className="w-full flex flex-col gap-y-4 p-2 mt-10">
-        <div className="relative h-12 w-full min-w-[200px]">
+        <div className="relative h-12 w-full">
           <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><CiMail/></div>
           <input className="h-full w-full indent-8 text-gray-200 rounded-lg border border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
               type="text"

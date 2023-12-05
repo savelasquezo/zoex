@@ -3,6 +3,14 @@ from django.utils.translation import gettext_lazy as _
 
 import apps.core.models as model
 
+from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+
+
+class CustomOutstandingTokenAdmin(OutstandingTokenAdmin):
+    def has_delete_permission(self, *args, **kwargs):
+        return True
+
 class ImagenSliderInline(admin.StackedInline):
     
     model = model.ImagenSlider
@@ -43,4 +51,8 @@ class CoreAdmin(admin.ModelAdmin):
 
     readonly_fields=['default',]
 
+
+admin.site.unregister(OutstandingToken)
+
 admin.site.register(model.Core, CoreAdmin)
+admin.site.register(OutstandingToken, CustomOutstandingTokenAdmin)

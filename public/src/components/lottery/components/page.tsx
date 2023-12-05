@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
-
 import TicketsLotteryModal from "./ticketsLotteryModal";
-
 import { fetchLottery } from '@/app/api/lottery/route';
+import { Session } from 'next-auth';
 
-
+interface LotteryModalProps {
+  session: Session | null | undefined;
+}
 interface LotteryData {
     banner: string;
-  }
+}
 
-const Lottery = () => {
+const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
 
     const [lottery, setLottery] = useState<LotteryData>({ banner: '' });
 
     const [showModal, setShowModal] = useState(false);
     const [closingModal, setClosingModal] = useState(false);
-
-    const [activeTab, setActiveTab] = useState('');
-
-    const openModal = (tab: string) => {
-      setShowModal(true);
-      setActiveTab(tab);
-    };
 
     const closeModal = () => {
       setClosingModal(true);
@@ -31,6 +25,13 @@ const Lottery = () => {
         setShowModal(false);
         setClosingModal(false);
       }, 500);
+    };
+
+    const [activeTab, setActiveTab] = useState('');
+
+    const openModal = (tab: string) => {
+      setShowModal(true);
+      setActiveTab(tab);
     };
 
     useEffect(() => {
@@ -68,13 +69,13 @@ const Lottery = () => {
             </div>
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-[55%] flex justify-between items-center h-[50%]">
+                <div className="relative w-[55%] flex justify-between items-center h-[26rem]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                   <div className="w-full h-full bg-gray-800 rounded-2xl p-6">
-                    <button onClick={() => openModal('buyTicket')} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Ingresar</button>
-                    <button onClick={() => openModal('lstTicket')} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'singup' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Inscribirse</button>
-                    <div style={{ display: activeTab === 'buyTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'buyTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'lstTicket' ? 'hidden' : ''}`}>
-                      <TicketsLotteryModal closeModal={closeModal}/>
+                    <button onClick={() => openModal('buyTicket')} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'buyTicket' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Loteria</button>
+                    <button onClick={() => openModal('lstTicket')} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'lstTicket' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Tickets</button>
+                    <div className={`h-full my-4 ${activeTab === 'buyTicket' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <TicketsLotteryModal closeModal={closeModal} session={session}/>
                     </div>
                     <div style={{ display: activeTab === 'lstTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'lstTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'buyTicket' ? 'hidden' : ''}`}>
                       <p>Modal Tickets Adquiridos</p>

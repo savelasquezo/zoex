@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import jwt from 'jsonwebtoken';
 
 export const authOptions = {
   providers: [
@@ -42,6 +43,7 @@ export const authOptions = {
           email: userData.email,
           phone: userData.phone,
           balance: userData.balance,
+          credits: userData.credits,
           accessToken: access,
           refreshToken: refresh,
         };
@@ -59,12 +61,36 @@ export const authOptions = {
       if (trigger === 'update') {
         return { ...token, ...session.user };
       }
+      if (token && token.accessToken) {
+        const decodedToken = jwt.decode(token.accessToken);
 
+        if (decodedToken && decodedToken.exp < Date.now() / 1000) {
+          session.user = null;
+        }
+      }
       return { ...token, ...user };
     },
 
     async session({ session, token }) {
-      session.user = token;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/me/`, {
+        headers: { Authorization: `JWT ${token.accessToken}` },
+      });
+
+      if (res.ok) {
+        const userData = await res.json();
+        session.user = {
+          id: userData.id,
+          uuid: userData.uuid,
+          name: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+          balance: userData.balance,
+          credits: userData.credits,
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
+        };
+      }
+
       return session;
     },
   },

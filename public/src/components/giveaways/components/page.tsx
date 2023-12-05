@@ -91,8 +91,8 @@ const Giveaways = ({  }) => {
                 <div className="relative w-[55%] flex justify-between items-center h-[50%]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                   <div className="w-full h-full bg-gray-800 rounded-2xl p-6">
-                    <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Ingresar</button>
-                    <button onClick={() => openModal('lstTicket',{giveawayId})} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'singup' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Inscribirse</button>
+                    <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-sm px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>
+                    <button onClick={() => openModal('lstTicket',{giveawayId})} className={`text-gray-100 rounded-sm px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'singup' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Adquiridos</button>
                     <div style={{ display: activeTab === 'buyTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'buyTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'lstTicket' ? 'hidden' : ''}`}>
                       <TicketsGiveawayModal closeModal={closeModal} giveawayId={giveawayId}/>
                     </div>

@@ -30,7 +30,7 @@ class Giveaway(models.Model):
     sold = models.SmallIntegerField (_("Tickets"), default=0, null=False, blank=False, help_text="#Tickets Totales")
     date_results = models.DateField(_("Fecha"), default=timezone.now)
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
-    ammount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
+    amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
 
     is_active = models.BooleanField(_("¿Activo?"),default=True)
 

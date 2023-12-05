@@ -7,9 +7,11 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
+methods = (('crypto','Cryptomonedas'),('bank','Transferencia'),('paypal','Paypal'),('nequi','Nequi'),('daviplata','Daviplata'),('pse','PSE'))
 
 def ImageUploadTo(instance, filename):
     return f"uploads/banner/{filename}"
+
 
 class Lottery(models.Model):
 
@@ -30,7 +32,7 @@ class Lottery(models.Model):
     sold = models.SmallIntegerField (_("Tickets"), default=0, null=False, blank=False, help_text="#Tickets Totales")
     date_results = models.DateField(_("Fecha"), default=timezone.now)
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
-    ammount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
+    amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
 
     is_active = models.BooleanField(_("¿Activo?"),default=True)
 
@@ -62,8 +64,10 @@ class TicketsLottery(models.Model):
     email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
+    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
+    is_active = models.BooleanField(_("¿Activo?"),default=False)
 
     def __str__(self):
         return f"{self.ticket}"

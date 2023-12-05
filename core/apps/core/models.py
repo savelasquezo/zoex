@@ -19,6 +19,11 @@ class Core(models.Model):
     facebook = models.URLField(_("Facebook"), max_length=128, blank=True, null=True)
     instagram = models.URLField(_("Instagram"), max_length=128, blank=True, null=True)
 
+    bonusPercent = models.FloatField(_("%Bonificacion"),default=50, null=True, blank=True, 
+        help_text="Porcentaje Adicional en la Primera Recarga (%) ")
+    referredPercent = models.FloatField(_("%Referidos"),default=5, null=True, blank=True,
+        help_text="Porcentaje Beneficio en Referidos (%)")
+
     def __str__(self):
         return f"{self.default}"
 

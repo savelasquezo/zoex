@@ -1,7 +1,95 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import UserAccount
+from django.conf.locale.es import formats as es_formats
 
+import apps.user.models as models
+
+
+class WithdrawalsInline(admin.StackedInline):
+    
+    model = models.Withdrawals
+    extra = 0
+
+    fieldsets = (
+        (" ", {"fields": (
+            'uuid',
+            ('method','state'),
+            ('amount','date','voucher'),
+                )
+            }
+        ),
+    )
+
+    radio_fields = {'state': admin.HORIZONTAL}
+    readonly_fields = ('uuid','method','amount','date','voucher')
+
+class InvoiceInline(admin.StackedInline):
+    
+    model = models.Invoice
+    extra = 0
+
+    fieldsets = (
+        (" ", {"fields": (
+            'uuid',
+            ('method','state'),
+            ('amount','date','voucher'),
+                )
+            }
+        ),
+    )
+
+    radio_fields = {'state': admin.HORIZONTAL}
+    readonly_fields = ('uuid','method','amount','date','voucher')
+
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'account',
+        'amount',
+        'date',
+        'voucher',
+        'state'
+        )
+
+    list_filter = ['date','state']
+    search_fields = ['voucher']
+
+    radio_fields = {'state': admin.HORIZONTAL}
+    es_formats.DATETIME_FORMAT = "d M Y"
+    
+    fieldsets = (
+        (None, {'fields': (('account','uuid'),('method','state'),)}),
+            ('Información', {'fields': (
+            ('amount','date','voucher'),
+        )}),
+    )
+
+    readonly_fields=['account','uuid','method','amount','date']
+
+class WithdrawalsAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'account',
+        'amount',
+        'date',
+        'voucher',
+        'state'
+        )
+
+    list_filter = ['date','state']
+    search_fields = ['voucher']
+
+    radio_fields = {'state': admin.HORIZONTAL}
+    es_formats.DATETIME_FORMAT = "d M Y"
+    
+    fieldsets = (
+        (None, {'fields': (('account','uuid'),('method','state'),)}),
+            ('Información', {'fields': (
+            ('amount','date','voucher'),
+        )}),
+    )
+
+    readonly_fields=['account','uuid','method','amount','date']
 
 class UserAccountAdmin(BaseUserAdmin):
     list_display = ('username', 'email','phone','balance')
@@ -9,9 +97,9 @@ class UserAccountAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {'fields': (('email','uuid','is_active','is_verified','is_staff'), 'password')}),
-        ('Información personal', {'fields': (
-            ('username','phone'),
-            ('balance','referred'),
+            ('Información', {'fields': (
+            ('username','phone','referred'),
+            ('balance','credits'),
         )}),
     )
 
@@ -24,7 +112,14 @@ class UserAccountAdmin(BaseUserAdmin):
 
     list_filter=[]
 
-    def get_readonly_fields(self, request, obj=None):
-        return ['username','email','uuid','phone','balance','referred']
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        self.inlines = [WithdrawalsInline, InvoiceInline]
+        return fieldsets
 
-admin.site.register(UserAccount, UserAccountAdmin)
+    def get_readonly_fields(self, request, obj=None):
+        return ['username','email','uuid','phone','referred']
+
+admin.site.register(models.UserAccount, UserAccountAdmin)
+admin.site.register(models.Invoice, InvoiceAdmin)
+admin.site.register(models.Withdrawals, WithdrawalsAdmin)

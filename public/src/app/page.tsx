@@ -8,6 +8,8 @@ import Carousel from '@/components/slider/index';
 import Cards from '@/components/giveaways/index';
 import Lottery from '@/components/lottery/index';
 
+import '@/styles/styles.css';
+
 export default function Home() {
   return (
     <SessionProvider>

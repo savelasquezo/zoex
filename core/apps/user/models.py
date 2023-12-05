@@ -8,6 +8,9 @@ from django.utils.translation import gettext_lazy as _
 def LogoUploadTo(instance, filename):
     return f"uploads/{instance.username}/logo/{filename}"
 
+states = (('pending','Pendiente'),('done','Aprobado'),('expired','Expirado'),('error','Error'))
+methods = (('crypto','Cryptomonedas'),('bank','Transferencia'),('paypal','Paypal'),('nequi','Nequi'),('daviplata','Daviplata'),('pse','PSE'))
+
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -34,7 +37,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(_("Telefono"),max_length=64, unique=True, null=False, blank=False)
     date_joined = models.DateField(_("Fecha"),default=timezone.now)
     last_joined = models.DateField(_("Ultimo Ingreso"),default=timezone.now)
-    balance = models.IntegerField(_("Saldo"),default=0, null=True, blank=True)
+    balance = models.FloatField(_("Saldo"),default=0, null=True, blank=True, help_text="Saldo Disponible $USD")
+    credits = models.FloatField(_("Creditos"),default=0, null=True, blank=True, help_text="Saldo Promocional $USD")
 
     is_active = models.BooleanField(_("¿Activo?"),default=True)
     is_staff = models.BooleanField(_("¿Staff?"),default=False)
@@ -52,3 +56,54 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.email}"
+
+    class Meta:
+        indexes = [models.Index(fields=['email']),]
+        verbose_name = _("Usuario")
+        verbose_name_plural = _("Usuarios")
+
+class Withdrawals(models.Model):
+    account = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    uuid = models.UUIDField(_("ID"),default=uuid.uuid4, unique=True)
+    amount = models.FloatField(_("Volumen"),blank=False,null=False,default=0,
+        help_text=_("Volumen de Capital Solicitado (USD)"),)
+    date = models.DateField(_("Fecha"), default=timezone.now)
+    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
+    voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
+    state = models.CharField(_("¿Estado?"), choices=states, default="pending", max_length=16)
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = str(uuid.uuid4())[:8]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.id}"
+
+    class Meta:
+        indexes = [models.Index(fields=['state']),]
+        verbose_name = _("Retiro")
+        verbose_name_plural = _("Retiros")
+
+class Invoice(models.Model):
+    account = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    uuid = models.UUIDField(_("ID"),default=uuid.uuid4, unique=True)
+    amount = models.FloatField(_("Volumen"),blank=False,null=False,default=0,
+        help_text=_("Volumen de Capital Solicitado (USD)"),)
+    date = models.DateField(_("Fecha"), default=timezone.now)
+    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
+    voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
+    state = models.CharField(_("¿Estado?"), choices=states, default="pending", max_length=16)
+
+    def save(self, *args, **kwargs):
+        if not self.uuid:
+            self.uuid = str(uuid.uuid4())[:8]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.id}"
+
+    class Meta:
+        indexes = [models.Index(fields=['state']),]
+        verbose_name = _("Recarga")
+        verbose_name_plural = _("Recargas")

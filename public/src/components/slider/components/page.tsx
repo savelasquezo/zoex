@@ -13,12 +13,12 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
     const [imagenSliders, setImagenSliders] = useState<ImagenSlider[]>([]);
 
     useEffect(() => {
-      fetchImagenSliders()
-        .then((data) => {
-          setImagenSliders(data);
-        })
-        .catch((error) => {
-          console.error('Error al obtener datos iniciales de imagenSliders:', error);
+        fetchImagenSliders()
+            .then((data) => {
+            setImagenSliders(data);
+            })
+            .catch((error) => {
+            console.error('Error al obtener datos iniciales de imagenSliders:', error);
         });
     }, []);
 

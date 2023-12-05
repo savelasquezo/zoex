@@ -12,7 +12,9 @@ import {AiOutlineClose} from 'react-icons/ai'
 
 import ProfileModal from "./profileModal";
 import TicketsModal from "./ticketsModal";
-import WalletModal from "./walletModal";
+
+import AccountWallet from '@/components/wallet/index';
+
 import ShareModal from "./shareModal";
 import SupportModal from "./supportModal";
 
@@ -48,7 +50,7 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                 <span onClick={() => openModal('history')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<FaUser />} Text="Perfil"/></span>
                 <span onClick={() => openModal('tickets')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoTicket />} Text="Tickets"/></span>
                 <div className="w-1/5 relative flex justify-center cursor-pointer">
-                    <button className="absolute -top-12 rounded-full px-2 py-1 bg-white h-16 w-16 border-4 border-gray-900 bg-gradient-to-b from-yellow-400 to-red-800">
+                    <button onClick={() => openModal('wallet')} className="absolute -top-12 rounded-full px-2 py-1 bg-white h-16 w-16 border-4 border-gray-900 bg-gradient-to-b from-yellow-400 to-red-800">
                         <Image width={150} height={150} src={"/assets/animations/animatedWallet.gif"} className="scale-150" alt="" />
                     </button>
                 </div>
@@ -67,7 +69,7 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                         <TicketsModal closeModal={closeModal} session={session}/>
                       </div>
                       <div style={{ display: activeTab === 'wallet' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'wallet' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'wallet' ? 'hidden' : ''}`}>
-                        <WalletModal closeModal={closeModal} session={session}/>
+                        <AccountWallet />
                       </div>
                       <div style={{ display: activeTab === 'share' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'share' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'share' ? 'hidden' : ''}`}>
                         <ShareModal closeModal={closeModal} session={session}/>

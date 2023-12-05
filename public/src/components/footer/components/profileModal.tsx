@@ -17,7 +17,7 @@ type ProfileModalProps = {
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ closeModal, session  }) => {
 
-  const sessionID = `${session?.user?.uuid || ''}`
+  const sessionID = `${session?.user?.accessToken || ''}`
   const handleCopyClick = () => {
     navigator.clipboard.writeText(sessionID)
   };
