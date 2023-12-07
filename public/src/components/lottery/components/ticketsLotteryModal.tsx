@@ -152,10 +152,10 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
 
 
   return (
-    <div>
+    <div className='w-full h-full'>
       {!ticketsSuccess ? (
-      <div className='w-full inline-flex flex-col items-center justify-center my-2'>
-        <div className='relative flex flex-row gap-x-4 w-96 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+      <div className='w-full h-full inline-flex flex-col items-center justify-center my-2'>
+        <div className='relative w-96 h-full flex flex-row gap-x-4  justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
           {listTickets.map((obj, i) => (
             <button key={i} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
               <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{obj}</p>
@@ -202,82 +202,75 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
             )}
           </div>
         </form>
+        {error && (<div className="text-red-400 text-sm mt-2">{error}</div>)}
+        {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
       </div>
       ) : (
-      <div className='relative flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
-        <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
-          <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
-        </span>
-        <div className='flex flex-col ml-1'>
-          <p className='text-gray-400 text-xs'>email: {email}</p>
-          <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
-        </div>
-      </div>
-          )}
-          {!ticketsSuccess ? (
-            <p>1</p>
-          ) : (
-          <div className={`w-full h-full justify-center items-center ${paymentInfo !== '' ? 'block' : 'hidden' }`}>
-
-              <div className={`flex flex-col leading-none ${paymentInfo === 'crypto' ? 'block' : 'hidden' }`}>
-                <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-                  <Image width={192} height={128} src={"/assets/image/pyment-crypto.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
-                </Link>
-              </div>
-              <div className={`flex flex-col leading-none ${paymentInfo === 'bank' ? 'block' : 'hidden' }`}>
-                <div className="flex flex-row gap-x-2 justify-start items-center">
-                  <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                    <span className="text-4xl text-gray-400"><CiBank /></span>
-                    <div className="flex flex-col ml-2">
-                      <p>Bancolombia -Ahorros</p>
-                      <p>4545745-5353</p>
-                    </div>
-                  </div>
-                  <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                    <span className="text-4xl text-gray-400"><CiBank /></span>
-                    <div className="flex flex-col ml-2">
-                      <p>Davivienda -Ahorros</p>
-                      <p>4545745-5353</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={`flex flex-col leading-none ${paymentInfo === 'paypal' ? 'block' : 'hidden' }`}>
-                <Link href={`https://www.paypal.com/`} target="_blank" rel="noopener noreferrer">
-                  <Image width={192} height={128} src={"/assets/image/pyment-paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
-                </Link>
-              </div>
-              <div className={`flex flex-col leading-none ${paymentInfo === 'nequi' ? 'block' : 'hidden' }`}>
-                <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                  <span className="text-4xl text-gray-400"><CiBank /></span>
-                  <div className="flex flex-col ml-2">
-                    <p>Nequi</p>
-                    <p>4545745-5353</p>
-                  </div>
-                </div>
-              </div>
-              <div className={`flex flex-col leading-none ${paymentInfo === 'daviplata' ? 'block' : 'hidden' }`}>
-                <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                  <span className="text-4xl text-gray-400"><CiBank /></span>
-                  <div className="flex flex-col ml-2">
-                    <p>Daviplata</p>
-                    <p>4545745-5353</p>
-                  </div>
-                </div>
-              </div>
-
-            <button type="button" className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
-            <p className="absolute bottom-8 w-full text-xs text-justify text-gray-400">
-              Incluye en la descripción el código de compra, El tiempo de confirmación es de 24 a 36 horas<br /> 
-              ¿Necesitas Ayuda? support@zoexwin.com</p>
+      <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
+        <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+          <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
+            <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
+          </span>
+          <div className='flex flex-col ml-1'>
+            <p className='text-gray-400 text-xs'>email: {email}</p>
+            <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
           </div>
-          )}
-          {success && (<div className="text-lime-400 text-sm mt-2">{success}</div>)}
-          {error && (<div className="text-red-400 text-sm mt-2">{error}</div>)}
-          {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
         </div>
-      ) : (
-        <p>No hay información que mostrar</p>
+        <div className={`flex flex-col justify-center items-center gap-y-4 ${paymentInfo !== '' ? 'block' : 'hidden' }`}>
+          {success && (<div className="text-lime-400 text-sm mt-2">{success}</div>)}
+          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'crypto' ? 'block' : 'hidden' }`}>
+            <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
+              <Image width={192} height={128} src={"/assets/image/pyment-crypto.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
+            </Link>
+          </div>
+          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'bank' ? 'block' : 'hidden' }`}>
+            <div className="flex flex-row gap-x-2 justify-start items-center">
+              <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
+                <span className="text-4xl text-gray-400"><CiBank /></span>
+                <div className="flex flex-col ml-2">
+                  <p>Bancolombia -Ahorros</p>
+                  <p>4545745-5353</p>
+                </div>
+              </div>
+              <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
+                <span className="text-4xl text-gray-400"><CiBank /></span>
+                <div className="flex flex-col ml-2">
+                  <p>Davivienda -Ahorros</p>
+                  <p>4545745-5353</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'paypal' ? 'block' : 'hidden' }`}>
+            <Link href={`https://www.paypal.com/`} target="_blank" rel="noopener noreferrer">
+              <Image width={192} height={128} src={"/assets/image/pyment-paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
+            </Link>
+          </div>
+          <div className={`flex flex-col leading-none ${paymentInfo === 'nequi' ? 'block' : 'hidden' }`}>
+            <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
+              <span className="text-4xl text-gray-400"><CiBank /></span>
+              <div className="flex flex-col ml-2">
+                <p>Nequi</p>
+                <p>4545745-5353</p>
+              </div>
+            </div>
+          </div>
+          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'daviplata' ? 'block' : 'hidden' }`}>
+            <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
+              <span className="text-4xl text-gray-400"><CiBank /></span>
+              <div className="flex flex-col ml-2">
+                <p>Daviplata</p>
+                <p>4545745-5353</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
+            <button type="button" className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
+            <p className='text-center text-xs text-gray-400'>Incluye en la descripción el código de compra, El tiempo de confirmación es de 24 a 36 horas<br /> 
+            ¿Necesitas Ayuda? support@zoexwin.com</p>
+          </div>
+      </div>
       )}
     </div>
   );
