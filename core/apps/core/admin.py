@@ -1,15 +1,22 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.auth.models import Group
 import apps.core.models as model
 
 from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 
 
-class CustomOutstandingTokenAdmin(OutstandingTokenAdmin):
-    def has_delete_permission(self, *args, **kwargs):
-        return True
+class MyAdminSite(admin.AdminSite):
+    index_title = 'Consola Administrativa'
+    verbose_name = "ZoeX"
+
+
+admin_site = MyAdminSite()
+admin.site = admin_site
+admin_site.site_header = "ZoeX"
+
 
 class ImagenSliderInline(admin.StackedInline):
     
@@ -51,8 +58,5 @@ class CoreAdmin(admin.ModelAdmin):
 
     readonly_fields=['default',]
 
-
-admin.site.unregister(OutstandingToken)
-
+admin.site.register(Group)
 admin.site.register(model.Core, CoreAdmin)
-admin.site.register(OutstandingToken, CustomOutstandingTokenAdmin)

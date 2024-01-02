@@ -15,7 +15,7 @@ import TicketsModal from "./ticketsModal";
 
 import AccountWallet from '@/components/wallet/index';
 
-import ShareModal from "./shareModal";
+import ShareModal from "@/components/share/index";
 import SupportModal from "./supportModal";
 
 import Tooltip from './tooltip';
@@ -72,7 +72,7 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                         <AccountWallet />
                       </div>
                       <div style={{ display: activeTab === 'share' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'share' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'share' ? 'hidden' : ''}`}>
-                        <ShareModal closeModal={closeModal} session={session}/>
+                        <ShareModal />
                       </div>
                       <div style={{ display: activeTab === 'support' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'support' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'support' ? 'hidden' : ''}`}>
                         <SupportModal closeModal={closeModal} session={session}/>

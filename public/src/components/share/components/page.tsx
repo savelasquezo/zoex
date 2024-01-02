@@ -14,12 +14,12 @@ import {
 } from 'next-share';
 
 type ShareModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
+    closeModal: () => void;
+    session: Session | null | undefined;
 };
 
 type InfoType = {
-  hashtag: string;
+    hashtag: string;
 };
 
 
@@ -57,7 +57,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
 
   return (
     <div>
-      <div className='absolute top-4 inline-flex gap-x-2 w-full justify-start items-center z-10'>
+      <div className='absolute top-4 inline-flex gap-x-2 w-full justify-start items-center z-0'>
         <FacebookShareButton url={shareURL} hashtag={shareHashtag}>
           <FacebookIcon size={32} round />
         </FacebookShareButton>

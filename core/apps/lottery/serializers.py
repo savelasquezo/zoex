@@ -10,3 +10,8 @@ class TicketsLotterySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TicketsLottery
         fields = '__all__'
+
+class HistoryLotterySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.HistoryLottery
+        fields = '__all__'

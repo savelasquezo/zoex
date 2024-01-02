@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Session } from 'next-auth';
 
 import {AiOutlineClose, AiFillLock, AiFillUnlock} from 'react-icons/ai'
-import {LuBitcoin} from 'react-icons/lu'
+import { GiTwoCoins } from "react-icons/gi";
 
 import LoginModal from "./loginModal";
 import RegisterModal from "./registerModal";
@@ -64,11 +64,11 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
         <main className="inline-flex items-center h-full ml-5 lg:w-2/5 lg:justify-end lg:ml-0 gap-x-3">
             {session && session?.user? (
               <div className='inline-flex gap-x-4'>
-                <div className='bg-gray-950 shadow-inner rounded-full p-2 px-4 inline-flex items-center justify-between w-40'>
-                  <span className='text-2xl text-gray-100 opacity-80'><LuBitcoin/></span>
-                  <p className='text-gray-100'>{session?.user?.balance || ""}-BTC</p>
+                <div className='bg-gray-950 shadow-inner rounded-full py-1 px-4 inline-flex items-center justify-between w-40'>
+                  <span className='text-2xl text-gray-100 opacity-80'><GiTwoCoins/></span>
+                  <p className='text-gray-100'>${session?.user?.balance ? session.user.balance.toLocaleString() : ""}</p>
                 </div>
-                <button onClick={() => {signOut();}} className="bg-pink-700 hover:bg-pink-900 text-white uppercase text-xs font-semibold py-1 px-4 rounded transition-colors duration-300">Salir</button>
+                <button onClick={() => {signOut();}} className="bg-pink-700 hover:bg-pink-900 text-white uppercase text-xs font-semibold p-2 rounded transition-colors duration-300">Salir</button>
               </div>
               ) : (
               <div className='inline-flex gap-x-2'>
@@ -96,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
                       <div className="text-start items-center inline-flex gap-x-2">
                         <p className="text-xs text-gray-300">¿No tienes una cuenta?</p>
                         <button onClick={() => openModal('singup')} className="cursor-pointer text-red-500 hover:text-pink-600 transition-colors duration-300 -mt-1">Inscribete</button>
-                      </div>
+                      </div><br />
                       <button onClick={() => openModal('forgot-password')} className="hover:underline text-xs text-blue-500">¿Olvidaste la contraseña?</button>
                     </div>
                     <div style={{ display: activeTab === 'singup' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'singup' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'login' ? 'hidden' : ''}`}>

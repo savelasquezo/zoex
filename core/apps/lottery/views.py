@@ -30,23 +30,6 @@ class fetchLottery(generics.GenericAPIView):
             return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-
-class fetchTicketsLottery(generics.ListAPIView):
-    """
-    Endpoint to retrieve a list of lottery tickets purchased by the authenticated user.
-    Requires authentication.
-    """
-    serializer_class = serializers.TicketsLotterySerializer
-    permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        return models.TicketsLottery.objects.filter(email=self.request.user.email)
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serialized_data = self.serializer_class(queryset, many=True).data
-        return Response(serialized_data)
-
-
 class requestTicketLottery(generics.GenericAPIView):
     """
     Endpoint to request and purchase a lottery ticket.
@@ -65,10 +48,10 @@ class requestTicketLottery(generics.GenericAPIView):
         data = {'email':email, 'method':paymentMethod, 'ticket':ticket, 'voucher':apiVoucher}
 
         try:
-            if models.TicketsLottery.objects.filter(ticket=ticket).first() is not None:
+            lottery = models.Lottery.objects.get(is_active=True)
+            if models.TicketsLottery.objects.filter(lottery=lottery,ticket=ticket).first() is not None:
                 return Response({'detail': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            lottery = models.Lottery.objects.all().order_by('id').first()
             obj = models.TicketsLottery.objects.create(lottery=lottery,**data) 
             return Response({'apiVoucher': apiVoucher}, status=status.HTTP_200_OK)
         
@@ -78,3 +61,36 @@ class requestTicketLottery(generics.GenericAPIView):
                 f.write("requestTicketLottery {} --> Error: {}\n".format(date, str(e)))
             return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
         
+
+class fetchTicketsLottery(generics.ListAPIView):
+    """
+    Endpoint to retrieve a list of lottery tickets purchased by the authenticated user.
+    Requires authentication.
+    """
+    serializer_class = serializers.TicketsLotterySerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        lottery = models.Lottery.objects.get(is_active=True)
+        return models.TicketsLottery.objects.filter(lottery=lottery, email=self.request.user.email)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serialized_data = self.serializer_class(queryset, many=True).data
+        for item in serialized_data:
+            item['lotteryID'] = models.Lottery.objects.get(is_active=True).lottery
+        return Response(serialized_data)
+
+class fetchHistoryLottery(generics.ListAPIView):
+    """
+    Endpoint to retrieve a list of history lottery by the any user.
+    Requires no authentication.
+    """
+    serializer_class = serializers.HistoryLotterySerializer
+    permission_classes = [AllowAny]
+    def get_queryset(self):
+        return models.HistoryLottery.objects.all().order_by("-id")
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serialized_data = self.serializer_class(queryset, many=True).data
+        return Response(serialized_data)

@@ -22,12 +22,13 @@ function getRandomTickets(aviableTickets: number[], num: number): number[] {
   return selectedTickets;
 }
 
-interface TicketsLotteryModalProps {
+interface TicketsGiveawayModalProps {
   closeModal: () => void;
   session: Session | null | undefined;
+  giveawayId: number;
 }
 
-const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, session  }) => {
+const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [ticketsSuccess, setTicketsSuccess] = useState(false);
@@ -45,8 +46,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   const [enteredLength, setEnteredLength] = useState<number>();
   const [generateNewNumbers, setGenerateNewNumbers] = useState<boolean>(true);
 
-
-  const handleGenerateNewNumbers = (): void => {
+  const handleGenerateNewNumbers = () => {
     setGenerateNewNumbers(true);
   };
 
@@ -58,7 +58,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   };
 
   useEffect(() => {
-    const websocketURL = `ws://${process.env.NEXT_PUBLIC_APP_URL}/ws/tickets_lottery/`;
+    const websocketURL = `ws://${process.env.NEXT_PUBLIC_APP_URL}/ws/tickets_giveaway/${giveawayId}/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
@@ -81,7 +81,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
         client.close();
       }
     };
-  }, [generateNewNumbers]);
+  }, [generateNewNumbers, giveawayId]);
 
   useEffect(() => {
     handleGenerateNewNumbers();
@@ -140,7 +140,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const res = await fetch('/api/buy/lottery', {
+    const res = await fetch('/api/buy/giveaway', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,6 +150,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
         email,
         paymentMethod,
         ticket,
+        giveawayId,
       }),
     });
     const data = await res.json();
@@ -166,15 +167,13 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
     setLoading(false);
   };
 
-
-
   return (
     <div className='w-full h-full'>
       {!ticketsSuccess ? (
       <div className='w-full h-full inline-flex flex-col items-center justify-center my-2'>
         {listTickets.length > 0 ? (
         <div className='w-full h-full'>
-          <div className='relative w-96 h-full flex flex-row gap-x-4  justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+          <div className='relative w-full h-full flex flex-row gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
             {listTickets.map((obj, i) => (
               <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
                 <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{obj}</p>
@@ -183,9 +182,9 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
             <button onClick={handleGenerateNewNumbers} className='absolute top-2 right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full p-1 h-6 text-white'><LuRefreshCw /></button>
           </div>
           <form>
-            <div className='flex flex-col justify-center items-center gap-y-2 my-1'>
-              <div className='flex flex-col h-full w-full justify-center items-center gap-y-2'>
-                <input className='w-96 rounded-sm bg-slate-900 text-gray-200 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
+            <div className='w-full flex flex-col justify-center items-center gap-y-2 my-1'>
+              <div className='flex flex-col h-full w-full justify-center items-center gap-y-2 px-2'>
+                <input className='w-full rounded-sm bg-slate-900 text-gray-200 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
                   type="email"
                   name="email"
                   value={email}
@@ -195,7 +194,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
                   pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
                   readOnly={ticketsSuccess || !!session?.user?.email}     
                 />
-                <input className='w-64 rounded-sm bg-slate-900 text-gray-400 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
+                <input className='w-full rounded-sm bg-slate-900 text-gray-400 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
                   type="text"
                   name="ticket"
                   id="ticket"
@@ -225,7 +224,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
         </div>
         ) : (
-        <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
+        <div className='w-full h-full flex flex-col justify-start items-center'>
           <span className='text-center text-gray-300 my-4 text-sm'>
               <p>¡No hay Tickets disponibles para este Sorteo!</p>
               <p>El Sorteo se realizara el proximo dia 15</p>
@@ -304,4 +303,4 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   );
 };
 
-export default TicketsLotteryModal;
+export default TicketsGiveawayModal;

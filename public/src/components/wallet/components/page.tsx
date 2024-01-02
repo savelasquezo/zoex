@@ -103,7 +103,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
           <th scope="col" className=" px-6 py-2">Voucher</th>
         </tr>
       </thead>
-      {withdrawList.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
+      {withdrawList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
         <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
           <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.id}</td>
           <td className="whitespace-nowrap px-6 py-2">{obj.amount}</td>
@@ -458,26 +458,26 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
             </div>
           </div>
           <div style={{ display: activeTab === 'history' ? 'block' : 'none' }} className={`h-full w-full ${activeTab === 'wallet' ? 'hidden' : ''}`}>
-              <div className="relative h-full w-full text-gray-500">
-                <ul>{displayWithdraw}</ul>
-                <ReactPaginate
-                  previousLabel={<MdNavigateBefore/>}
-                  nextLabel={<MdNavigateNext/>}
-                  breakLabel={'...'}
+            <div className="relative h-full w-full text-gray-500">
+              <ul>{displayWithdraw}</ul>
+              <ReactPaginate
+                previousLabel={<MdNavigateBefore/>}
+                nextLabel={<MdNavigateNext/>}
+                breakLabel={'...'}
 
-                  pageCount={pageCount}
-                  marginPagesDisplayed={0}
-                  pageRangeDisplayed={5}
-                  onPageChange={changePage}
-                  className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
-                  pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
-                  activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                pageCount={pageCount}
+                marginPagesDisplayed={0}
+                pageRangeDisplayed={5}
+                onPageChange={changePage}
+                className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
 
-                  previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
-                  nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+                previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+                nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
 
-                />
-              </div>
+              />
+            </div>
           </div>
         </div>
       )}

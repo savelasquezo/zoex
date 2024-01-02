@@ -140,7 +140,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                         readOnly={registrationSuccess}
                     />
                 </div>
-                <div className="relative h-12 w-full min-w-[200px]">
+                <div className="relative gap-y-3 rounded-sm shadow-xl h-12 w-full min-w-[200px]">
                     <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><CiMail/></div>
                     <input className="h-full w-full indent-8 text-gray-200 rounded-lg border border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
                         type="text"
@@ -153,6 +153,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                         readOnly={registrationSuccess}
                     />
                 </div>
+                <ul></ul>
                  <div className="relative h-12 w-full min-w-[200px]">
                     <div className="absolute text-gray-500 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><FiLock/></div>
                     <input className="h-full w-full indent-8 text-gray-200 rounded-lg border border-gray-700 focus:border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline-0 ring-0 focus:!ring-0 transition-all focus:outline-0 disabled:border-0"

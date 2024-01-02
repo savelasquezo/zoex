@@ -7,6 +7,8 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
+methods = (('crypto','Cryptomonedas'),('bank','Transferencia'),('paypal','Paypal'),('nequi','Nequi'),('daviplata','Daviplata'),('pse','PSE'))
+
 def ImageUploadTo(instance, id):
     return f"uploads/banner/{id}"
 
@@ -15,7 +17,7 @@ class Giveaway(models.Model):
     giveaway = models.CharField(_("ID"), max_length=128, unique=True, null=False, blank=False)
 
     prize = models.CharField(_("Objeto"), max_length=128, null=False, blank=False)
-    value = models.IntegerField(_("$Valor Estimado"), default=1000, null=False, blank=False, help_text="$Valor (USD)")
+    value = models.IntegerField(_("Inversion"), default=1000, null=False, blank=False, help_text="$Valor del Objeto (USD)")
 
     banner = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
                     help_text="Dimenciones: width:1240px height:550px")
@@ -67,8 +69,10 @@ class TicketsGiveaway(models.Model):
     email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
+    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
+    is_active = models.BooleanField(_("¿Activo?"),default=False)
 
     def __str__(self):
         return f"{self.ticket}"

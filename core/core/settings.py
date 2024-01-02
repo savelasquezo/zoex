@@ -56,13 +56,11 @@ CORS_DEBUG = True
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
-SITE_ID = 1
 # Application definition
 
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -82,7 +80,6 @@ THIRD_APPS = [
     'rest_framework',
     'rest_framework_api',
     'djoser',
-    'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'channels',
@@ -96,7 +93,6 @@ CKEDITOR_UPLOAD_PATH = "/ckeditor/"
 INSTALLED_APPS = DJANGO_APPS + CORE_APPS + THIRD_APPS
 
 MIDDLEWARE = [
-    "social_django.middleware.SocialAuthExceptionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -205,7 +201,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Bogota'
 
@@ -239,8 +235,6 @@ REST_FRAMEWORK = {
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS =(
-    "social_core.backends.google.GoogleOAuth2",
-    "social_core.backends.facebook.FacebookOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
 
@@ -267,11 +261,6 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_RETYPE": True,
     "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
     "ACTIVATION_URL": "activate?uid={uid}&token={token}",
-    "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
-    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        "http://localhost:8000/google",
-        "http://localhost:8000/facebook",
-    ],
     "SERIALIZERS": {
         "user_create": "apps.user.serializers.UserSerializer",
         "user": "apps.user.serializers.UserSerializer",

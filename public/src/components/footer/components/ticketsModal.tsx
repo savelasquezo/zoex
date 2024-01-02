@@ -31,24 +31,31 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
   const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketType[]>([]);
   const [giveawayTickets, setGiveawayTickets] = useState<GiveawayTicketType[]>([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const ticketsPerPage = 1;
+  const ticketsPerPage = 5;
 
   useEffect(() => {
     if (session) {
       const accessToken = session.user.accessToken;
-      const fetchTickets = activeTab === 'lottery-tickets' ? fetchLotteryTickets : fetchGiveawayTickets;
-
-      fetchTickets(accessToken)
+  
+      if (activeTab === 'lottery-tickets') {
+        fetchLotteryTickets(accessToken)
         .then((data) => {
-          if (activeTab === 'lottery-tickets') {
             setLotteryTickets(data);
-          } else {
-            setGiveawayTickets(data);
-          }
         })
         .catch((error) => {
           console.error('Error getting information about tickets!', error);
-        });
+        });  
+      }
+
+      if (activeTab === 'giveaway-tickets') {
+        fetchGiveawayTickets(accessToken,1)
+        .then((data) => {
+          setGiveawayTickets(data);
+        })
+        .catch((error) => {
+          console.error('Error getting information about tickets!', error);
+        }); 
+      }
     }
   }, [activeTab, session]);
 
@@ -71,10 +78,10 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
             </tr>
           </thead>
           <tbody>
-            {tickets.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((ticket: any, index: number) => (
+            {tickets?.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((ticket: any, index: number) => (
               <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{ticket.id}</td>
-                <td className="whitespace-nowrap px-6 py-2">{ticket.amount}</td>
+                <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{ticket.lotteryID}</td>
+                <td className="whitespace-nowrap px-6 py-2">{ticket.ticket}</td>
                 <td className="whitespace-nowrap px-6 py-2">{ticket.date}</td>
                 <td className="whitespace-nowrap px-6 py-2">{ticket.voucher}</td>
               </tr>

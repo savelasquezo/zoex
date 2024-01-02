@@ -33,11 +33,12 @@
   },
   "devDependencies": {
     "@heroicons/react": "^2.0.18",
+    "@svgr/webpack": "^8.1.0",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "20.8.9",
     "@types/react": "18.2.33",
     "@types/websocket": "^1.0.10",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "typescript": "^5.0.4"
   }
 }

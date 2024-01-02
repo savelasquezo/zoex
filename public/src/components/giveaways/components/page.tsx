@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { Session } from 'next-auth';
 
 import TicketsGiveawayModal from "./ticketsGiveawayModal";
+import ListTicketsGiveawayModal from "./listTicketsModal";
 
 import { fetchGiveaways } from '@/app/api/giveaway/route';
 import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
+
+interface GiveawaysModalProps {
+    session: Session | null | undefined;
+  }
 
 interface GiveawayData {
     id: any;
@@ -12,7 +18,7 @@ interface GiveawayData {
     progress: number;
   }
 
-const Giveaways = ({  }) => {
+const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
     
     const [showModal, setShowModal] = useState(false);
     const [closingModal, setClosingModal] = useState(false);
@@ -50,7 +56,7 @@ const Giveaways = ({  }) => {
     const defaultElements = Array.from({ length: numberOfElements }, (_, index) => index + 1);
 
     return (
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center py-4 mb-16">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center py-4">
             {itemsGiveaway.length > 0 ? (
                 itemsGiveaway.map((itemGiveaway, i) => (
                 <div key={itemGiveaway.id} className="relative flex flex-col items-center rounded-sm h-40 md:h-80 shadow-inner">
@@ -88,16 +94,16 @@ const Giveaways = ({  }) => {
             
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-[55%] flex justify-between items-center h-[50%]">
+                <div className="relative w-[55%] flex justify-between items-center h-[26rem]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                   <div className="w-full h-full bg-gray-800 rounded-2xl p-6">
-                    <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-sm px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>
-                    <button onClick={() => openModal('lstTicket',{giveawayId})} className={`text-gray-100 rounded-sm px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'singup' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Adquiridos</button>
-                    <div style={{ display: activeTab === 'buyTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'buyTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'lstTicket' ? 'hidden' : ''}`}>
-                      <TicketsGiveawayModal closeModal={closeModal} giveawayId={giveawayId}/>
+                    <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'buyTicket' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>
+                    <button onClick={() => openModal('lstTicket',{giveawayId})} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'lstTicket' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Tickets</button>
+                    <div className={`${activeTab === 'buyTicket' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                        <TicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
                     </div>
                     <div style={{ display: activeTab === 'lstTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'lstTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'buyTicket' ? 'hidden' : ''}`}>
-                      <p>Modal Tickets Adquiridos</p>
+                        <ListTicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
                     </div>
                   </div>
                 </div>

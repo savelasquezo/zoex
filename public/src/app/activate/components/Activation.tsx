@@ -8,7 +8,6 @@ export default function Activation() {
   const [token, setToken] = useState('');
   const [uid, setUID] = useState('');
 
-  const [effectRegister, setEffectRegister] = useState(false);
   const [activated, setActivated] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +26,7 @@ export default function Activation() {
 
   const activateAccount = async () => {
     setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const res = await fetch('/api/activation', {
       method: 'POST',
       headers: {
@@ -42,8 +42,6 @@ export default function Activation() {
       const data = await res.json();
       console.log('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
     } else {
-
-      console.log('Tu cuenta ha sido activada, ahora puedes hacer login!');
       setActivated(true);
     }
     setLoading(false);
@@ -59,39 +57,19 @@ export default function Activation() {
 
   return (
     <div>
-      {loading ? (
-        <div className="text-md relative inline-flex items-center border border-transparent bg-palm-leaf-500 px-4 py-2 font-bold text-white shadow-sm hover:bg-palm-leaf-600 focus:outline-none focus:ring-2 focus:ring-palm-leaf-400 focus:ring-offset-2">
-          <CircleLoader loading={loading} size={25} color="#ffffff" />
-        </div>
+      {activated ? (
+        <p className="h-10 bg-green-500 text-white font-semibold rounded-sm py-2 px-4 w-full text-center flex items-center justify-center">
+          Activado
+        </p>
       ) : (
-        <button
-          type="button"
-          onClick={activateAccount}
-          onMouseDown={() => {
-            setEffectRegister(true);
-          }}
-          onMouseUp={() => setEffectRegister(false)}
-          className={`${
-            effectRegister &&
-            'duration-400 animate-click hover:shadow-neubrutalism-sm'
-          }
-                text-md 
-                relative
-                uppercase
-                inline-flex
-                rounded-sm
-                w-full 
-                items-center
-                justify-center 
-                border 
-                border-dark-bg border-transparent
-                bg-green-500  px-4  py-2  text-sm
-                font-bold
-                text-white shadow-neubrutalism-md transition duration-300 ease-in-out hover:bg-green-600  hover:shadow-neubrutalism-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2
-            `}
-        >
-          Activar
-        </button>
+        loading ? (
+          <button type="button" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-sm py-2 px-4 w-full text-center flex items-center justify-center">
+            <CircleLoader loading={loading} size={25} color="#1c1d1f" />
+          </button>
+        ) : (
+          <button type="button" onClick={activateAccount}
+          className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-sm py-2 px-4 w-full text-center uppercase text-sm transition-colors duration-300">Activar</button>
+          )
       )}
     </div>
   );

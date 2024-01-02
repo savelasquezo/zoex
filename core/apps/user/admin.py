@@ -4,7 +4,6 @@ from django.conf.locale.es import formats as es_formats
 
 import apps.user.models as models
 
-
 class WithdrawalsInline(admin.StackedInline):
     
     model = models.Withdrawals
@@ -22,6 +21,8 @@ class WithdrawalsInline(admin.StackedInline):
 
     radio_fields = {'state': admin.HORIZONTAL}
     readonly_fields = ('uuid','method','amount','date','voucher')
+    def has_add_permission(self, request, obj=None):
+        return False
 
 class InvoiceInline(admin.StackedInline):
     
@@ -40,6 +41,9 @@ class InvoiceInline(admin.StackedInline):
 
     radio_fields = {'state': admin.HORIZONTAL}
     readonly_fields = ('uuid','method','amount','date','voucher')
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = (
@@ -65,6 +69,8 @@ class InvoiceAdmin(admin.ModelAdmin):
     )
 
     readonly_fields=['account','uuid','method','amount','date']
+    def has_add_permission(self, request):
+         return False
 
 class WithdrawalsAdmin(admin.ModelAdmin):
     list_display = (
@@ -90,6 +96,8 @@ class WithdrawalsAdmin(admin.ModelAdmin):
     )
 
     readonly_fields=['account','uuid','method','amount','date']
+    def has_add_permission(self, request):
+         return False
 
 class UserAccountAdmin(BaseUserAdmin):
     list_display = ('username', 'email','phone','balance')
@@ -120,6 +128,8 @@ class UserAccountAdmin(BaseUserAdmin):
     def get_readonly_fields(self, request, obj=None):
         return ['username','email','uuid','phone','referred']
 
+
 admin.site.register(models.UserAccount, UserAccountAdmin)
 admin.site.register(models.Invoice, InvoiceAdmin)
 admin.site.register(models.Withdrawals, WithdrawalsAdmin)
+

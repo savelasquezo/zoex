@@ -10,12 +10,15 @@ class TicketsGiveawayInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            ("email","ticket"),
-            ("date","voucher"),
+            ('is_active','ticket','email'),
+            ('date','voucher','method'),
                 )
             }
         ),
     )
+
+    def get_readonly_fields(self, request, obj=None):
+        return ['email','ticket','date','method','voucher']
 
 class GiveawayAdmin(admin.ModelAdmin):
 
