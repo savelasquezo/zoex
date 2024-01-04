@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
-export const fetchWithdrawals = async (accessToken: any) => {
+export const fetchLotteryTickets = async (accessToken) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/fetch-withdrawals/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery-tickets/`,
       {
         method: 'GET',
         headers: {
