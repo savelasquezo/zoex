@@ -71,9 +71,9 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
         <table className="min-w-full text-center text-sm font-light">
           <thead className="font-medium text-white">
             <tr className="border-b border-slate-900 uppercase text-xs">
-              <th scope="col" className="px-6 py-2">Lottery</th>
+              <th scope="col" className="px-6 py-2">Loteria</th>
               <th scope="col" className="px-6 py-2">Ticket</th>
-              <th scope="col" className="px-6 py-2">Date</th>
+              <th scope="col" className="px-6 py-2">Fecha</th>
               <th scope="col" className="px-6 py-2">Voucher</th>
             </tr>
           </thead>
