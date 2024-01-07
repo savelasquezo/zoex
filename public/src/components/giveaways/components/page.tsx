@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Session } from 'next-auth';
+
 import { NextResponse } from 'next/server';
 
 import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
@@ -9,9 +9,7 @@ import TicketsGiveawayModal from "./ticketsGiveawayModal";
 import ListTicketsGiveawayModal from "./listTicketsModal";
 
 
-interface GiveawaysModalProps {
-    session: Session | null | undefined;
-}
+interface GiveawaysModalProps {}
 
 interface GiveawayData {
     id: any;
@@ -41,7 +39,7 @@ export const fetchGiveaways = async () => {
 }
 
 
-const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
+const Giveaways: React.FC<GiveawaysModalProps> = () => {
     
     const [showModal, setShowModal] = useState(false);
     const [closingModal, setClosingModal] = useState(false);
@@ -123,10 +121,10 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
                     <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'buyTicket' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>
                     <button onClick={() => openModal('lstTicket',{giveawayId})} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'lstTicket' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Tickets</button>
                     <div className={`${activeTab === 'buyTicket' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                        <TicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
+                        <TicketsGiveawayModal closeModal={closeModal}  giveawayId={giveawayId}/>
                     </div>
                     <div style={{ display: activeTab === 'lstTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'lstTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'buyTicket' ? 'hidden' : ''}`}>
-                        <ListTicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
+                        <ListTicketsGiveawayModal closeModal={closeModal}  giveawayId={giveawayId}/>
                     </div>
                   </div>
                 </div>

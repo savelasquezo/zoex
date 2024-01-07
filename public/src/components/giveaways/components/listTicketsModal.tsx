@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
+import { useSession } from 'next-auth/react';
 
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
@@ -10,7 +11,6 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 interface ListTicketsGiveawayModalProps {
   closeModal: () => void;
-  session: Session | null | undefined;
   giveawayId: number;
 }
 
@@ -44,7 +44,8 @@ export const fetchGiveawayTickets = async (accessToken: any, giveawayId: number)
     }
   }
 
-const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
+const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ closeModal, giveawayId  }) => {
+    const { data: session } = useSession();
 
     const [pageNumber, setPageNumber] = useState(0);
     const TicketsPage = 5;
