@@ -1,14 +1,8 @@
-import React, { useRef } from 'react';
-import Image from 'next/image';
-
+import React from 'react';
 import { Session } from 'next-auth';
 
 import {FaUser, FaPhone, FaCopy} from 'react-icons/fa';
 import { MdEmail } from "react-icons/md";
-
-
-
-
 
 type ProfileModalProps = {
   closeModal: () => void;
@@ -16,7 +10,7 @@ type ProfileModalProps = {
 };
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ closeModal, session  }) => {
-
+  
   const sessionID = `${session?.user?.accessToken || ''}`
   const handleCopyClick = () => {
     navigator.clipboard.writeText(sessionID)

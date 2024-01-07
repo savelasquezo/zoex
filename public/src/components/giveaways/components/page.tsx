@@ -1,22 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Session } from 'next-auth';
+import { NextResponse } from 'next/server';
+
+import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
 
 import TicketsGiveawayModal from "./ticketsGiveawayModal";
 import ListTicketsGiveawayModal from "./listTicketsModal";
 
-import { fetchGiveaways } from '@/app/api/giveaway/route';
-import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
 
 interface GiveawaysModalProps {
     session: Session | null | undefined;
-  }
+}
 
 interface GiveawayData {
     id: any;
     banner: string;
     progress: number;
+}
+
+export const fetchGiveaways = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
   }
+}
+
 
 const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
     

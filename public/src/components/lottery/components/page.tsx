@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
+import { NextResponse } from 'next/server';
+import { Session } from 'next-auth';
+
 import TicketsLotteryModal from "./ticketsLotteryModal";
 import ListTicketsLotteryModal from "./listTicketsModal";
 import ListHistoryLotteryModal from "./listHistoryModal";
 
-import { fetchLottery } from '@/app/api/lottery/route';
-import { Session } from 'next-auth';
+import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
 
 interface LotteryModalProps {
   session: Session | null | undefined;
@@ -14,6 +15,30 @@ interface LotteryModalProps {
 interface LotteryData {
     banner: string;
 }
+
+
+export const fetchLottery = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
+
 
 const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
 

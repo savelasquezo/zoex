@@ -2,21 +2,12 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import CircleLoader from 'react-spinners/CircleLoader';
 import Link from 'next/link';
 import { Session } from 'next-auth';
+import { NextResponse } from 'next/server';
 
-import {AiOutlineWhatsApp, AiOutlineInstagram} from 'react-icons/ai'
-import {BiLogoFacebook} from 'react-icons/bi'
-
-import {
-  FacebookIcon,
-  TelegramIcon,
-  TwitterIcon,
-  WhatsappIcon,
-} from 'next-share';
-
-import {CiMail} from 'react-icons/ci'
+import {AiOutlineWhatsApp, AiOutlineInstagram} from 'react-icons/ai';
+import {BiLogoFacebook} from 'react-icons/bi';
+import {CiMail} from 'react-icons/ci';
 import { MdSubject } from "react-icons/md";
-
-import { fetchInfo } from '@/app/api/images/info/route';
 
 type SupportModalProps = {
   closeModal: () => void;
@@ -30,6 +21,26 @@ type InfoType = {
   instagram: string;
 };
 
+export const fetchInfo = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-info/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
 
 const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => {
   const [loading, setLoading] = useState(false);
@@ -71,22 +82,26 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
     setLoading(true);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/send-message/`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          subject,
+          message,
+        }),
+      });
 
-    const res = await fetch('/api/messages/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        subject,
-        message,
-      }),
-    });
-
-    const data = res.headers.get('content-type')?.includes('application/json') ? await res.json() : {};
-    if (!data.error) {
-      setRegistrationSuccess(true);
+      const data = res.headers.get('content-type')?.includes('application/json') ? await res.json() : {};
+      if (!data.error) {
+        setRegistrationSuccess(true);
+      }
+    } catch (error) {
+      return NextResponse.json({ error: 'There was an error with the network request' });
     }
     setLoading(false);
   };

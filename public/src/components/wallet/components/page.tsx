@@ -2,23 +2,19 @@ import React, { useState, useEffect } from "react";
 import ReactPaginate from 'react-paginate';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { Session } from 'next-auth';
-
+import { NextResponse } from 'next/server';
 import CircleLoader from 'react-spinners/CircleLoader';
 
-import { fetchWithdrawals } from '@/app/api/withdrawals/route';
 import { getBitcoinPrice } from '@/utils/cryptoApi';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-
 import { FaWallet } from "react-icons/fa";
 import { GiTwoCoins } from "react-icons/gi";
 import { FiDollarSign } from "react-icons/fi";
 import { LuRefreshCw } from "react-icons/lu";
 import { CiBank } from "react-icons/ci";
 
-import { fetchRefresh } from '@/app/api/refresh/route';
 
 type WalletModalProps = {
   closeModal: () => void;
@@ -33,7 +29,52 @@ type WithdrawType = {
   state: boolean;
 };
 
-  
+export const fetchWithdrawals = async (accessToken: any) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/fetch-withdrawals/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${accessToken}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
+export const fetchRefresh = async (accessToken: any) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/refresh-invoices/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${accessToken}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
+
+
 const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
 
   const [showModal, setShowModal] = useState(true);
@@ -68,7 +109,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
     setPageNumber(selected);
   };
 
-  const [formData, setFormData] = useState({paymentAmount: '',withdrawAmount: ''});
+  const [formData, setFormData] = useState({paymentAmount: 0,withdrawAmount: ''});
   const {paymentAmount, withdrawAmount } = formData;
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -147,8 +188,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
     setErrorAdd('');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const amountPattern = /^[1-9][0-9]+$/;
-    if (!amountPattern.test(paymentAmount) || parseInt(paymentAmount, 0) >= 99999 || parseInt(paymentAmount, 0) <= 9) {
+    if (typeof paymentAmount !== 'number' || paymentAmount < 10 || paymentAmount > 99999) {
       setErrorAdd('¡Error - Ingrese un valor Valido entre 10 USD & 99999 USD!');
       setLoading(false);
       return;
@@ -160,24 +200,29 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
       return;
     }
 
-    const res = await fetch('/api/invoice/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${session?.user?.accessToken}`,
-      },
-      body: JSON.stringify({    
-        paymentMethod,
-        paymentAmount,
-      }),
-    });
-    const data = await res.json();
-    if (!data.error) {
-      setSuccessAdd('¡Facturacion Exitosa!');
-      setPaymentInfo(paymentMethod);
-      setInvoice(data.apiInvoice);
-      setInvoiceSuccess(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/request-invoice/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify({    
+          paymentMethod,
+          paymentAmount,
+        }),
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setSuccessAdd('¡Facturacion Exitosa!');
+        setPaymentInfo(paymentMethod);
+        setInvoice(data.apiInvoice);
+        setInvoiceSuccess(true);
+      }
+    } catch (error) {
+      console.error('RequestInvoice Error:', error);
     }
+    
     setLoading(false);
   };
 
@@ -202,26 +247,30 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
       return;
     }
 
-    const res = await fetch('/api/withdraw/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${session?.user?.accessToken}`,
-      },
-      body: JSON.stringify({    
-        withdrawMethod,
-        withdrawAmount,
-      }),
-    });
-    const data = await res.json();
-    if (!data.error) {
-      setSuccessWithdraw('¡Facturacion Exitosa!');
-      setWithdrawInfo(withdrawMethod);
-      setWithdraw(data.apiWithdraw);
-      setWithdrawSuccess(true);
-      if (session && session.user) {
-        session.user.balance = data.newBalance;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/request-withdraw/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify({    
+          withdrawMethod,
+          withdrawAmount,
+        }),
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setSuccessWithdraw('¡Facturacion Exitosa!');
+        setWithdrawInfo(withdrawMethod);
+        setWithdraw(data.apiWithdraw);
+        setWithdrawSuccess(true);
+        if (session && session.user) {
+          session.user.balance = data.newBalance;
+        }
       }
+    } catch (error) {
+      console.error('RequestWithdraw Error:', error);
     }
     setLoading(false);
   };

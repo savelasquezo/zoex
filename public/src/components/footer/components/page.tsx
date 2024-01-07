@@ -5,22 +5,24 @@ import Image from 'next/image';
 import { Session } from 'next-auth';
 
 import {FaUser} from 'react-icons/fa';
-import {HiShare} from 'react-icons/hi'
-import {IoMdHelp} from 'react-icons/io'
-import {IoTicket} from 'react-icons/io5'
-import {AiOutlineClose} from 'react-icons/ai'
+import {HiShare} from 'react-icons/hi';
+import {IoMdHelp} from 'react-icons/io';
+import {IoTicket} from 'react-icons/io5';
+import {AiOutlineClose} from 'react-icons/ai';
 
-import ProfileModal from "./profileModal";
-import TicketsModal from "./ticketsModal";
+import ProfileModal from '@/components/profile/index';
+import TicketsModal from '@/components/tickets/index';
 
 import AccountWallet from '@/components/wallet/index';
 
-import ShareModal from "@/components/share/index";
-import SupportModal from "./supportModal";
+import ShareModal from '@/components/share/index';
+import SupportModal from '@/components/support/index';
 
-import Tooltip from './tooltip';
+import Tooltip from '@/utils/tooltip';
 
-type FooterProps = {session: Session | null | undefined;};
+interface FooterProps {
+  session: Session | null | undefined;
+}
 
 const Footer: React.FC<FooterProps> = ({ session  }) => {
     const searchParams = useSearchParams();
@@ -63,10 +65,10 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                     <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                     <div>
                       <div style={{ display: activeTab === 'history' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'history' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'history' ? 'hidden' : ''}`}>
-                        <ProfileModal closeModal={closeModal} session={session}/>
+                        <ProfileModal />
                       </div>
                       <div style={{ display: activeTab === 'tickets' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'tickets' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'tickets' ? 'hidden' : ''}`}>
-                        <TicketsModal closeModal={closeModal} session={session}/>
+                        <TicketsModal />
                       </div>
                       <div style={{ display: activeTab === 'wallet' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'wallet' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'wallet' ? 'hidden' : ''}`}>
                         <AccountWallet />
@@ -75,7 +77,7 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                         <ShareModal />
                       </div>
                       <div style={{ display: activeTab === 'support' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'support' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'support' ? 'hidden' : ''}`}>
-                        <SupportModal closeModal={closeModal} session={session}/>
+                        <SupportModal />
                       </div>
                     </div>
                 </div>

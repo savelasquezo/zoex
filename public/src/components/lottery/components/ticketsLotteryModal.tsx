@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { LuRefreshCw } from "react-icons/lu";
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
 import CircleLoader from 'react-spinners/CircleLoader';
 
@@ -139,31 +139,36 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
     }
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const res = await fetch('/api/buy/lottery', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${session?.user?.accessToken}`,
-      },
-      body: JSON.stringify({    
-        email,
-        paymentMethod,
-        ticket,
-      }),
-    });
-    const data = await res.json();
-    if (!data.error) {
-      setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
-      setInvoice(data.apiVoucher)
-      setTicketsSuccess(true)
-      setPaymentInfo(paymentMethod);
-      if (session && session.user) {
-        session.user.balance = data.newBalance;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/request-ticketlottery/`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify({    
+          email,
+          paymentMethod,
+          ticket,
+        }),
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
+        setInvoice(data.apiVoucher)
+        setTicketsSuccess(true)
+        setPaymentInfo(paymentMethod);
+        if (session && session.user) {
+          session.user.balance = data.newBalance;
+        }
       }
-    }
+    } catch (error) {
+      return NextResponse.json({ error: 'There was an error with the network request' });
 
-    setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   };
 
 

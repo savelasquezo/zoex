@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Session } from 'next-auth';
+import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
-import { fetchLotteryTickets } from '@/app/api/tickets/lottery/route';
-import { fetchGiveawayTickets } from '@/app/api/tickets/giveaway/route';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
@@ -25,7 +24,56 @@ type GiveawayTicketType = {
   voucher: string;
 };
 
-const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
+
+
+export const fetchLotteryTickets = async (accessToken: any) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery-tickets/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${accessToken}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
+export const fetchGiveawayTickets = async (accessToken: any, giveawayId: number) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway-tickets/${giveawayId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${accessToken}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
+
+
+const TicketsModal: React.FC<TicketsModalProps>  = ({ closeModal, session }) => {
+
   const [showModal, setShowModal] = useState(true);
   const [activeTab, setActiveTab] = useState('lottery-tickets');
   const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketType[]>([]);
@@ -48,7 +96,7 @@ const TicketsModal: React.FC<TicketsModalProps> = ({ closeModal, session }) => {
       }
 
       if (activeTab === 'giveaway-tickets') {
-        fetchGiveawayTickets(accessToken,1)
+        fetchGiveawayTickets(accessToken,0)
         .then((data) => {
           setGiveawayTickets(data);
         })

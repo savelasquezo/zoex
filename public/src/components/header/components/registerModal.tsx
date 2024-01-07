@@ -88,28 +88,32 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         }
 
         const referred = searchParams.get('uuid') ?? 'N/A';
-        const res = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            phone,
-            username,
-            email,
-            password,
-            re_password,
-            referred,
-          }),
-        });
-    
-        const data = await res.json();
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              phone,
+              username,
+              email,
+              password,
+              re_password,
+              referred,
+            }),
+          });
+      
+          const data = await res.json();
 
-        if (data.error) {
-          setError("¡Email no Encontrado! Intentalo Nuevamente ");
-        } else {
-          setSuccess("¡Enviamos un Correo Electronio de Verificacion! ");
-          setRegistrationSuccess(true);
+          if (data.error) {
+            setError("¡Email no Encontrado! Intentalo Nuevamente ");
+          } else {
+            setSuccess("¡Enviamos un Correo Electronio de Verificacion! ");
+            setRegistrationSuccess(true);
+          }
+        } catch (error) {
+          console.error('Error registerUser:', error);
         }
         setLoading(false);
     };

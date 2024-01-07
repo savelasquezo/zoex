@@ -17,8 +17,8 @@ export default function Page() {
     };
 
     return (
-        <footer>
+        <section>
             <ShareModal closeModal={closeModal} session={session} />
-        </footer>
+        </section>
     );
 }

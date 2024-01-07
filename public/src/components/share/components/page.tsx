@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Session } from 'next-auth';
-import { fetchInfo } from '@/app/api/images/info/route';
+import { NextResponse } from 'next/server';
 
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  TelegramShareButton,
-  TelegramIcon,
-  TwitterShareButton,
-  TwitterIcon,
-  WhatsappShareButton,
-  WhatsappIcon,
-} from 'next-share';
+import {FacebookShareButton, FacebookIcon, TelegramShareButton, TelegramIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon,} from 'next-share';
 
 type ShareModalProps = {
-    closeModal: () => void;
-    session: Session | null | undefined;
+  closeModal: () => void;
+  session: Session | null | undefined;
 };
 
 type InfoType = {
-    hashtag: string;
+  hashtag: string;
 };
 
+export const fetchInfo = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-info/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
 
 const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
   const [info, setInfo] = useState<InfoType>();

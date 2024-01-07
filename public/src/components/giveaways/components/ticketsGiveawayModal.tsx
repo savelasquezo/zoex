@@ -3,7 +3,7 @@ import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { LuRefreshCw } from "react-icons/lu";
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
 import CircleLoader from 'react-spinners/CircleLoader';
 
@@ -140,31 +140,37 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const res = await fetch('/api/buy/giveaway', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${session?.user?.accessToken}`,
-      },
-      body: JSON.stringify({    
-        email,
-        paymentMethod,
-        ticket,
-        giveawayId,
-      }),
-    });
-    const data = await res.json();
-    if (!data.error) {
-      setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
-      setInvoice(data.apiVoucher)
-      setTicketsSuccess(true)
-      setPaymentInfo(paymentMethod);
-      if (session && session.user) {
-        session.user.balance = data.newBalance;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/request-ticketgiveaway/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${session?.user?.accessToken}`,
+        },
+        body: JSON.stringify({    
+          email,
+          paymentMethod,
+          ticket,
+          giveawayId,
+        }),
+      });
+      const data = await res.json();
+      if (!data.error) {
+        setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
+        setInvoice(data.apiVoucher)
+        setTicketsSuccess(true)
+        setPaymentInfo(paymentMethod);
+        if (session && session.user) {
+          session.user.balance = data.newBalance;
+        }
       }
+      } catch (error) {
+        return NextResponse.json({ error: 'There was an error with the network request' });
+        
+      } finally {
+        setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

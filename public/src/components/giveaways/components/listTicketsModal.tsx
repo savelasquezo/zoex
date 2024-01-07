@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
 import ReactPaginate from 'react-paginate';
-import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-
 import { useRouter } from 'next/navigation';
-
 import { Session } from 'next-auth';
-import { fetchGiveawayTickets } from '@/app/api/tickets/giveaway/route';
+import { NextResponse } from 'next/server';
 
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 interface ListTicketsGiveawayModalProps {
   closeModal: () => void;
@@ -24,6 +21,28 @@ type TicketType = {
     voucher: string;
     is_active: boolean;
 };
+
+export const fetchGiveawayTickets = async (accessToken: any, giveawayId: number) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway-tickets/${giveawayId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${accessToken}`,
+          },
+        },
+      );
+      if (!res.ok) {
+        return NextResponse.json({ error: 'Server responded with an error' });
+      }
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return NextResponse.json({ error: 'There was an error with the network request' });
+    }
+  }
 
 const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
 

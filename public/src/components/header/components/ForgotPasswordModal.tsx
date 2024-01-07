@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CircleLoader from 'react-spinners/CircleLoader';
+import { NextResponse } from 'next/server';
 
 import {CiMail} from 'react-icons/ci'
 
@@ -30,22 +31,31 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ closeModal })
     setError('');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const res = await fetch('/api/forgot_password/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-      }),
-    });
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/reset_password/`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      });
 
-    if (res.status !== 200) {
-      setError("¡Email no fue Encontrado! ");
+      if (res.status !== 200) {
+        return setError("¡Email no fue Encontrado! ");
+      }
+      
+      setSuccess("¡Enviamos un Correo Electronio de Restablecimiento! ");
+      setRegistrationSuccess(true);
+
+      } catch (error) {
+        setError('¡Error al Actualizar! Inténtalo Nuevamente!');
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+    } finally {
+        setLoading(false);
     }
-    setSuccess("¡Enviamos un Correo Electronio de Restablecimiento! ");
-    setRegistrationSuccess(true);
-    setLoading(false);
   };
 
   return (

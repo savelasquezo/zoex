@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
-
+import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
-import { fetchLotteryTickets } from '@/app/api/tickets/lottery/route';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
-import { LuRefreshCw } from "react-icons/lu";
 
 
 interface ListTicketsLotteryModalProps {
@@ -23,6 +21,30 @@ type TicketType = {
     voucher: string;
     is_active: boolean;
 };
+
+
+export const fetchLotteryTickets = async (accessToken: any) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery-tickets/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${accessToken}`,
+        },
+      },
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
+}
+
 
 const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ closeModal, session  }) => {
 

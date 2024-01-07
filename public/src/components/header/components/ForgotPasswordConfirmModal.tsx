@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NextResponse } from 'next/server';
 
 import CircleLoader from 'react-spinners/CircleLoader';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -54,7 +55,8 @@ const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModalProps> = ({
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch('/api/forgot_password_confirm/', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/reset_password_confirm/`,
+      {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,13 +69,17 @@ const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModalProps> = ({
         }),
       });
       
-      setChangePasswordSuccess(true);
-      updateForgotPasswordModalState(false);
-      setSuccess('¡Contraseña Actualizada!');
+      if (res.ok) {
+        setChangePasswordSuccess(true);
+        updateForgotPasswordModalState(false);
+        setSuccess('¡Contraseña Actualizada!');
+        NextResponse.json({ success: 'Password reset successfully' });
+      }
 
     } catch (error) {
         setChangePasswordSuccess(false);
         setError('¡Error al Actualizar! Inténtalo Nuevamente!');
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     } finally {
         setLoading(false);
     }

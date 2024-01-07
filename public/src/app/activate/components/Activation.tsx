@@ -1,6 +1,6 @@
-'use client';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { NextResponse } from 'next/server';
 import CircleLoader from 'react-spinners/CircleLoader';
 
 export default function Activation() {
@@ -27,24 +27,30 @@ export default function Activation() {
   const activateAccount = async () => {
     setLoading(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const res = await fetch('/api/activation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        uid,
-        token,
-      }),
-    });
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/activation/`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid,
+          token,
+        }),
+      });
+      if (res.status !== 204) {
+        const data = await res.json();
+        console.log('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
+      } else {
+        setActivated(true);
+      }
+    } catch (error) {
+      return NextResponse.json({ error: 'There was an error with the network request' });
 
-    if (res.status !== 204) {
-      const data = await res.json();
-      console.log('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
-    } else {
-      setActivated(true);
-    }
-    setLoading(false);
+    } finally {
+      setLoading(false);
+  }
   };
 
   const router = useRouter();
