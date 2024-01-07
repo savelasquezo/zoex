@@ -58,7 +58,7 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
     useEffect(() => {
         const fetchData = async () => {
             if (session) {
-                const accessToken = session.user.accessToken;
+                const accessToken = session?.user?.accessToken;
                 try {
                     const TicketsList = await fetchGiveawayTickets(accessToken, giveawayId);
                     setTicketList(TicketsList || []);
