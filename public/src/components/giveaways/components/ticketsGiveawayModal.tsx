@@ -4,8 +4,7 @@ import { LuRefreshCw } from "react-icons/lu";
 import Image from 'next/image';
 import Link from 'next/link';
 import { NextResponse } from 'next/server';
-import { useSession } from 'next-auth/react';
-
+import { Session } from 'next-auth';
 import CircleLoader from 'react-spinners/CircleLoader';
 
 import { CiBank } from "react-icons/ci";
@@ -25,12 +24,11 @@ function getRandomTickets(aviableTickets: number[], num: number): number[] {
 
 interface TicketsGiveawayModalProps {
   closeModal: () => void;
+  session: Session | null | undefined;
   giveawayId: number;
 }
 
-const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal, giveawayId  }) => {
-  const { data: session } = useSession();
-
+const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [ticketsSuccess, setTicketsSuccess] = useState(false);
