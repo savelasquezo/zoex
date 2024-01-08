@@ -52,6 +52,9 @@ MANIFEST
 **/package-lock.json
 package-lock.json
 
+!lib/types/next-auth.d.ts
+
+
 
 
 # PyInstaller
