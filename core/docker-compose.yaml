@@ -4,6 +4,7 @@ services:
   # DjangorestFaremwork
   core:
     container_name: django
+    restart: always
     build: .
     ports:
       - "8000:8000"
@@ -31,5 +32,6 @@ services:
   redis:
     image: redis
     container_name: redis
+    restart: always
     ports:
       - 6379:6379
