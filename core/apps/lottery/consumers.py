@@ -1,15 +1,16 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-import apps.lottery.models as models
+
+from apps.lottery.models import Lottery, TicketsLottery
 from asgiref.sync import sync_to_async
 
 @sync_to_async
 def getAsyncLottery():
-    return models.Lottery.objects.get(is_active=True)
+    return Lottery.objects.get(is_active=True)
 
 @sync_to_async
 def getAsyncTickets(lottery):
-    return list(models.TicketsLottery.objects.filter(lottery=lottery).values_list('ticket', flat=True))
+    return list(TicketsLottery.objects.filter(lottery=lottery).values_list('ticket', flat=True))
 
 async def getAsyncAviableTickets():
     lottery = await getAsyncLottery()

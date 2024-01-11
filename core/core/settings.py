@@ -90,7 +90,7 @@ THIRD_APPS = [
 CKEDITOR_CONFIGS = {"default": {"toolbar": "full", "autoParagraph": False}}
 CKEDITOR_UPLOAD_PATH = "/ckeditor/"
 
-INSTALLED_APPS = DJANGO_APPS + CORE_APPS + THIRD_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + CORE_APPS
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

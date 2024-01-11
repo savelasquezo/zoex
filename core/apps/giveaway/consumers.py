@@ -1,15 +1,15 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-import apps.giveaway.models as models
+from apps.giveaway.models import Giveaway, TicketsGiveaway
 from asgiref.sync import sync_to_async
 
 @sync_to_async
 def getAsyncGiveaway(id):
-    return models.Giveaway.objects.get(pk=id)
+    return Giveaway.objects.get(pk=id)
 
 @sync_to_async
 def getAsyncTickets(giveaway):
-    return list(models.TicketsGiveaway.objects.filter(giveaway=giveaway).values_list('ticket', flat=True))
+    return list(TicketsGiveaway.objects.filter(giveaway=giveaway).values_list('ticket', flat=True))
 
 async def getAsyncAviableTickets(id):
     giveaway = await getAsyncGiveaway(id)
