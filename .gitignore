@@ -27,6 +27,7 @@ __pycache__/
 
 # C extensions
 *.so
+core/core.sock.lock
 
 # Distribution / packaging
 .Python
@@ -193,3 +194,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 !/lib/types/next-env.d.ts
+
+public/.next/

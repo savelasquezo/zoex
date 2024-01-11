@@ -23,7 +23,7 @@ application = get_asgi_application()
 async_websocket_urlpatterns = (core_websocket + lottery_websocket + giveaway_websocket)
 
 application = ProtocolTypeRouter({
-    "https": application,
+    "http": application,
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(URLRouter(async_websocket_urlpatterns))
         ),

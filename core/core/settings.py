@@ -37,18 +37,9 @@ APILAYER_KEY = os.getenv('APILAYER_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-DOMAIN = ("zoexbet")
+DOMAIN = ("zoexbet.com")
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-]
-
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://zoexbet.com"]
 
 
 CORS_ALLOW_REQUESTS_FROM_NO_REFERER = True
