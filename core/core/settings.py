@@ -142,7 +142,7 @@ DATABASES = {
         "NAME": "zoex",
         "USER": "postgres",
         "PASSWORD": "4oPn2655Lmn",
-        "HOST": "db",
+        "HOST": "localhost",
         "PORT": "5432",
     }
 }
