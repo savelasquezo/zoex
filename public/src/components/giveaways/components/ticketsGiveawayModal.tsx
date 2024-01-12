@@ -58,7 +58,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
   };
 
   useEffect(() => {
-    const websocketURL = `ws://${process.env.NEXT_PUBLIC_APP_URL}/ws/tickets_giveaway/${giveawayId}/`;
+    const websocketURL = `ws://${process.env.NEXT_PUBLIC_APP_URL}/api/ws/tickets_giveaway/${giveawayId}/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
