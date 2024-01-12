@@ -39,8 +39,12 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 DOMAIN = ("zoexbet.com")
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://zoexbet.com"]
+CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+CORS_ALLOW_HEADERS = ['*', 'authorization', 'content-type']
+
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://zoexbet.com"]
 
 CORS_ALLOW_REQUESTS_FROM_NO_REFERER = True
 CORS_DEBUG = True
@@ -155,7 +159,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis', 6379)],
+            "hosts": [('localhost', 6379)],
         },
     },
 }

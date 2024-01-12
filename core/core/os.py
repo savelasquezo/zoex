@@ -1,9 +1,9 @@
 from .settings  import *
 
-DEBUG = False
-ALLOWED_HOSTS = ['217.196.63.210','zoexbet.com']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://zoexbet.com']
+CSRF_TRUSTED_ORIGINS = ['*']
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.hostinger.com'

@@ -19,6 +19,7 @@ out.log
 
 **/users/
 !users/README.md
+postgresql/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
