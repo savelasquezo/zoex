@@ -141,7 +141,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/request-ticketgiveaway/`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/giveaway/request-ticketgiveaway/`,
       {
         method: 'POST',
         headers: {

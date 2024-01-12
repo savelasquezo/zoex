@@ -32,7 +32,7 @@ type WithdrawType = {
 export const fetchWithdrawals = async (accessToken: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/fetch-withdrawals/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/user/fetch-withdrawals/`,
       {
         method: 'GET',
         headers: {
@@ -54,7 +54,7 @@ export const fetchWithdrawals = async (accessToken: any) => {
 export const fetchRefresh = async (accessToken: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/refresh-invoices/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}user/refresh-invoices/`,
       {
         method: 'GET',
         headers: {
@@ -201,7 +201,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/request-invoice/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/user/request-invoice/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/user/request-withdraw/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/user/request-withdraw/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
