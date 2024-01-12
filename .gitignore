@@ -198,3 +198,4 @@ yarn-error.log*
 !/lib/types/next-env.d.ts
 
 public/.next/
+public/next.config.js
