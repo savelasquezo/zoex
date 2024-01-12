@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: http://localhost:8000
+Host: https://zoexbet.com
 
 # Sitemaps
-Sitemap: http://localhost:8000/sitemap.xml
+Sitemap: https://zoexbet.com/sitemap.xml
