@@ -12,7 +12,7 @@ interface ImagenSlider {file: any;}
 export const fetchImagenSliders = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/core/fetch-sliders/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-sliders/`,
       {
         method: 'GET',
         headers: {

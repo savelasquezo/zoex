@@ -16,7 +16,7 @@ type InfoType = {
 export const fetchInfo = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/core/fetch-info/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-info/`,
       {
         method: 'GET',
         headers: {

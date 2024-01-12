@@ -32,7 +32,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ closeModal })
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/auth/users/reset_password/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/reset_password/`, 
       {
         method: 'POST',
         headers: {

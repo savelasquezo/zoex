@@ -26,7 +26,7 @@ type TicketType = {
 export const fetchLotteryTickets = async (accessToken: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/lottery/fetch-lottery-tickets/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery-tickets/`,
       {
         method: 'GET',
         headers: {

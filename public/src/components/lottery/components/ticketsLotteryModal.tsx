@@ -140,7 +140,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/lottery/request-ticketlottery/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/request-ticketlottery/`, 
       {
         method: 'POST',
         headers: {
