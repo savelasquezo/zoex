@@ -1,6 +1,8 @@
 from .settings  import *
 
 DEBUG = True
+SECURE_SSL_REDIRECT = True
+
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = ['*']
