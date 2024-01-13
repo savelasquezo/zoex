@@ -83,8 +83,8 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
             {itemsGiveaway.length > 0 ? (
                 itemsGiveaway.map((itemGiveaway, i) => (
                 <div key={itemGiveaway.id} className="relative flex flex-col items-center rounded-sm h-40 md:h-80 shadow-inner">
-                    <Image width={1240} height={550} unoptimized src={itemGiveaway.banner} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" alt="" />
-		    <div className="absolute top-0 h-2 w-full flex flex-row items-center gap-x-1">
+                    <Image unoptimized width={1240} height={550} src={itemGiveaway.banner} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" alt="" />
+		                <div className="absolute top-0 h-2 w-full flex flex-row items-center gap-x-1">
                         <div className='absolute top-0 h-full w-full bg-gradient-to-r from-lime-500 to-red-500 transition-all duration-200'/>
                         <div className="absolute top-0 h-full w-full flex items-end justify-end">
                             <div className='h-full w-full flex  bg-white transition-all duration-200' style={{ width: `${itemGiveaway.progress}%` }} />
@@ -101,7 +101,7 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
                 ) : (
                 defaultElements.map((i) => (
                 <div key={i} className="relative flex flex-col items-center rounded-sm h-40 md:h-80 shadow-inner">
-                    <Image width={1240} height={550} src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" alt="" />
+                    <Image unoptimized width={1240} height={550} src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" alt="" />
                     <div className="absolute top-0 h-2 w-full flex flex-row items-center gap-x-1">
                         <div className='absolute top-0 h-full w-full bg-gradient-to-r from-lime-500 to-red-500 transition-all duration-200'/>
                     </div>

@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
                 <div className="relative w-[55%] flex justify-between items-center h-[90%]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
-                  <Image width={1200} height={800} src={"/assets/image/banner.png"} alt="" className="h-full w-[45%] object-cover rounded-l-2xl"/>
+                  <Image unoptimized width={1200} height={800} src={"/assets/image/banner.png"} alt="" className="h-full w-[45%] object-cover rounded-l-2xl"/>
                   <div className="w-[55%] h-full bg-gray-800 rounded-r-2xl p-6">
                     <div className='flex flex-row w-full items-center'>
                       <button onClick={() => openModal('login')} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ?  'bg-red-500 hover:bg-red-600' : ''}`}>Ingresar</button>

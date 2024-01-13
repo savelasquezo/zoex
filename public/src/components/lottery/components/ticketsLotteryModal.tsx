@@ -212,11 +212,11 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
                   required
                 />
                 <div className="relative flex flex-wrap gap-x-2 my-4">
-                  <span onClick={() => {if (paymentMethod === 'crypto') {setPaymentMethod('');} else {setPaymentMethod('crypto');}}} className=""><Image width={405} height={200} src={"/assets/image/bitcoin.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300  ${paymentMethod === 'crypto' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'bank') {setPaymentMethod('');} else {setPaymentMethod('bank');}}} className=""><Image width={405} height={200} src={"/assets/image/bank.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'bank' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'paypal') {setPaymentMethod('');} else {setPaymentMethod('paypal');}}} className=""><Image width={405} height={200} src={"/assets/image/paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'paypal' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'nequi') {setPaymentMethod('');} else {setPaymentMethod('nequi');}}} className=""><Image width={405} height={200} src={"/assets/image/nequi.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'nequi' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'daviplata') {setPaymentMethod('');} else {setPaymentMethod('daviplata');}}} className=""><Image width={405} height={200} src={"/assets/image/daviplata.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'daviplata' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
+                  <span onClick={() => {if (paymentMethod === 'crypto') {setPaymentMethod('');} else {setPaymentMethod('crypto');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/bitcoin.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300  ${paymentMethod === 'crypto' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
+                  <span onClick={() => {if (paymentMethod === 'bank') {setPaymentMethod('');} else {setPaymentMethod('bank');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/bank.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'bank' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
+                  <span onClick={() => {if (paymentMethod === 'paypal') {setPaymentMethod('');} else {setPaymentMethod('paypal');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'paypal' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
+                  <span onClick={() => {if (paymentMethod === 'nequi') {setPaymentMethod('');} else {setPaymentMethod('nequi');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/nequi.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'nequi' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
+                  <span onClick={() => {if (paymentMethod === 'daviplata') {setPaymentMethod('');} else {setPaymentMethod('daviplata');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/daviplata.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'daviplata' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
                 </div>
               </div>
               {loading ? (
@@ -253,7 +253,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           {success && (<div className="text-lime-400 text-sm mt-2">{success}</div>)}
           <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'crypto' ? 'block' : 'hidden' }`}>
             <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-              <Image width={192} height={128} src={"/assets/image/pyment-crypto.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
+              <Image unoptimized width={192} height={128} src={"/assets/image/pyment-crypto.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
             </Link>
           </div>
           <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'bank' ? 'block' : 'hidden' }`}>
@@ -276,7 +276,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           </div>
           <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'paypal' ? 'block' : 'hidden' }`}>
             <Link href={`https://www.paypal.com/`} target="_blank" rel="noopener noreferrer">
-              <Image width={192} height={128} src={"/assets/image/pyment-paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
+              <Image unoptimized width={192} height={128} src={"/assets/image/pyment-paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
             </Link>
           </div>
           <div className={`flex flex-col leading-none ${paymentInfo === 'nequi' ? 'block' : 'hidden' }`}>
