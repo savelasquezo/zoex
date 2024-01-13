@@ -2,7 +2,8 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import jwt from 'jsonwebtoken';
 
-export const authOptions = {
+
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -63,8 +64,8 @@ export const authOptions = {
       }
       if (token && token.accessToken) {
         const decodedToken = jwt.decode(token.accessToken);
-
-        if (decodedToken && decodedToken.exp < Date.now() / 1000) {
+    
+        if (decodedToken && typeof decodedToken === 'object' && 'exp' in decodedToken && decodedToken.exp !== undefined && decodedToken.exp < Date.now() / 1000) {
           session.user = null;
         }
       }
@@ -94,7 +95,7 @@ export const authOptions = {
       return session;
     },
   },
-};
+})
 
-export const GET = NextAuth(authOptions);
-export const POST = NextAuth(authOptions);
+
+export { handler as GET, handler as POST }

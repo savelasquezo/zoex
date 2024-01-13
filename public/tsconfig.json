@@ -38,7 +38,6 @@
     "**/*.js",
     "**/*.jsx",
     ".next/types/**/*.ts",
-    "src/app/api/auth/[...nextauth]/route.js",
     "src/app/layout.jsx",
     "src/app/page.tsx",
     "src/utils/tooltip.js",
@@ -52,7 +51,7 @@
     "src/components/slider.jsx",
     "src/components/giveaways/components/ticketsGiveawayModal.tsx",
     "src/components/footer/components/shareModal.tsx",
-    "src/components/lottery/components/ticketsLotteryModal.tsx",
+    "src/components/lottery/components/ticketsLotteryModal.tsx"
   ],
   "exclude": [
     "node_modules"
