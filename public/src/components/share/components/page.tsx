@@ -16,7 +16,7 @@ type InfoType = {
 export const fetchInfo = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-info/`,
+      `${process.env.NEXTAUTH_URL}/api/core/fetch-info/`,
       {
         method: 'GET',
         headers: {
@@ -47,7 +47,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
       });
   }, []);
 
-  const shareURL = `https://${process.env.NEXT_PUBLIC_APP_SITE}/?singup=True&uuid=${session?.user?.uuid || ''}`
+  const shareURL = `${process.env.NEXTAUTH_URL}/?singup=True&uuid=${session?.user?.uuid || ''}`
   const shareHashtag = `${info?.hashtag}`
   const shareTittle = "¡Atencion Comunidad! registrarse a través de mi enlace, ¡obtendrán un BONUS EXCLUSIVO del 50% en su primera recarga! 💰✨"
 

@@ -12,7 +12,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/jwt/create/`, {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/jwt/create/`, {
           method: 'POST',
           body: JSON.stringify({
             email: credentials?.email,
@@ -27,7 +27,7 @@ const handler = NextAuth({
 
         const { access, refresh } = await res.json();
 
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/me/`, {
+        const userRes = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/users/me/`, {
           headers: { Authorization: `JWT ${access}` },
         });
 
@@ -73,7 +73,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/me/`, {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/users/me/`, {
         headers: { Authorization: `JWT ${token.accessToken}` },
       });
 

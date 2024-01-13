@@ -28,5 +28,4 @@ urlpatterns = [
     path("api/lottery/", include("apps.lottery.urls")),
     path("api/giveaway/", include("apps.giveaway.urls")),
     path("api/admin/", admin.site.urls),
-    path('', RedirectView.as_view(url='http://localhost:3000/', permanent=False)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

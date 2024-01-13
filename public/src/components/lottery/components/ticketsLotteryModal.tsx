@@ -58,7 +58,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   };
 
   useEffect(() => {
-    const websocketURL = `ws://${process.env.NEXT_PUBLIC_APP_URL}/ws/tickets_lottery/`;
+    const websocketURL = `${process.env.WEBSOCKET_APP}/ws/tickets_lottery/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
@@ -140,7 +140,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/request-ticketlottery/`, 
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/lottery/request-ticketlottery/`, 
       {
         method: 'POST',
         headers: {
