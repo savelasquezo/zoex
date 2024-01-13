@@ -20,7 +20,7 @@ interface LotteryData {
 export const fetchLottery = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/lottery/fetch-lottery/`,      
+      `https://zoexbet.com/api/lottery/fetch-lottery/`,      
     {
         method: 'GET',
         headers: {
