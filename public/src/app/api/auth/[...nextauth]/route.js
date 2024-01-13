@@ -96,5 +96,5 @@ export const authOptions = {
   },
 };
 
-export const GET = NextAuth(authOptions as any);
-export const POST = NextAuth(authOptions as any);
+export const GET = NextAuth(authOptions);
+export const POST = NextAuth(authOptions);

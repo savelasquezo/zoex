@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
-
+import { NextResponse } from 'next/server';
 import { validatePassword } from "../../../utils/passwordValidation";
 
 import PhoneInput from 'react-phone-input-2'
@@ -98,24 +98,28 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
               phone,
               username,
               email,
-              password,
-              re_password,
               referred,
+              password,
+              re_password
             }),
           });
       
           const data = await res.json();
-
-          if (data.error) {
-            setError("¡Email no Encontrado! Intentalo Nuevamente ");
-          } else {
-            setSuccess("¡Enviamos un Correo Electronio de Verificacion! ");
-            setRegistrationSuccess(true);
+          if (!res.ok) {
+            setLoading(false);
+            return setError("¡Email no Encontrado! Intentalo Nuevamente ");
           }
+
+          setSuccess("¡Enviamos un Correo Electronio de Verificacion! ");
+          setRegistrationSuccess(true);
+
         } catch (error) {
-          console.error('Error registerUser:', error);
+          return NextResponse.json({ error: 'There was an error with the network request' });
+
+        } finally  {
+          setLoading(false);
         }
-        setLoading(false);
+        
     };
 
     return (

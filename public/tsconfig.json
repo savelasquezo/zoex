@@ -38,7 +38,7 @@
     "**/*.js",
     "**/*.jsx",
     ".next/types/**/*.ts",
-    "src/app/api/auth/[...nextauth]/route.ts",
+    "src/app/api/auth/[...nextauth]/route.js",
     "src/app/layout.jsx",
     "src/app/page.tsx",
     "src/utils/tooltip.js",
