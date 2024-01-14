@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
 
 def ImageUploadTo(instance, id):
     return f"uploads/banner/{id}"
