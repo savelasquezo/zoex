@@ -51,7 +51,7 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
             <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
                 {imagenSliders.map(imagenSlider => (
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <Image unoptimized width={1280} height={800} src={imagenSlider.file} className="block absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 object-fill" alt=""/>
+                    <img src={imagenSlider.file} className="block absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 object-fill" alt=""/>
                 </div>
                 ))}
             </div>
