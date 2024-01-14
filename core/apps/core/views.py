@@ -2,7 +2,6 @@ import os
 from django.conf import settings
 
 from django.core.mail import send_mail, BadHeaderError
-from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -18,9 +17,7 @@ class fetchImagesSlider(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-
-        response_data = {'data': serializer.data}
-        return JsonResponse(response_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class fetchInfo(generics.GenericAPIView):
     serializer_class = serializers.CoreSerializer
@@ -55,4 +52,4 @@ class fetchMessage(generics.GenericAPIView):
         except Exception as e:
             with open(os.path.join(settings.BASE_DIR, 'logs/email.log'), 'a') as f:
                 f.write("EmailError {} SingupConfig--> Error: {}\n".format(eDate, str(e)))
-            return JsonResponse({'error': 'Unexpected error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': 'Unexpected error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

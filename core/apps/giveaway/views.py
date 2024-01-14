@@ -2,8 +2,6 @@ import os, uuid
 from django.conf import settings
 from django.utils import timezone
 
-from django.http import JsonResponse
-
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -37,7 +35,7 @@ class fetchGiveaway(generics.ListAPIView):
 
             serialized_data.append(giveaway_data)
 
-        return JsonResponse(serialized_data, safe=False)
+        return Response(serialized_data, status=status.HTTP_200_OK)
 
 class requestTicketGiveaway(generics.GenericAPIView):
     """
@@ -82,7 +80,7 @@ class fetchTicketsGiveaway(generics.ListAPIView):
         giveawayId = self.kwargs.get('giveawayId')
         return models.TicketsGiveaway.objects.filter(email=self.request.user.email, giveaway=giveawayId)
 
-    def list(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         queryset = self.get_queryset(request)
         serialized_data = self.serializer_class(queryset, many=True).data
         return Response(serialized_data)
