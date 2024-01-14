@@ -58,7 +58,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   };
 
   useEffect(() => {
-    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/ws/tickets_lottery/`;
+    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/api/ws/tickets_lottery/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
