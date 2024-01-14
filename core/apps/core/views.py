@@ -15,9 +15,13 @@ class fetchImagesSlider(generics.ListAPIView):
     serializer_class = serializers.ImagenSliderSerializer
 
     def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response({'detail': 'NotFound ZoeXConfig.'}, status=status.HTTP_404_NOT_FOUND)    
+    
 
 class fetchInfo(generics.GenericAPIView):
     serializer_class = serializers.CoreSerializer

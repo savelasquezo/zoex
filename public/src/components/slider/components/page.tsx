@@ -49,7 +49,10 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
     <div className="w-screen mx-0">
         <div id="default-carousel" className="relative" data-carousel="slide">
         {imagenSliders.map(imagenSlider => (
-                  <p className='block w-full h-12 bg-white text-black'>{imagenSlider.file}</p>
+                  <div className='block w-full h-full bg-white text-black'>{imagenSlider.file}
+                  <img src={imagenSlider.file} className="block w-full h-full" alt=""/>
+                  </div>
+                  
                 ))}
             <p className='block w-full h-12 bg-white text-black'>imagenSliders.length: {imagenSliders.length}</p>
             {imagenSliders.length > 0 ? (
