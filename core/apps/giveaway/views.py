@@ -20,11 +20,9 @@ class fetchGiveaway(generics.ListAPIView):
     """
     serializer_class = serializers.GiveawaySerializer
     permission_classes = [AllowAny]
-    def get_queryset(self):
-        return models.Giveaway.objects.filter(is_active=True)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+    def get(self, request, *args, **kwargs):
+        queryset = models.Giveaway.objects.filter(is_active=True)
         serialized_data = []
 
         for giveaway in queryset:
