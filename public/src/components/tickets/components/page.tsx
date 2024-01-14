@@ -29,7 +29,7 @@ type GiveawayTicketType = {
 export const fetchLotteryTickets = async (accessToken: any) => {
   try {
     const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/lottery/fetch-lottery-tickets/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery-tickets/`,
       {
         method: 'GET',
         headers: {
@@ -51,7 +51,7 @@ export const fetchLotteryTickets = async (accessToken: any) => {
 export const fetchGiveawayTickets = async (accessToken: any, giveawayId: number) => {
   try {
     const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/giveaway/fetch-giveaway-tickets/${giveawayId}`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway-tickets/${giveawayId}`,
       {
         method: 'GET',
         headers: {

@@ -37,15 +37,33 @@ APILAYER_KEY = os.getenv('APILAYER_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-DOMAIN = ("zoexbet.com")
-
-CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:8000","https://zoexbet.com"]
+CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOW_REQUESTS_FROM_NO_REFERER = True
 CORS_DEBUG = True
-
 DEBUG_PROPAGATE_EXCEPTIONS = True
+CORS_ALLOW_REQUESTS_FROM_NO_REFERER = True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/home/savelasquezo/zoex/core/logs/django.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 
 # Application definition
 
@@ -203,7 +221,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')

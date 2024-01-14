@@ -19,9 +19,8 @@ interface LotteryData {
 
 export const fetchLottery = async () => {
   try {
-    const res = await fetch(
-      `https://zoexbet.com/api/lottery/fetch-lottery/`,      
-    {
+    console.log(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery/`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/lottery/fetch-lottery/`,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ type InfoType = {
 export const fetchInfo = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/core/fetch-info/`,
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/fetch-info/`,
       {
         method: 'GET',
         headers: {
@@ -83,7 +83,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/core/send-message/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/core/send-message/`, 
       {
         method: 'POST',
         headers: {

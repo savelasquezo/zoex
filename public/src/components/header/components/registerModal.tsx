@@ -89,7 +89,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
 
         const referred = searchParams.get('uuid') ?? 'N/A';
         try {
-          const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/users/`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
