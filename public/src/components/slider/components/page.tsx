@@ -53,7 +53,7 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
                 ))}
             <p className='block w-full h-12 bg-white text-black'>imagenSliders.length: {imagenSliders.length}</p>
             {imagenSliders.length > 0 ? (
-            <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
+            <div className='overflow-hidden relative z-0 h-[calc(100vh-112px)]'>
                 {imagenSliders.map(imagenSlider => (
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
                     <img src={imagenSlider.file} className="block w-full h-full" alt=""/>
