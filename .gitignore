@@ -199,3 +199,4 @@ yarn-error.log*
 
 public/.next/
 public/next.config.js
+next-sitemap.config.js

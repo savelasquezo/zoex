@@ -21,9 +21,7 @@ interface GiveawayData {
 
 export const fetchGiveaways = async () => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway/`,
-      {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway/`,{
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
