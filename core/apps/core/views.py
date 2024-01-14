@@ -15,6 +15,13 @@ class fetchImagesSlider(generics.ListAPIView):
     queryset = models.ImagenSlider.objects.all()
     serializer_class = serializers.ImagenSliderSerializer
 
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+
+        response_data = {'data': serializer.data}
+        return JsonResponse(response_data)
+
 class fetchInfo(generics.GenericAPIView):
     serializer_class = serializers.CoreSerializer
     def get(self, request, *args, **kwargs):
