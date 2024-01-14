@@ -17,14 +17,7 @@ class fetchImagesSlider(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-
-        # Construir URLs con protocolo HTTPS
-        data = serializer.data
-        for item in data:
-            if item.get('file'):
-                item['file'] = request.build_absolute_uri(item['file']).replace('http://', 'https://')
-
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class fetchInfo(generics.GenericAPIView):
     serializer_class = serializers.CoreSerializer
