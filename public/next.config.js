@@ -11,19 +11,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'localhost',
-        port: '8000',
-        pathname: '/media/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'zoexber.com',
-        port: '',
-        pathname: '/media/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'zoexber.com/api',
+        hostname: 'zoexbet.com',
         port: '',
         pathname: '/media/**',
       },
