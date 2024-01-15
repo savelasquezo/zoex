@@ -20,11 +20,13 @@
     "flowbite": "^2.0.0",
     "framer-motion": "^10.16.4",
     "jsonwebtoken": "^9.0.2",
+    "keep-react": "^1.1.0",
     "next": "^14.0.0",
     "next-auth": "^4.24.4",
     "next-share": "^0.27.0",
     "next-sitemap": "^4.2.3",
     "npm": "^10.2.1",
+    "postcss": "^8.4.33",
     "react-icons": "^4.11.0",
     "react-paginate": "^8.2.0",
     "react-phone-input-2": "^2.15.1",
@@ -41,7 +43,7 @@
     "@types/node": "20.8.9",
     "@types/react": "18.2.33",
     "@types/websocket": "^1.0.10",
-    "tailwindcss": "3.3.2",
+    "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
   }
 }
