@@ -20,7 +20,6 @@
     "flowbite": "^2.0.0",
     "framer-motion": "^10.16.4",
     "jsonwebtoken": "^9.0.2",
-    "keep-react": "^1.1.0",
     "next": "^14.0.0",
     "next-auth": "^4.24.4",
     "next-share": "^0.27.0",

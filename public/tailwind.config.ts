@@ -1,15 +1,12 @@
-/** @type {import('tailwindcss').Config} */
-import keepPreset from "keep-react/preset";
+import type { Config } from 'tailwindcss'
 
-module.exports = {
+const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/flowbite/**/*.js',
-    './node_modules/keep-react/**/*.{js,jsx,ts,tsx}',
   ],
-  presets: [keepPreset],
   theme: {
     extend: {
       fontFamily: {
@@ -44,4 +41,4 @@ module.exports = {
     require('flowbite/plugin')
 ]
 }
-
+export default config
