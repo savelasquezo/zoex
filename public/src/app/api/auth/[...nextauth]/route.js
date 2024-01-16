@@ -14,7 +14,7 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         console.log("ANTES DE CREAR JWT")
-        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/jwt/create/`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/jwt/create/`, {
           method: 'POST',
           body: JSON.stringify({
             email: credentials?.email,
@@ -29,7 +29,7 @@ const handler = NextAuth({
         console.log("DESPUES DE CREAR JWT")
         const { access, refresh } = await res.json();
         console.log("ANTES DE HACER LOGIN")
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/me/`, {
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/users/me/`, {
           headers: { Authorization: `JWT ${access}` },
         });
 
@@ -75,7 +75,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/me/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/users/me/`, {
         headers: { Authorization: `JWT ${token.accessToken}` },
       });
 

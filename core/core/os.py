@@ -1,9 +1,9 @@
 from .settings  import *
 
 DEBUG = True
+CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ["*"]
 
-ALLOWED_HOSTS = ["217.196.63.210","localhost:3000","zoexbet.com"]
-CORS_ALLOWED_ORIGINS = ["217.196.63.210","http://localhost:3000","http://localhost:8000","https://zoexbet.com"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.hostinger.com'

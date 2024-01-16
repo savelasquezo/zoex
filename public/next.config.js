@@ -17,17 +17,17 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
-    if (process.env.NEXT_PUBLIC_DEBUG === 'False') {
-      return [
-        {
-          source: '/api/auth/:path*',
-          destination: '/src/app/api/auth/[...nextauth]/route.js',
-        },
-      ];
-    }
-    return [];
-  },
+  //async rewrites() {
+  //  if (process.env.NEXT_PUBLIC_DEBUG === 'False') {
+  //    return [
+  //      {
+  //        source: '/api/auth/:path*',
+  //        destination: '/src/app/api/auth/[...nextauth]/route.js',
+  //      },
+  //    ];
+  //  }
+  //  return [];
+  //},
 };
 
 module.exports = nextConfig;
