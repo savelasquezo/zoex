@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 
 
 const handler = NextAuth({
-  site: 'https://zoexbet.com',
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -13,8 +12,8 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        console.log("ANTES DE CREAR JWT")
-        const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/jwt/create/`, {
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/app/auth/jwt/create/`, {
           method: 'POST',
           body: JSON.stringify({
             email: credentials?.email,
@@ -26,17 +25,17 @@ const handler = NextAuth({
         if (!res.ok) {
           throw new Error(`¡Error authorize! ${res.statusText}`);
         }
-        console.log("DESPUES DE CREAR JWT")
+
         const { access, refresh } = await res.json();
-        console.log("ANTES DE HACER LOGIN")
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/users/me/`, {
+
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/app/auth/users/me/`, {
           headers: { Authorization: `JWT ${access}` },
         });
 
         if (!userRes.ok) {
           throw new Error(`Error on /auth/users/me/: ${userRes.statusText}`);
         }
-        console.log("DESPUES DE HACER LOGIN")
+
         const userData = await userRes.json();
 
         const user = {
@@ -75,7 +74,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/auth/users/me/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/app/auth/users/me/`, {
         headers: { Authorization: `JWT ${token.accessToken}` },
       });
 

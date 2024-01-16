@@ -58,7 +58,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
   };
 
   useEffect(() => {
-    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/api/ws/tickets_giveaway/${giveawayId}/`;
+    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/app/ws/tickets_giveaway/${giveawayId}/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
@@ -141,7 +141,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/request-ticketgiveaway/`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/request-ticketgiveaway/`,
       {
         method: 'POST',
         headers: {

@@ -24,7 +24,7 @@ type TicketType = {
 
 export const fetchGiveawayTickets = async (accessToken: any, giveawayId: number) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/giveaway/fetch-giveaway-tickets/${giveawayId}`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/fetch-giveaway-tickets/${giveawayId}`,{
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
