@@ -242,6 +242,9 @@ REST_FRAMEWORK = {
    ),
 }
 
+LOGIN_REDIRECT_URL = "localhost:3000"
+LOGOUT_REDIRECT_URL = "zoexbet.com"
+
 # Authentication Backends
 AUTHENTICATION_BACKENDS =(
     "django.contrib.auth.backends.ModelBackend",

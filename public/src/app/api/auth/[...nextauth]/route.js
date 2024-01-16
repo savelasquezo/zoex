@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 
 const handler = NextAuth({
+  site: 'https://zoexbet.com',
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -12,6 +13,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
+        console.log("ANTES DE CREAR JWT")
         const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/jwt/create/`, {
           method: 'POST',
           body: JSON.stringify({
@@ -24,9 +26,9 @@ const handler = NextAuth({
         if (!res.ok) {
           throw new Error(`¡Error authorize! ${res.statusText}`);
         }
-
+        console.log("DESPUES DE CREAR JWT")
         const { access, refresh } = await res.json();
-
+        console.log("ANTES DE HACER LOGIN")
         const userRes = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/auth/users/me/`, {
           headers: { Authorization: `JWT ${access}` },
         });
@@ -34,7 +36,7 @@ const handler = NextAuth({
         if (!userRes.ok) {
           throw new Error(`Error on /auth/users/me/: ${userRes.statusText}`);
         }
-
+        console.log("DESPUES DE HACER LOGIN")
         const userData = await userRes.json();
 
         const user = {
@@ -93,6 +95,9 @@ const handler = NextAuth({
       }
 
       return session;
+    },
+    async signOut({ url, baseUrl }) {
+      return Promise.resolve(baseUrl);
     },
   },
 })
