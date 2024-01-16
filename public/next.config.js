@@ -18,7 +18,7 @@ const nextConfig = {
     ],
   },
   async rewrites() {
-    if (process.env.DEBUG === 'False') {
+    if (process.env.NEXT_PUBLIC_DEBUG === 'False') {
       return [
         {
           source: '/api/auth/:path*',
