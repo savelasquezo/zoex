@@ -17,6 +17,17 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    if (process.env.DEBUG === 'False') {
+      return [
+        {
+          source: '/api/auth/:path*',
+          destination: '/src/app/api/auth/[...nextauth]/route.js',
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 module.exports = nextConfig;
