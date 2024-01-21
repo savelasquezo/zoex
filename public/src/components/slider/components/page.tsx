@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 
+import { imageLoader } from '@/utils/imageConfig';
 
 type SliderProps = {
   session: Session | null | undefined;
@@ -52,20 +53,20 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
             <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
                 {imagenSliders.map(imagenSlider => (
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src={imagenSlider.file} className="block w-full h-full" alt=""/>
+                    <Image width={1240} height={550} src={imagenSlider.file} loader={imageLoader} className="block w-full h-full" alt=""/>
                 </div>
                 ))}
             </div>
             ) : (
             <div className="overflow-hidden relative h-56 md:h-[calc(100vh-56px)] z-0">
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <Image unoptimized width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt=""/>
+                    <Image width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" loader={imageLoader} alt=""/>
                 </div>
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <Image unoptimized width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-2.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt=""/>
+                    <Image width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-2.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" loader={imageLoader} alt=""/>
                 </div>
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <Image unoptimized width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-3.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt=""/>
+                    <Image width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-3.svg"} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" loader={imageLoader} alt=""/>
                 </div>
             </div>
             )}

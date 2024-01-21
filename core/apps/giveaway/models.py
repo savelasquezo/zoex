@@ -72,7 +72,7 @@ class TicketsGiveaway(models.Model):
     method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
-    is_active = models.BooleanField(_("¿Activo?"),default=False)
+    is_active = models.BooleanField(_("¿Activo?"),default=True)
 
     def __str__(self):
         return f"{self.ticket}"

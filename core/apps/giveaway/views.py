@@ -48,21 +48,22 @@ class requestTicketGiveaway(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
 
         email = str(request.data.get('email', ''))
-        paymentMethod = str(request.data.get('paymentMethod', ''))
         ticket = str(request.data.get('ticket', ''))
         giveawayID = str(request.data.get('giveawayId', ''))
         apiVoucher = str(uuid.uuid4())[:8]
 
-        data = {'email':email, 'method':paymentMethod, 'ticket':ticket, 'voucher':apiVoucher}
+        data = {'email':email, 'ticket':ticket, 'voucher':apiVoucher}
 
         try:
+            ##Agregar verificacion y resta de saldo, priorizando creditos a balance
+
             giveaway = models.Giveaway.objects.get(id=giveawayID)
             if models.TicketsGiveaway.objects.filter(giveaway=giveaway,ticket=ticket).first() is not None:
                 return Response({'detail': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
 
             obj = models.TicketsGiveaway.objects.create(giveaway=giveaway,**data) 
             return Response({'apiVoucher': apiVoucher}, status=status.HTTP_200_OK)
-        
+
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/django.log'), 'a') as f:

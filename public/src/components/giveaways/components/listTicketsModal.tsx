@@ -17,7 +17,6 @@ interface ListTicketsGiveawayModalProps {
 type TicketType = {
     ticket: string;
     date: string;
-    method: string;
     voucher: string;
     is_active: boolean;
 };
@@ -88,7 +87,6 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
                                 <tr className="border-b border-slate-900 uppercase text-xs">
                                     <th scope="col" className=" px-6 py-2">Ticket</th>
                                     <th scope="col" className=" px-6 py-2">Fecha</th>
-                                    <th scope="col" className=" px-6 py-2">Metodo</th>
                                     <th scope="col" className=" px-6 py-2">Voucher</th>
                                     <th scope="col" className=" px-6 py-2">Estado</th>
                                 </tr>
@@ -97,7 +95,6 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
                                     <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.ticket}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.method}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
                                     <td className="whitespace-nowrap px-6 py-2 flex justify-center">
                                         {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}

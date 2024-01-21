@@ -146,7 +146,7 @@ ASGI_APPLICATION = "core.asgi.application"
 #     }
 # }
 
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",

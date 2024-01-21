@@ -65,8 +65,11 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
             {session && session?.user? (
               <div className='inline-flex gap-x-4'>
                 <div className='bg-gray-950 shadow-inner rounded-full py-1 px-4 inline-flex items-center justify-between w-40'>
-                  <span className='text-2xl text-gray-100 opacity-80'><GiTwoCoins/></span>
-                  <p className='text-gray-100'>${session?.user?.balance ? session.user.balance.toLocaleString() : ""}</p>
+                  <span className='text-2xl text-gray-100 opacity-80 flex flex-row items-center gap-x-2'>
+                    <GiTwoCoins/>
+                    <p className='text-base'>$</p>
+                  </span>
+                  <p className='text-gray-100'>{session?.user?.balance ? session.user.balance.toLocaleString() : "0"}</p>
                 </div>
                 <button onClick={() => {signOut();}} className="bg-pink-700 hover:bg-pink-900 text-white uppercase text-xs font-semibold p-2 rounded transition-colors duration-300">Salir</button>
               </div>
@@ -80,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({ session  }) => {
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
                 <div className="relative w-[55%] flex justify-between items-center h-[90%]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
-                  <Image unoptimized width={1200} height={800} src={"/assets/image/banner.png"} alt="" className="h-full w-[45%] object-cover rounded-l-2xl"/>
+                  <Image width={1200} height={800} src={"/assets/image/banner.png"} alt="" className="h-full w-[45%] object-cover rounded-l-2xl"/>
                   <div className="w-[55%] h-full bg-gray-800 rounded-r-2xl p-6">
                     <div className='flex flex-row w-full items-center'>
                       <button onClick={() => openModal('login')} className={`text-gray-100 rounded-full px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'login' ?  'bg-red-500 hover:bg-red-600' : ''}`}>Ingresar</button>

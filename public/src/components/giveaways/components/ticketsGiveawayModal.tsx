@@ -33,11 +33,8 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
   const [success, setSuccess] = useState<string>('');
   const [ticketsSuccess, setTicketsSuccess] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [paymentInfo, setPaymentInfo] = useState('');
   
   const [loading, setLoading] = useState(false);
-
   const [invoice, setInvoice] = useState('');
 
   const [aviableTickets, setAviableTickets] = useState<string[]>([]);
@@ -126,12 +123,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
       return;
     }
 
-    if (!paymentMethod) {
-      setError('¡Error - Seleccione un Metodo de Pago!');
-      setLoading(false);
-      return;
-    }
-
     if (!aviableTickets.includes(ticket)) {
       setError('¡Lamentablemente el Numero ya ha sido Adquirido! Intentalo Nuevamente');
       setLoading(false);
@@ -150,7 +141,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
         },
         body: JSON.stringify({    
           email,
-          paymentMethod,
           ticket,
           giveawayId,
         }),
@@ -160,7 +150,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
         setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
         setInvoice(data.apiVoucher)
         setTicketsSuccess(true)
-        setPaymentInfo(paymentMethod);
         if (session && session.user) {
           session.user.balance = data.newBalance;
         }
@@ -211,13 +200,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
                   readOnly={ticketsSuccess}
                   required
                 />
-                <div className="relative flex flex-wrap gap-x-2 my-4">
-                  <span onClick={() => {if (paymentMethod === 'crypto') {setPaymentMethod('');} else {setPaymentMethod('crypto');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/bitcoin.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300  ${paymentMethod === 'crypto' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'bank') {setPaymentMethod('');} else {setPaymentMethod('bank');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/bank.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'bank' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'paypal') {setPaymentMethod('');} else {setPaymentMethod('paypal');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'paypal' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'nequi') {setPaymentMethod('');} else {setPaymentMethod('nequi');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/nequi.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'nequi' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                  <span onClick={() => {if (paymentMethod === 'daviplata') {setPaymentMethod('');} else {setPaymentMethod('daviplata');}}} className=""><Image unoptimized width={405} height={200} src={"/assets/image/daviplata.webp"} className={`rounded-lg shadow-inherit h-10 w-20 object-fit hover:scale-[1.05] transition-transform duration-300" ${paymentMethod === 'daviplata' ? 'opacity-100' : 'opacity-80'}`} alt="" /></span>
-                </div>
               </div>
               {loading ? (
                 <button type="button" className='w-32 h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
@@ -247,55 +229,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
           <div className='flex flex-col ml-1'>
             <p className='text-gray-400 text-xs'>email: {email}</p>
             <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
-          </div>
-        </div>
-        <div className={`flex flex-col justify-center items-center gap-y-4 ${paymentInfo !== '' ? 'block' : 'hidden' }`}>
-          {success && (<div className="text-lime-400 text-sm mt-2">{success}</div>)}
-          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'crypto' ? 'block' : 'hidden' }`}>
-            <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-              <Image unoptimized width={192} height={128} src={"/assets/image/pyment-crypto.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
-            </Link>
-          </div>
-          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'bank' ? 'block' : 'hidden' }`}>
-            <div className="flex flex-row gap-x-2 justify-start items-center">
-              <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                <span className="text-4xl text-gray-400"><CiBank /></span>
-                <div className="flex flex-col ml-2">
-                  <p>Bancolombia -Ahorros</p>
-                  <p>4545745-5353</p>
-                </div>
-              </div>
-              <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-                <span className="text-4xl text-gray-400"><CiBank /></span>
-                <div className="flex flex-col ml-2">
-                  <p>Davivienda -Ahorros</p>
-                  <p>4545745-5353</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'paypal' ? 'block' : 'hidden' }`}>
-            <Link href={`https://www.paypal.com/`} target="_blank" rel="noopener noreferrer">
-              <Image unoptimized width={192} height={128} src={"/assets/image/pyment-paypal.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
-            </Link>
-          </div>
-          <div className={`flex flex-col leading-none ${paymentInfo === 'nequi' ? 'block' : 'hidden' }`}>
-            <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-              <span className="text-4xl text-gray-400"><CiBank /></span>
-              <div className="flex flex-col ml-2">
-                <p>Nequi</p>
-                <p>4545745-5353</p>
-              </div>
-            </div>
-          </div>
-          <div className={`flex flex-col justify-center items-center leading-none ${paymentInfo === 'daviplata' ? 'block' : 'hidden' }`}>
-            <div className="text-xs text-white flex flex-row items-center bg-gray-900 rounded-sm py-2 px-2 h-10">
-              <span className="text-4xl text-gray-400"><CiBank /></span>
-              <div className="flex flex-col ml-2">
-                <p>Daviplata</p>
-                <p>4545745-5353</p>
-              </div>
-            </div>
           </div>
         </div>
         <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">

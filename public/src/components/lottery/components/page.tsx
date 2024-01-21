@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
 
+import { imageLoader } from '@/utils/imageConfig';
+
 import TicketsLotteryModal from "./ticketsLotteryModal";
 import ListTicketsLotteryModal from "./listTicketsModal";
 import ListHistoryLotteryModal from "./listHistoryModal";
@@ -75,7 +77,7 @@ const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
         <div className="w-full h-full z-10">
             <div className="relative h-40 md:h-96 items-center">
                 {lottery.banner ? (<>
-                    <Image unoptimized width={1250} height={385} src={lottery.banner} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0"  alt=""/>
+                    <Image width={1240} height={550} src={lottery.banner} loader={imageLoader} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0"  alt=""/>
                     <button className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden">
                       <span className='text-white font-semibold text-lg'><AiOutlineShoppingCart /></span>
 			                <span className="block text-white shadow-inner text-sm py-2 px-4 tracking-wide uppercase font-bold"
@@ -84,7 +86,7 @@ const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
 			                </span>
 		                </button>
                   </>) : (<>
-                  <Image unoptimized width={1280} height={800} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0" src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} alt=""/>
+                  <Image width={1280} height={800} src={"https://flowbite.com/docs/images/carousel/carousel-1.svg"} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0"  loader={imageLoader} alt=""/>
                   <span className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden cursor-not-allowed">
                     <span className='text-white font-semibold text-lg'><AiOutlineShoppingCart /></span>
                     <span className="block text-white shadow-inner text-sm py-2 px-4 tracking-wide uppercase font-bold">
