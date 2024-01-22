@@ -17,7 +17,7 @@ import '@/styles/styles.css';
 
 export default function Home() {
   return (
-    <SessionProvider>
+    <SessionProvider >
       <Header />
       <main className='w-full h-full overflow-x-hidden bg-slate-800'>
         <Slider />

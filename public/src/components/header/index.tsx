@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
@@ -13,7 +14,9 @@ export default function Header() {
           <Link href="#" className="inline-flex text-center justify-center items-center w-32">
             <Image width={400} height={200} src={"/assets/image/logo0.webp"} loading="eager" priority={true} className="h-10 w-20 sm:h-9 object-cover self-start mr-4 z-10" alt="" />
           </Link>
-          <Authentication session={session} />
+          <Suspense fallback={<p>...</p>}>
+            <Authentication session={session} />
+          </Suspense>
         </div>
       </header>
   );
