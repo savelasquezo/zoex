@@ -43,8 +43,15 @@ class AsyncLotteryConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive(self, text_data=None, bytes_data=None):
-        pass
+    async def asyncSignal(self, event):
+        data = event['data']
+        await self.send(json.dumps(data))
+
+
+        
+class AsyncTicketsConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
 
     async def asyncSignal(self, event):
         data = event['data']

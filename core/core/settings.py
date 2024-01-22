@@ -54,7 +54,7 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/home/savelasquezo/zoex/core/logs/django.log',
+            'filename': os.path.join(BASE_DIR, 'logs', 'core.log'),
         },
     },
     'loggers': {
@@ -65,7 +65,6 @@ LOGGING = {
         },
     },
 }
-
 
 # Application definition
 
@@ -138,14 +137,6 @@ ASGI_APPLICATION = "core.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 
 DATABASES = {
     "default": {

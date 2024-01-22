@@ -17,23 +17,3 @@ EMAIL_PORT = 465
 
 MEDIA_ROOT = '/var/www/zoex/media/'
 MEDIA_URL = '/media/'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': '/app/zoex/core/logs/django.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
-}
-

@@ -7,8 +7,6 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
-methods = (('crypto','Cryptomonedas'),('bank','Transferencia'),('paypal','Paypal'),('nequi','Nequi'),('daviplata','Daviplata'),('pse','PSE'))
-
 def ImageUploadTo(instance, filename):
     return f"uploads/banner/{filename}"
 
@@ -67,7 +65,6 @@ class TicketsLottery(models.Model):
     email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
-    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
     is_active = models.BooleanField(_("¿Activo?"),default=True)

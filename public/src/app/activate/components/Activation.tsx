@@ -73,8 +73,7 @@ export default function Activation() {
             <CircleLoader loading={loading} size={25} color="#1c1d1f" />
           </button>
         ) : (
-          <button type="button" onClick={activateAccount}
-          className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-sm py-2 px-4 w-full text-center uppercase text-sm transition-colors duration-300">Activar</button>
+          <button type="button" onClick={activateAccount} className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-sm py-2 px-4 w-full text-center uppercase text-sm transition-colors duration-300">Activar</button>
           )
       )}
     </div>

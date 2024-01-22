@@ -3,10 +3,8 @@ import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
 import { Session } from 'next-auth';
 
-
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
-
 
 
 interface ListHistoryLotteryModalProps {
@@ -95,18 +93,19 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
                         </table>
                     </ul>
                     <ReactPaginate
-                    previousLabel={<MdNavigateBefore/>}
-                    nextLabel={<MdNavigateNext/>}
-                    breakLabel={'...'}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={0}
-                    pageRangeDisplayed={5}
-                    onPageChange={changePage}
-                    className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
-                    pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
-                    activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
-                    previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
-                    nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'} />
+                        previousLabel={<MdNavigateBefore/>}
+                        nextLabel={<MdNavigateNext/>}
+                        breakLabel={'...'}
+                        pageCount={pageCount}
+                        marginPagesDisplayed={0}
+                        pageRangeDisplayed={5}
+                        onPageChange={changePage}
+                        className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                        pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                        activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                        previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
+                        nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'} 
+                    />
                 </div>
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>

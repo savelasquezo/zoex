@@ -1,26 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { LuRefreshCw } from "react-icons/lu";
-import Image from 'next/image';
-import Link from 'next/link';
 import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
 import CircleLoader from 'react-spinners/CircleLoader';
 
-import { CiBank } from "react-icons/ci";
-
-function getRandomTickets(aviableTickets: number[], num: number): number[] {
-  const shuffledTickets = aviableTickets?.slice();
-  let selectedTickets: number[] = [];
-
-  while (selectedTickets.length < num && shuffledTickets.length > 0) {
-    const randomIndex = Math.floor(Math.random() * shuffledTickets.length);
-    selectedTickets.push(shuffledTickets[randomIndex]);
-    shuffledTickets.splice(randomIndex, 1);
-  }
-
-  return selectedTickets;
-}
+import { getRandomTickets } from '@/utils/getRandomTickets'
 
 interface TicketsGiveawayModalProps {
   closeModal: () => void;
@@ -109,13 +94,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
       return
     }
 
-    const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email);
-    if (!isEmailValid) {
-      setError('¡Error - Ingrese un Email Valido!');
-      setLoading(false);
-      return;
-    }
-
     const isTicketValid = /^[0-9]+$/.test(ticket);
     if (!isTicketValid && ticket === '') {
       setError('¡Error - Ingrese un Ticket Valido!');
@@ -179,16 +157,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
           <form>
             <div className='w-full flex flex-col justify-center items-center gap-y-2 my-1'>
               <div className='flex flex-col h-full w-full justify-center items-center gap-y-2 px-2'>
-                <input className='w-full rounded-sm bg-slate-900 text-gray-200 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => onChange(e)}
-                  required
-                  placeholder="Email"
-                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
-                  readOnly={ticketsSuccess || !!session?.user?.email}     
-                />
                 <input className='w-full rounded-sm bg-slate-900 text-gray-400 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
                   type="text"
                   name="ticket"

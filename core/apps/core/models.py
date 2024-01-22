@@ -22,6 +22,7 @@ class Core(models.Model):
 
     bonusPercent = models.FloatField(_("%Bonificacion"),default=50, null=True, blank=True, 
         help_text="Porcentaje Adicional en la Primera Recarga (%) ")
+    
     referredPercent = models.FloatField(_("%Referidos"),default=5, null=True, blank=True,
         help_text="Porcentaje Beneficio en Referidos (%)")
 

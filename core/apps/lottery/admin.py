@@ -13,14 +13,14 @@ class TicketsLotteryInline(admin.StackedInline):
     fieldsets = (
         (" ", {"fields": (
             ('is_active','ticket','email'),
-            ('date','voucher','method'),
+            ('date','voucher'),
                 )
             }
         ),
     )
 
     def get_readonly_fields(self, request, obj=None):
-        return ['email','ticket','date','method','voucher']
+        return ['email','ticket','date','voucher']
 
     def has_add_permission(self, request, obj=None):
         return False

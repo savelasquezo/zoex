@@ -53,7 +53,7 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
                 <span onClick={() => openModal('tickets')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoTicket />} Text="Tickets"/></span>
                 <div className="w-1/5 relative flex justify-center cursor-pointer">
                     <button onClick={() => openModal('wallet')} className="absolute -top-12 rounded-full px-2 py-1 bg-white h-16 w-16 border-4 border-gray-900 bg-gradient-to-b from-yellow-400 to-red-800">
-                        <Image width={150} height={150} src={"/assets/animations/animatedWallet.gif"} className="scale-150" alt="" />
+                        <Image width={150} height={150} src={"/assets/animations/animatedWallet.gif"} priority={false} className="scale-150" alt="" />
                     </button>
                 </div>
                 <span onClick={() => openModal('share')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<HiShare />} Text="Compartir"/></span>

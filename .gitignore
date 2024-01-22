@@ -11,7 +11,7 @@ staticfiles/
 uploads/
 
 # Logs
-django.log
+core.log
 email.log
 workbook.log
 err.log

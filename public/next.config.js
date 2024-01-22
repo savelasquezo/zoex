@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compiler: {
+    styledComponents: true
+  },
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -10,7 +13,7 @@ const nextConfig = {
         pathname: '/media/**',
       },
       {
-        protocol: 'https',
+        protocol: 'http',
         hostname: 'zoexbet.com',
         port: '',
         pathname: '/media/**',
