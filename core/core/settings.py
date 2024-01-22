@@ -289,7 +289,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 if not DEBUG:
 
-    SECURE_SSL_REDIRECT = True
+    #SECURE_SSL_REDIRECT = True
 
     #CORS_ALLOW_ALL_ORIGINS = False
     #ALLOWED_HOSTS = ["217.196.63.210","localhost:3000","zoexbet.com"]
@@ -300,11 +300,11 @@ if not DEBUG:
     MEDIA_ROOT = '/var/www/zoex/media/'
     MEDIA_URL = '/media/'
 
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = 'smtp.hostinger.com'
-    EMAIL_HOST_USER = 'noreply@zoexbet.com'
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-    EMAIL_USE_SSL = True
-    EMAIL_PORT = 465
+    #EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    #EMAIL_HOST = 'smtp.hostinger.com'
+    #EMAIL_HOST_USER = 'noreply@zoexbet.com'
+    #EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    #EMAIL_USE_SSL = True
+    #EMAIL_PORT = 465
 
 
