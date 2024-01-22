@@ -20,11 +20,11 @@ class fetchLottery(generics.GenericAPIView):
     Endpoint to retrieve details of the currently active lottery.
     Requires no authentication.
     """
-    queryset = Lottery.objects.get(is_active=True)
     serializer_class = LotterySerializer
+
     def get(self, request, *args, **kwargs):
         try: 
-            queryset = self.filter_queryset(self.get_queryset())
+            queryset = Lottery.objects.get(is_active=True)
             serializer = self.get_serializer(queryset)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
