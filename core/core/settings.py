@@ -34,7 +34,7 @@ CONFIRMO_KEY_TEST = os.getenv('CONFIRMO_KEY_TEST')
 APILAYER_KEY = os.getenv('APILAYER_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv('DEBUG',True))
+DEBUG = "DEBUG" not in os.environ
 
 # CorsHeaders
 ALLOWED_HOSTS = ["*"]
@@ -289,6 +289,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 if not DEBUG:
 
+    SECURE_SSL_REDIRECT = True
     CORS_DEBUG = False
     CORS_ALLOW_ALL_ORIGINS = False
 
@@ -297,6 +298,7 @@ if not DEBUG:
 
     MEDIA_ROOT = '/var/www/zoex/media/'
     MEDIA_URL = '/media/'
+
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = 'smtp.hostinger.com'
     EMAIL_HOST_USER = 'noreply@zoexbet.com'
@@ -304,4 +306,4 @@ if not DEBUG:
     EMAIL_USE_SSL = True
     EMAIL_PORT = 465
 
-SECURE_SSL_REDIRECT = True
+
