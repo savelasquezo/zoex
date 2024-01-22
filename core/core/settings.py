@@ -293,8 +293,8 @@ if not DEBUG:
     CORS_DEBUG = False
     CORS_ALLOW_ALL_ORIGINS = False
 
-    ALLOWED_HOSTS = ["217.196.63.210","localhost"]
-    CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+    ALLOWED_HOSTS = ["217.196.63.210","localhost:3000","zoexbet.com"]
+    CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://217.196.63.210:3000","https://zoexbet.com",]
 
     MEDIA_ROOT = '/var/www/zoex/media/'
     MEDIA_URL = '/media/'
