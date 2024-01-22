@@ -20,11 +20,11 @@ class fetchLottery(generics.GenericAPIView):
     Endpoint to retrieve details of the currently active lottery.
     Requires no authentication.
     """
+    queryset = Lottery.objects.get(is_active=True)
     serializer_class = LotterySerializer
-    permission_classes = [AllowAny]
     def get(self, request, *args, **kwargs):
         try: 
-            queryset = Lottery.objects.get(is_active=True)
+            queryset = self.filter_queryset(self.get_queryset())
             serializer = self.get_serializer(queryset)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -32,6 +32,7 @@ class fetchLottery(generics.GenericAPIView):
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("fetchLottery {} --> Error: {}\n".format(eDate, str(e)))
             return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+   
 
 
 class requestTicketLottery(generics.GenericAPIView):
