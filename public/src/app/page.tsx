@@ -15,7 +15,6 @@ import History from '@/components/history/index';
 
 import '@/styles/styles.css';
 
-
 export default function Home() {
   return (
     <SessionProvider>
