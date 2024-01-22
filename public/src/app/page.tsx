@@ -3,7 +3,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { SessionProvider } from 'next-auth/react';
 
 import Header from '@/components/header/index';
@@ -18,6 +18,7 @@ import '@/styles/styles.css';
 export default function Home() {
   return (
     <SessionProvider >
+    <Suspense fallback={<p>...</p>}>
       <Header />
       <main className='w-full h-full overflow-x-hidden bg-slate-800'>
         <Slider />
@@ -30,6 +31,7 @@ export default function Home() {
         </div>
       </main>
       <Footer />
+    </Suspense>
     </SessionProvider>
   );
 }
