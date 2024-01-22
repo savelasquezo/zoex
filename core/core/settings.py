@@ -34,19 +34,18 @@ CONFIRMO_KEY_TEST = os.getenv('CONFIRMO_KEY_TEST')
 APILAYER_KEY = os.getenv('APILAYER_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG',True))
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CorsHeaders
 ALLOWED_HOSTS = ["*"]
-#ALLOWED_HOSTS = ["*"]
-#CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:8000"]
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True
 CORS_ALLOW_REQUESTS_FROM_NO_REFERER = True
 
 
+# Logging File
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -132,7 +131,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+#WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
 
 # Database
@@ -283,9 +282,26 @@ DJOSER = {
     },
 }
 
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+if not DEBUG:
+
+    CORS_DEBUG = False
+    CORS_ALLOW_ALL_ORIGINS = False
+
+    ALLOWED_HOSTS = ["217.196.63.210","localhost"]
+    CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+
+    MEDIA_ROOT = '/var/www/zoex/media/'
+    MEDIA_URL = '/media/'
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = 'smtp.hostinger.com'
+    EMAIL_HOST_USER = 'noreply@zoexbet.com'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_SSL = True
+    EMAIL_PORT = 465
+
+SECURE_SSL_REDIRECT = True

@@ -17,7 +17,7 @@ from apps.core.routing import websocket_urlpatterns as core_websocket
 from apps.lottery.routing import websocket_urlpatterns as lottery_websocket
 from apps.giveaway.routing import websocket_urlpatterns as giveaway_websocket
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.os')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 application = get_asgi_application()
 
 async_websocket_urlpatterns = (core_websocket + lottery_websocket + giveaway_websocket)
