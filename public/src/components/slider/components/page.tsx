@@ -41,15 +41,15 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
   const [imagenSliders, setImagenSliders] = useState<ImagenSlider[]>([]);
 
   useEffect(() => {
-    const storedImagenSliders = localStorage.getItem('imagenSliders');
-  
-    if (storedImagenSliders) {
-      const parsedImagenSliders = JSON.parse(storedImagenSliders) as ImagenSlider[];
-      setImagenSliders(parsedImagenSliders);
-    }
-
     const fetchData = async () => {
-      try {  
+      try {
+        const storedImagenSliders = localStorage.getItem('imagenSliders');
+  
+        if (storedImagenSliders) {
+          const parsedImagenSliders = JSON.parse(storedImagenSliders) as ImagenSlider[];
+          setImagenSliders(parsedImagenSliders);
+        }
+  
         const data = await fetchImagenSliders();
         setImagenSliders(data);
         localStorage.setItem('imagenSliders', JSON.stringify(data));
@@ -64,11 +64,6 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
 
   return (
     <div className="w-screen mx-0">
-      <div className='w-full h-12 bg-white text-black'>
-        {imagenSliders.map((imagenSlider, i) => (
-                <p>{imagenSlider.file}</p>
-              ))}
-      </div>
       <div id="default-carousel" className="relative" data-carousel="slide">
           <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
             <Carousel slide={true} slideInterval={3000} indicators={false}
