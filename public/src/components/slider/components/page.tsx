@@ -9,9 +9,11 @@ import { imageLoader } from '@/utils/imageConfig';
 
 type SliderProps = {
   session: Session | null | undefined;
-};
+}
 
-interface ImagenSlider {file: any;}
+interface ImagenSlider {
+  file: string;
+}
 
 export const fetchImagenSliders = async () => {
   try {
@@ -39,19 +41,20 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
     const [imagenSliders, setImagenSliders] = useState<ImagenSlider[]>([]);
 
     useEffect(() => {
-        fetchImagenSliders()
-            .then((data) => {
-            setImagenSliders(data);
-            })
-            .catch((error) => {
-            console.error('Error al obtener datos iniciales de imagenSliders:', error);
+      fetchImagenSliders()
+        .then((data) => {
+          setImagenSliders(data);
+          localStorage.setItem('imagenSliders', JSON.stringify(data));
+        })
+        .catch((error) => {
+          console.error('Error al obtener datos iniciales de imagenSliders:', error);
         });
-    }, []);
+    },[]);
 
     return (
     <div className="w-screen mx-0">
         <div id="default-carousel" className="relative" data-carousel="slide">
-          {imagenSliders.length > 0 ? (
+          {imagenSliders?.length > 0 ? (
             <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
               <Carousel slide={true} slideInterval={1000} indicators={false}
                 rightControl={<svg className="w-5 h-5 text-gray-400 sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>}

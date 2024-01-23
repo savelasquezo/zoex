@@ -175,7 +175,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                     />
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-2">
-                    <input className="bg-transparent transition-all appearance-none focus:!appearance-none"
+                    <input className=""
                         type="checkbox"
                         id="show-agreed"
                         onChange={toggleAgreed}
