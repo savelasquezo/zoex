@@ -18,7 +18,7 @@ class Giveaway(models.Model):
     value = models.IntegerField(_("Inversion"), default=1000, null=False, blank=False, help_text="$Valor del Objeto (USD)")
 
     banner = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
-                    help_text="Dimenciones: width:1240px height:550px")
+        help_text="Width-(630px) - Height-(300px)")
     
     tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets Totales")
     price = models.SmallIntegerField(_("Valor"), null=False, blank=False, help_text="$Ticket (USD)")

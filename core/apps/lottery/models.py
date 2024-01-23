@@ -17,7 +17,7 @@ class Lottery(models.Model):
     prize = models.IntegerField(_("Acumulado"), default=500, null=False, blank=False, help_text="$Acumulado Valor (USD)")
 
     banner = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False, 
-                help_text="Dimenciones: width:1250px height:385px")
+            help_text="width-(1280px) - height-(400px)")
     
     tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets")
     price = models.IntegerField(_("Valor"), null=False, default=1, blank=False, help_text="$Ticket (USD)",

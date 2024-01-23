@@ -37,7 +37,7 @@ class ImagenSlider(models.Model):
 
     settings = models.ForeignKey(Core, on_delete=models.CASCADE)
     file = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=True, blank=True,
-                                help_text="width-(1360px) - height-(320px)")
+                                help_text="Width-(1340px) - Height-(500px)")
 
     def __str__(self):
         return f"{self.id}"
