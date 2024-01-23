@@ -75,7 +75,6 @@ const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
 
     return (
         <div className="w-full h-full z-10">
-}
             <div className="relative h-40 md:h-96 items-center">
               <Image width={1240} height={550} src={lottery.banner} loader={imageLoader} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0"  alt=""/>
               <button className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden">
@@ -86,7 +85,6 @@ const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
                 </span>
               </button>
             </div>
-}
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
                 <div className="relative w-[55%] flex justify-between items-center h-[26rem]">
