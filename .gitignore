@@ -57,8 +57,9 @@ package-lock.json
 
 !lib/types/next-auth.d.ts
 
-
-
+robots.txt
+sitemap-0.xml
+sitemap.xml
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
