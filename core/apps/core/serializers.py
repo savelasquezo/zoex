@@ -8,16 +8,13 @@ class CoreSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ImagenSliderSerializer(serializers.ModelSerializer):
+    
+    file = serializers.SerializerMethodField()
+    def get_file(self, obj):
+        if obj.file:
+            return obj.file.url.lstrip('/')
+        return None
+
     class Meta:
         model = models.ImagenSlider
         fields = '__all__'
-
-
-    ## def get_file(self, obj):
-    ##    if obj.file:
-    ##        # Obtén la URL absoluta
-    ##        absolute_url = obj.file.url
-    ##        # Convierte la URL absoluta a relativa
-    ##        relative_url = absolute_url.replace(settings.MEDIA_URL, '')
-    ##        return relative_url
-    ##    return None
