@@ -18,7 +18,6 @@ import '@/styles/styles.css';
 export default function Home() {
   return (
     <SessionProvider >
-    <Suspense fallback={<p>...</p>}>
       <Header />
       <main className='w-full h-full overflow-x-hidden bg-slate-800'>
         <Slider />
@@ -31,7 +30,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-    </Suspense>
     </SessionProvider>
   );
 }
