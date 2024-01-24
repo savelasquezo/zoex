@@ -82,7 +82,8 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
 
     return (
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center py-4">
-            {(itemsGiveaway).map((itemGiveaway, i) => (
+            {itemsGiveaway.length > 0 ? (
+              (itemsGiveaway).map((itemGiveaway, i) => (
                   <div key={i} className="relative flex flex-col items-center rounded-sm h-40 md:h-80 shadow-inner">
                     <Image width={630} height={300} src={itemGiveaway?.banner ?? "/assets/demo/giveaway.webp"} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" loader={imageLoader} alt="" />
                     <div className="absolute top-0 h-2 w-full flex flex-row items-center gap-x-1">
@@ -98,7 +99,8 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
                         </span>
                     </button>
                   </div>
-            ))}
+              ))
+            ) : null}
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
                 <div className="relative w-[55%] flex justify-between items-center h-[26rem]">
