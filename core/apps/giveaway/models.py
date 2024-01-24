@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 
 def ImageUploadTo(instance, id):
-    return f"uploads/banner/{id}"
+    return f"uploads/files/{id}"
 
 class Giveaway(models.Model):
 
@@ -17,7 +17,7 @@ class Giveaway(models.Model):
     prize = models.CharField(_("Objeto"), max_length=128, null=False, blank=False)
     value = models.IntegerField(_("Inversion"), default=1000, null=False, blank=False, help_text="$Valor del Objeto (USD)")
 
-    banner = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
+    file = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
         help_text="Width-(630px) - Height-(300px)")
     
     tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets Totales")

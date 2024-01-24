@@ -41,7 +41,7 @@ def signalLottery(sender, instance, **kwargs):
 
             instance.save()
 
-            newLottery = models.Lottery.objects.create(banner=instance.banner)
+            newLottery = models.Lottery.objects.create(file=instance.file)
             newHistoryTotal = instance.amount - instance.prize
 
             obj, newHistoryLottery = models.HistoryLottery.objects.get_or_create(
@@ -64,7 +64,6 @@ def signalLottery(sender, instance, **kwargs):
             f.write("signalLottery {} --> Error: {}\n".format(eDate, str(e)))
 
     finally:
-        # Reconnect the Signal
         pre_save.connect(signalLottery, sender=models.Lottery)
         
         

@@ -35,11 +35,6 @@ class fetchGiveaway(generics.ListAPIView):
                 ticket_count = TicketsGiveaway.objects.filter(giveaway=obj).count()
                 giveaway_data = GiveawaySerializer(obj).data
                 giveaway_data['progress'] = round(100-(ticket_count/(total_tickets+1))*100, 2)
-
-                """Fix Relative URL---> Absolute URL"""
-                if giveaway_data['banner']:
-                    giveaway_data['banner'] = request.build_absolute_uri(giveaway_data['banner'])
-
                 serialized_data.append(giveaway_data)
 
             return Response(serialized_data, status=status.HTTP_200_OK)

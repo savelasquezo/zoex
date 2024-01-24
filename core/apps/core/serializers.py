@@ -1,6 +1,6 @@
 from rest_framework import serializers
 import apps.core.models as models
-from django.conf import settings
+
 
 class CoreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,7 +12,7 @@ class ImagenSliderSerializer(serializers.ModelSerializer):
     file = serializers.SerializerMethodField()
     def get_file(self, obj):
         if obj.file:
-            return obj.file.url.lstrip('/')
+            return obj.file.url.lstrip('')
         return None
 
     class Meta:
