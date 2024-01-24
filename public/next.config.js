@@ -10,6 +10,12 @@ const nextConfig = {
         pathname: '/media/**',
       },
       {
+        protocol: 'https',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/media/**',
+      },
+      {
         protocol: 'http',
         hostname: 'zoexbet.com',
         port: '',
