@@ -291,13 +291,13 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 if not DEBUG:
 
     #SECURE_SSL_REDIRECT = True
-    CORS_ALLOW_ALL_ORIGINS = True
-    ALLOWED_HOSTS = ["217.196.63.210","localhost:3000","zoexbet.com"]
-    CORS_ORIGIN_WHITELIST = ["217.196.63.210","localhost:3000","zoexbet.com"]
-    CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://217.196.63.210:3000","https://zoexbet.com",]
+    #CORS_ALLOW_ALL_ORIGINS = True
+    #ALLOWED_HOSTS = ["217.196.63.210","localhost:3000","zoexbet.com"]
+    #CORS_ORIGIN_WHITELIST = ["217.196.63.210","localhost:3000","zoexbet.com"]
+    #CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://217.196.63.210:3000","https://zoexbet.com",]
 
     MEDIA_ROOT = '/var/www/zoex/media/'
-    MEDIA_URL = '/app/media/'
+    MEDIA_URL = '/media/'
 
     #EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     #EMAIL_HOST = 'smtp.hostinger.com'
