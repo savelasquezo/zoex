@@ -287,6 +287,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+SECURE_SSL_REDIRECT = True
 if not DEBUG:
 
     #SECURE_SSL_REDIRECT = True
