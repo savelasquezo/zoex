@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { LuRefreshCw } from "react-icons/lu";
 import { NextResponse } from 'next/server';
@@ -13,17 +15,38 @@ interface TicketsGiveawayModalProps {
   giveawayId: number;
 }
 
+interface GiveawayData {
+  id: any;
+  file: string;
+  giveaway: string;
+  prize: string;
+  value: number;
+  tickets: number;
+  price: number;
+  winner: string | null | undefined;
+  date_giveaway: string;
+  sold: number;
+  date_results: string;
+  stream: string | null | undefined;
+  amount: number;
+  is_active: boolean;
+  progress: number
+}
+
 const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [ticketsSuccess, setTicketsSuccess] = useState(false);
 
+  const router = useRouter();
   
   const [loading, setLoading] = useState(false);
   const [invoice, setInvoice] = useState('');
 
   const [aviableTickets, setAviableTickets] = useState<string[]>([]);
   const [listTickets, setListTickets] = useState<string[]>([]);
+
+  const [giveaway, setGiveaway] = useState<GiveawayData>();
 
   const [enteredLength, setEnteredLength] = useState<number>();
   const [generateNewNumbers, setGenerateNewNumbers] = useState<boolean>(true);
@@ -49,10 +72,11 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
         data = JSON.parse(message.data);
       }
 
-      setEnteredLength(data.iTickets[0]?.length); 
+      setEnteredLength(data?.tickets[0].length);
       if (generateNewNumbers) {
-        const randomTickets = getRandomTickets(data.iTickets, 5);
-        setAviableTickets(data.iTickets);
+        const randomTickets = getRandomTickets(data.tickets, 5);
+        setAviableTickets(data.tickets);
+        setGiveaway(data.giveaway);
         setListTickets(randomTickets.map(String));
         setGenerateNewNumbers(false);
       }
@@ -83,6 +107,8 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
     setSuccess('');
     setError('');
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     if (ticketsSuccess) {
       setGenerateNewNumbers(true);
       setTicketsSuccess(false)
@@ -94,20 +120,24 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
       return
     }
 
-    const isTicketValid = /^[0-9]+$/.test(ticket);
-    if (!isTicketValid && ticket === '') {
+    if (!session?.user) {
+      setError('¡Error - Inicio de Session!');
+      setLoading(false);
+      return;
+    }
+
+    const isTicketValid = /^[0-9]+$/.test(ticket.toString());
+    if (!isTicketValid && ticket !== null) {
       setError('¡Error - Ingrese un Ticket Valido!');
       setLoading(false);
       return;
     }
 
     if (!aviableTickets.includes(ticket)) {
-      setError('¡Lamentablemente el Numero ya ha sido Adquirido! Intentalo Nuevamente');
+      setError('¡Numero no Disponible!');
       setLoading(false);
       return;
     }
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/request-ticketgiveaway/`,
@@ -140,71 +170,100 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
     }
   };
 
+  const openLogin = () => {
+    closeModal()
+    router.push('/?login=True');
+  };
+
   return (
-    <div className='w-full h-full'>
-      {!ticketsSuccess ? (
-      <div className='w-full h-full inline-flex flex-col items-center justify-center my-2'>
-        {listTickets.length > 0 ? (
-        <div className='w-full h-full'>
-          <div className='relative w-full h-full flex flex-row gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
-            {listTickets.map((obj, i) => (
-              <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
-                <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{obj}</p>
-              </button>
-            ))}
-            <button onClick={handleGenerateNewNumbers} className='absolute top-2 right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full p-1 h-6 text-white'><LuRefreshCw /></button>
-          </div>
-          <form>
-            <div className='w-full flex flex-col justify-center items-center gap-y-2 my-1'>
-              <div className='flex flex-col h-full w-full justify-center items-center gap-y-2 px-2'>
-                <input className='w-full rounded-sm bg-slate-900 text-gray-400 text-center border-none appearance-none focus:!appearance-none outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0'
-                  type="text"
-                  name="ticket"
-                  id="ticket"
-                  minLength={enteredLength}
-                  maxLength={enteredLength}
-                  value={ticket}
-                  onChange={(e) => onChange(e)}
-                  readOnly={ticketsSuccess}
-                  required
-                />
+    <div className='w-full h-[22rem]'>
+      {(!ticketsSuccess && giveaway)? (
+        <div className='w-full h-[22rem] flex flex-col py-2'>
+          {listTickets.length > 0 ? (
+          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center'>
+            <form className='w-full md:w-2/5 flex flex-col justify-start items-start md:items-center gap-y-2 my-6 py-6'>
+                <div className='relative flex flex-col w-full h-32 md:h-52 justify-start md:justify-center items-center'>
+                  <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 md:h-48 w-auto object-cover z-10 -mt-12 md:mt-0"/>
+                  <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
+                    type="text"
+                    name="ticket"
+                    id="ticket"
+                    minLength={enteredLength}
+                    maxLength={enteredLength}
+                    value={ticket}
+                    onChange={(e) => onChange(e)}
+                    readOnly={ticketsSuccess}
+                    required
+                  />
+                </div>
+                {loading ? (
+                  <button type="button" className='w-full md:w-40 h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
+                ) : (
+                  session && session?.user? (
+                    <input onClick={handleSubmit} type="submit" value="Comprar" className='w-full md:w-40 h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'/>
+                    ) : (
+                    <span onClick={openLogin} className="w-full md:w-40 h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300">Ingresar</span>
+                  )
+                )}
+            </form>
+            <div className='w-full md:w-3/5 flex flex-col justify-start items-center gap-y-2 my-4 md:my-10'>
+              <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+                {listTickets.map((obj, i) => (
+                  <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-4 md:p-6'>
+                    <p className='absolute h-full w-full flex justify-center items-center text-xs md:text-lg uppercase font-normal md:font-semibold underline'>{obj}</p>
+                  </button>
+                ))}
+                <button onClick={handleGenerateNewNumbers} className='p-1 h-5 md:h-6 text-xs md:text-base absolute scale-75 md:scale-100 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white'><LuRefreshCw /></button>
               </div>
-              {loading ? (
-                <button type="button" className='w-32 h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
-              ) : (
-                <input onClick={handleSubmit} type="submit" value="Comprar" className='w-32 h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'/>
-              )}
+              {giveaway? (
+              <div className='relative w-full hidden md:flex md:flex-col md:justify-start h-36 gap-y-0.5 px-4 my-4'>
+                <div className='flex flex-row justify-between items-center'>
+                  <p className='text-gray-400 text-xs'>Sorteo: {giveaway.giveaway}</p>
+                  <p className='text-gray-400 text-xs'>Fecha: {giveaway.date_giveaway}</p>
+                </div >
+                <div className='flex flex-row justify-between items-center'>
+                  <p className='text-gray-400 text-xs'>Disponibles: {giveaway.tickets - giveaway.sold}/{giveaway.tickets}</p>
+                  <p className='text-gray-400 text-xs'>Premio: {giveaway.prize}</p>
+                </div >
+                <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
+                <div className='absolute w-full bottom-0 flex items-center h-6'>
+                  {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
+                  {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+                </div>
+              </div>
+                ) : (
+                  null
+                )}
             </div>
-          </form>
-          {error && (<div className="text-red-400 text-sm mt-2">{error}</div>)}
-          {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+            <div className='flex md:hidden absolute bottom-3 left-0 items-center h-6 w-full'>
+              {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
+              {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexwin.com</p>)}
+            </div>
+          </div>
+          ) : (
+          <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
+            <span className='text-center text-gray-300 my-4 text-sm'>
+                <p>¡No hay Tickets disponibles para este Sorteo!</p>
+                <p>El Sorteo se realizara el proximo dia 15</p>
+            </span>
+          </div>
+          )}
         </div>
-        ) : (
-        <div className='w-full h-full flex flex-col justify-start items-center'>
-          <span className='text-center text-gray-300 my-4 text-sm'>
-              <p>¡No hay Tickets disponibles para este Sorteo!</p>
-              <p>El Sorteo se realizara el proximo dia 15</p>
-          </span>
-        </div>
-        )}
-      </div>
       ) : (
-      <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
-        <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
-          <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
-            <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
-          </span>
-          <div className='flex flex-col ml-1'>
-            <p className='text-gray-400 text-xs'>email: {email}</p>
-            <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
+        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
+          <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+            <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
+              <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
+            </span>
+            <div className='flex flex-col ml-1'>
+              <p className='text-gray-400 text-xs'>email: {email}</p>
+              <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
+            </div>
           </div>
+          <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
+              <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
+            </div>
         </div>
-        <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
-            <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
-            <p className='text-center text-xs text-gray-400'>Incluye en la descripción el código de compra, El tiempo de confirmación es de 24 a 36 horas<br /> 
-            ¿Necesitas Ayuda? support@zoexwin.com</p>
-          </div>
-      </div>
       )}
     </div>
   );

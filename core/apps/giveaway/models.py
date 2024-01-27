@@ -7,6 +7,8 @@ from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from apps.user.models import UserAccount
+
 def ImageUploadTo(instance, id):
     return f"uploads/files/{id}"
 
@@ -64,7 +66,7 @@ class Giveaway(models.Model):
 
 class TicketsGiveaway(models.Model):
     giveaway = models.ForeignKey(Giveaway, on_delete=models.CASCADE)
-    email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
+    email = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 

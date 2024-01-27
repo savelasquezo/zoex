@@ -59,17 +59,21 @@ class requestTicketGiveaway(generics.GenericAPIView):
         giveawayID = str(request.data.get('giveawayId', ''))
         apiVoucher = str(uuid.uuid4())[:8]
 
-        data = {'email':email, 'ticket':ticket, 'voucher':apiVoucher}
+        user = UserAccount.objects.get(email=email)
+
+        data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
+
 
         try:
-            user = UserAccount.objects.get(email=email) 
+            
             giveaway = Giveaway.objects.get(id=giveawayID)
             if TicketsGiveaway.objects.filter(giveaway=giveaway,ticket=ticket).first() is not None:
                 return Response({'error': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
-
+            
             if user.balance < giveaway.price and user.credits < giveaway.price:
                 return Response({'error': 'The balance/credits are insufficient!'}, status=status.HTTP_400_BAD_REQUEST)
 
+            
             elif user.credits >= giveaway.price:
                 user.credits -= giveaway.price
                 user.save()
@@ -95,8 +99,9 @@ class fetchTicketsGiveaway(generics.ListAPIView):
     serializer_class = TicketsGiveawaySerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self, request):
+        user = UserAccount.objects.get(email=self.request.user.email)
         giveawayId = self.kwargs.get('giveawayId')
-        return TicketsGiveaway.objects.filter(email=self.request.user.email, giveaway=giveawayId)
+        return TicketsGiveaway.objects.filter(email=user, giveaway=giveawayId)
 
     def get(self, request, *args, **kwargs):
         try:

@@ -17,7 +17,19 @@ interface GiveawaysModalProps {
 interface GiveawayData {
     id: any;
     file: string;
-    progress: number;
+    giveaway: string;
+    prize: string;
+    value: number;
+    tickets: number;
+    price: number;
+    winner: string | null | undefined;
+    date_giveaway: string;
+    sold: number;
+    date_results: string;
+    stream: string | null | undefined;
+    amount: number;
+    is_active: boolean;
+    progress: number
 }
 
 export const fetchGiveaways = async () => {
@@ -103,7 +115,7 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
             ) : null}
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-[55%] flex justify-between items-center h-[26rem]">
+                <div className="relative w-4/5 md:w-[55%] flex justify-between items-center h-[26rem]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                   <div className="w-full h-full bg-gray-800 rounded-2xl p-6">
                     <button onClick={() => openModal('buyTicket',{giveawayId})} className={`text-gray-100 rounded-md px-2 py-0.5 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'buyTicket' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>

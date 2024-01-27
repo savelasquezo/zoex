@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
+from .serializers import LotterySerializer
+
 @sync_to_async
 def getAsyncLottery():
     from apps.lottery.models import Lottery
@@ -16,8 +18,11 @@ async def getAsyncAviableTickets():
     lottery = await getAsyncLottery()
     getAviableTickets = [str(i).zfill(len(str(lottery.tickets))) for i in range((lottery.tickets+1))]
     getTickets = await getAsyncTickets(lottery)
-    iTickets = [i for i in getAviableTickets if i not in getTickets]
-    return {'iTickets': iTickets}
+    tickets = [i for i in getAviableTickets if i not in getTickets]
+
+    serializer = LotterySerializer(lottery)
+
+    return {'lottery':serializer.data,'tickets': tickets}
 
 
 class AsyncLotteryConsumer(AsyncWebsocketConsumer):

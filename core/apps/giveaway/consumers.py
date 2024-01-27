@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
+from.serializers import GiveawaySerializer
+
 @sync_to_async
 def getAsyncGiveaway(id):
     from apps.giveaway.models import Giveaway
@@ -16,8 +18,11 @@ async def getAsyncAviableTickets(id):
     giveaway = await getAsyncGiveaway(id)
     getAviableTickets = [str(i).zfill(len(str(giveaway.tickets))) for i in range((giveaway.tickets+1))]
     getTickets = await getAsyncTickets(giveaway)
-    iTickets = [i for i in getAviableTickets if i not in getTickets]
-    return {'iTickets': iTickets}
+    tickets = [i for i in getAviableTickets if i not in getTickets]
+
+    serializer = GiveawaySerializer(giveaway)
+
+    return {'giveaway':serializer.data,'tickets': tickets}
 
 
 class AsyncGiveawayConsumer(AsyncWebsocketConsumer):

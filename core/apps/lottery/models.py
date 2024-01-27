@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from django.core.exceptions import ObjectDoesNotExist
+from apps.user.models import UserAccount
 
 def ImageUploadTo(instance, filename):
     return f"uploads/files/{filename}"
@@ -27,7 +28,7 @@ class Lottery(models.Model):
 
     date_lottery = models.DateField(_("Fecha"), default=timezone.now)
 
-    sold = models.SmallIntegerField (_("Tickets"), default=0, null=False, blank=False, help_text="#Tickets Totales")
+    sold = models.SmallIntegerField (_("Vendidos"), default=0, null=False, blank=False, help_text="#Tickets Totales")
     date_results = models.DateField(_("Fecha"), default=timezone.now)
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
@@ -62,7 +63,7 @@ class Lottery(models.Model):
 
 class TicketsLottery(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.CASCADE)
-    email = models.EmailField(_("Email"), unique=False, null=False, blank=False)
+    email = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 

@@ -29,7 +29,7 @@ class LotteryAdmin(admin.ModelAdmin):
 
     list_display = (
         'lottery',
-        'prize',
+        'sold',
         'tickets',
         'price',
         'date_lottery',
