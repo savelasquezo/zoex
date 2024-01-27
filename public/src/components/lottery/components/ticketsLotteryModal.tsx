@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
@@ -66,14 +66,22 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
 
     client.onmessage = (message) => {
       let data;
-      data = JSON.parse(message.data as string);
-      setEnteredLength(data.tickets[0]?.length); 
-      if (generateNewNumbers) {
-        const randomTickets = getRandomTickets(data.tickets, 5);
-        setAviableTickets(data.tickets);
-        setLottery(data.lottery);
-        setListTickets(randomTickets.map(String));
-        setGenerateNewNumbers(false);
+      try {
+        data = JSON.parse(message.data as string);
+  
+        if (data.tickets && data.tickets.length > 0 && data.tickets[0]) {
+          setEnteredLength(data.tickets[0].length);
+        }
+  
+        if (generateNewNumbers) {
+          const randomTickets = getRandomTickets(data.tickets, 5);
+          setAviableTickets(data.tickets);
+          setLottery(data.lottery);
+          setListTickets(randomTickets.map(String));
+          setGenerateNewNumbers(false);
+        }
+      } catch (error) {
+        console.error("Error parsing message:", error);
       }
     };
 
@@ -83,10 +91,6 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
       }
     };
   }, [generateNewNumbers]);
-
-  useEffect(() => {
-    handleGenerateNewNumbers();
-  }, []);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -147,6 +151,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           ticket,
         }),
       });
+      
       const data = await res.json();
       if (!data.error) {
         setSuccess('¡Adquirido! Enviamos el Ticket a tu Email');
@@ -160,6 +165,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
       return NextResponse.json({ error: 'There was an error with the network request' });
 
     } finally {
+      handleGenerateNewNumbers();
       setLoading(false);
     }
   };
@@ -174,7 +180,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
       {(!ticketsSuccess && lottery)? (
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
-          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center'>
+          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center animate-fade-in animate__animated animate__fadeIn'>
             <form className='w-full md:w-2/5 flex flex-col justify-start items-start md:items-center gap-y-2 my-6 py-6'>
                 <div className='relative flex flex-col w-full h-32 md:h-52 justify-start md:justify-center items-center'>
                   <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 md:h-48 w-auto object-cover z-10 -mt-12 md:mt-0"/>
@@ -239,7 +245,8 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           </div>
           )}
         </div>
-      ) : (
+        
+      ) : (ticketsSuccess && lottery)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
           <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
             <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
@@ -254,6 +261,8 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
               <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>
         </div>
+      ) : (
+        <p>Hola</p>
       )}
     </div>
   );

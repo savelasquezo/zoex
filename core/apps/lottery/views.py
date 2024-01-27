@@ -49,10 +49,11 @@ class requestTicketLottery(generics.GenericAPIView):
         ticket = str(request.data.get('ticket', ''))
         apiVoucher = str(uuid.uuid4())[:8]
 
-        data = {'email':email, 'ticket':ticket, 'voucher':apiVoucher}
+        user = UserAccount.objects.get(email=email) 
+
+        data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
 
         try:
-            user = UserAccount.objects.get(email=email) 
             lottery = Lottery.objects.get(is_active=True)
             if TicketsLottery.objects.filter(lottery=lottery,ticket=ticket).first() is not None:
                 return Response({'error': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
@@ -86,8 +87,9 @@ class fetchTicketsLottery(generics.ListAPIView):
     serializer_class = TicketsLotterySerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
+        user = UserAccount.objects.get(email=self.request.user.email) 
         lottery = Lottery.objects.get(is_active=True)
-        return TicketsLottery.objects.filter(lottery=lottery, email=self.request.user.email)
+        return TicketsLottery.objects.filter(lottery=lottery, email=user)
 
     def get(self, request, *args, **kwargs):
         try:

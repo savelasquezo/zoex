@@ -65,23 +65,28 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
   useEffect(() => {
     const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/app/ws/tickets_giveaway/${giveawayId}/`;
     const client = new W3CWebSocket(websocketURL);
-
+  
     client.onmessage = (message) => {
       let data;
-      if (typeof message.data === 'string') {
-        data = JSON.parse(message.data);
-      }
-
-      setEnteredLength(data?.tickets[0].length);
-      if (generateNewNumbers) {
-        const randomTickets = getRandomTickets(data.tickets, 5);
-        setAviableTickets(data.tickets);
-        setGiveaway(data.giveaway);
-        setListTickets(randomTickets.map(String));
-        setGenerateNewNumbers(false);
+      try {
+        data = JSON.parse(message.data as string);
+  
+        if (data.tickets && data.tickets.length > 0 && data.tickets[0]) {
+          setEnteredLength(data.tickets[0].length);
+        }
+  
+        if (generateNewNumbers) {
+          const randomTickets = getRandomTickets(data.tickets, 5);
+          setAviableTickets(data.tickets);
+          setGiveaway(data.giveaway);
+          setListTickets(randomTickets.map(String));
+          setGenerateNewNumbers(false);
+        }
+      } catch (error) {
+        console.error("Error parsing message:", error);
       }
     };
-
+  
     return () => {
       if (client.readyState === client.OPEN) {
         client.close();
@@ -89,9 +94,6 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
     };
   }, [generateNewNumbers, giveawayId]);
 
-  useEffect(() => {
-    handleGenerateNewNumbers();
-  }, []);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -166,6 +168,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
         return NextResponse.json({ error: 'There was an error with the network request' });
         
       } finally {
+        handleGenerateNewNumbers();
         setLoading(false);
     }
   };
@@ -180,7 +183,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
       {(!ticketsSuccess && giveaway)? (
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
-          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center'>
+          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center animate-fade-in animate__animated animate__fadeIn'>
             <form className='w-full md:w-2/5 flex flex-col justify-start items-start md:items-center gap-y-2 my-6 py-6'>
                 <div className='relative flex flex-col w-full h-32 md:h-52 justify-start md:justify-center items-center'>
                   <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 md:h-48 w-auto object-cover z-10 -mt-12 md:mt-0"/>
@@ -188,8 +191,8 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
                     type="text"
                     name="ticket"
                     id="ticket"
-                    minLength={enteredLength}
-                    maxLength={enteredLength}
+                    minLength={3}
+                    maxLength={3}
                     value={ticket}
                     onChange={(e) => onChange(e)}
                     readOnly={ticketsSuccess}
@@ -249,7 +252,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
           </div>
           )}
         </div>
-      ) : (
+      ) : (ticketsSuccess && giveaway)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
           <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
             <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
@@ -264,6 +267,8 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
               <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>
         </div>
+      ) : (
+        <p>Hola</p>
       )}
     </div>
   );
