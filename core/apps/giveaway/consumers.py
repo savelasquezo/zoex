@@ -24,7 +24,7 @@ async def getAsyncAviableTickets(id):
     getTickets = await getAsyncTickets(giveaway)
     tickets = [i for i in getAviableTickets if i not in getTickets]
 
-    serializer = getAsyncsSerializersGiveaway(giveaway)
+    serializer = await getAsyncsSerializersGiveaway(giveaway)
 
     return {'giveaway':serializer.data,'tickets': tickets}
 
