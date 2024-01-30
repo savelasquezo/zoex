@@ -53,9 +53,9 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
     },[]);
 
     return (
-      <div className="w-screen mx-0">
+      <div className="w-screen h-auto mx-0">
         <div id="default-carousel" className="relative" data-carousel="slide">
-            <div className={`overflow-hidden relative z-0 ${session ? 'h-[calc(100vh-112px)]' : 'h-56 md:h-[calc(100vh-56px)]'}`}>
+            <div className={`overflow-hidden relative z-0 ${session ? 'h-44 md:h-80 lg:h-[calc(100vh-112px)]' : 'h-44 md:h-80 lg:h-[calc(100vh-56px)]'}`}>
             <Suspense fallback={<p>...</p>}>
               {imagenSliders?.length > 0 ? (
                 <Carousel slide={true} slideInterval={3000} indicators={false}

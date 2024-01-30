@@ -99,6 +99,34 @@ class WithdrawalsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
          return False
 
+
+class SupportAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'account',
+        'subject',
+        'date',
+        'state'
+        )
+
+    list_filter = ['date','state']
+    search_fields = ['account']
+
+    es_formats.DATETIME_FORMAT = "d M Y"
+    
+    fieldsets = (
+        (None, {'fields': (('account','uuid'),('subject','state'),)}),
+            ('', {'fields': (
+            ('message'),
+        )}),
+    )
+
+    readonly_fields=['account','uuid','date','subject','message']
+    def has_add_permission(self, request):
+         return False
+
+
+
 class UserAccountAdmin(BaseUserAdmin):
     list_display = ('username', 'email','phone','balance')
     search_fields = ('username', 'email')
@@ -132,4 +160,5 @@ class UserAccountAdmin(BaseUserAdmin):
 admin.site.register(models.UserAccount, UserAccountAdmin)
 admin.site.register(models.Invoice, InvoiceAdmin)
 admin.site.register(models.Withdrawals, WithdrawalsAdmin)
+admin.site.register(models.Support, SupportAdmin)
 

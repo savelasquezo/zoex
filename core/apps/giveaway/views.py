@@ -54,9 +54,9 @@ class requestTicketGiveaway(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        email = str(request.data.get('email', ''))
-        ticket = str(request.data.get('ticket', ''))
-        giveawayID = str(request.data.get('giveawayId', ''))
+        email = request.data.get('email', '')
+        ticket = request.data.get('ticket', '')
+        giveawayID = request.data.get('giveawayId', '')
         apiVoucher = str(uuid.uuid4())[:8]
 
         user = UserAccount.objects.get(email=email)
@@ -98,15 +98,17 @@ class fetchTicketsGiveaway(generics.ListAPIView):
     """
     serializer_class = TicketsGiveawaySerializer
     permission_classes = [IsAuthenticated]
-    def get_queryset(self, request):
+    def get_queryset(self, request, giveawayId):
         user = UserAccount.objects.get(email=self.request.user.email)
-        giveawayId = self.kwargs.get('giveawayId')
         return TicketsGiveaway.objects.filter(email=user, giveaway=giveawayId)
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = self.get_queryset(request)
+            giveawayId = self.kwargs.get('giveawayId')
+            queryset = self.get_queryset(request, giveawayId)
             serialized_data = self.serializer_class(queryset, many=True).data
+            for item in serialized_data:
+                item['giveawayID'] = Giveaway.objects.get(id=giveawayId).giveaway
             return Response(serialized_data)
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")

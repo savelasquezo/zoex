@@ -113,17 +113,17 @@ const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModalProps> = ({
             />
         </div>
         {changePasswordSuccess ? (
-          <button className="bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase"
+          <button className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase"
             onClick={() => {closeModal();router.push('/');}}>
             Actualizado
           </button>
           ) : (
           loading ? (
-            <button type="button" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
+            <button type="button" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
               <CircleLoader loading={loading} size={25} color="#1c1d1f" />
             </button>
             ) : (
-            <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">Restablecer</button>
+            <button type="submit" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">Restablecer</button>
           )
         )}
       </form>

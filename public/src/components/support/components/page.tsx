@@ -83,11 +83,12 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/send-message/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/request-message/`, 
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `JWT ${session?.user?.accessToken}`,
         },
         body: JSON.stringify({
           email,
@@ -169,16 +170,16 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
           Términos del servicio y Tratamiento de datos, Acepto la respuesta via email que será emitida en las próximas 24 horas.</p>
         </div>
         {registrationSuccess ? (
-          <p onClick={closeModal} className="bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
+          <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
             Enviado
           </p>
         ) : (
           loading ? (
-            <button type="button" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
+            <button type="button" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
               <CircleLoader loading={loading} size={25} color="#1c1d1f" />
             </button>
           ) : (
-            <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
+            <button onClick={onSubmit} type="submit" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
               Enviar
             </button>
           )

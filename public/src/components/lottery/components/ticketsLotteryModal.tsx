@@ -113,6 +113,18 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
       setLoading(false);
       return;
     }
+
+    if (!lottery) {
+      setError('¡Error Inesperado! Intentelo Nuevamente');
+      setLoading(false);
+      return;
+    }
+
+    if ((session.user.balance < lottery.price) && (session.user.credits < lottery.price)) {
+      setError('¡Saldo Insuficiente!');
+      setLoading(false);
+      return;
+    }
     
     if (ticketsSuccess) {
       setGenerateNewNumbers(true);
@@ -180,10 +192,10 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
       {(!ticketsSuccess && lottery)? (
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
-          <div className='w-full flex flex-col-reverse md:flex-row items-start justify-start md:justify-center animate-fade-in animate__animated animate__fadeIn'>
-            <form className='w-full md:w-2/5 flex flex-col justify-start items-start md:items-center gap-y-2 my-6 py-6'>
-                <div className='relative flex flex-col w-full h-32 md:h-52 justify-start md:justify-center items-center'>
-                  <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 md:h-48 w-auto object-cover z-10 -mt-12 md:mt-0"/>
+          <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
+            <form className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
+                <div className='relative flex flex-col w-full h-32 justify-start items-center lg:h-52 lg:justify-center'>
+                  <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
                   <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
                     type="text"
                     name="ticket"
@@ -197,26 +209,30 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
                   />
                 </div>
                 {loading ? (
-                  <button type="button" className='w-full md:w-40 h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
+                  <button type="button" className='w-full h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
                 ) : (
                   session && session?.user? (
-                    <input onClick={handleSubmit} type="submit" value="Comprar" className='w-full md:w-40 h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'/>
+                    <input onClick={handleSubmit} type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
                     ) : (
-                    <span onClick={openLogin} className="w-full md:w-40 h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300">Ingresar</span>
+                    <span onClick={openLogin} className="w-full h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 lg:w-40">Ingresar</span>
                   )
                 )}
             </form>
-            <div className='w-full md:w-3/5 flex flex-col justify-start items-center gap-y-2 my-4 md:my-10'>
+            <div className='w-full flex flex-col justify-start items-center gap-y-2 my-4 lg:w-3/5 lg:my-10'>
               <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
                 {listTickets.map((obj, i) => (
                   <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-4 md:p-6'>
                     <p className='absolute h-full w-full flex justify-center items-center text-xs md:text-lg uppercase font-normal md:font-semibold underline'>{obj}</p>
                   </button>
                 ))}
-                <button onClick={handleGenerateNewNumbers} className='p-1 h-5 md:h-6 text-xs md:text-base absolute scale-75 md:scale-100 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white'><LuRefreshCw /></button>
+                {generateNewNumbers ? (
+                  <button type="button" className='p-1 h-5 text-xs absolute scale-75 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base lg:scale-100 '><CircleLoader size={16} /></button>
+                ) : (
+                  <button onClick={handleGenerateNewNumbers} className='p-1 h-5 text-xs absolute scale-75 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base lg:scale-100 '><LuRefreshCw /></button>
+                )}
               </div>
               {lottery? (
-              <div className='relative w-full hidden md:flex md:flex-col md:justify-start h-36 gap-y-0.5 px-4 my-4'>
+              <div className='relative w-full h-36 gap-y-0.5 px-4 my-4 hidden lg:flex lg:flex-col lg:justify-start'>
                 <div className='flex flex-row justify-between items-center'>
                   <p className='text-gray-400 text-xs'>Loteria: {lottery.lottery}</p>
                   <p className='text-gray-400 text-xs'>Fecha: {lottery.date_lottery}</p>
@@ -229,11 +245,15 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
                   {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
                   {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+                  </div>
                 </div>
-              </div>
                 ) : (
                   null
                 )}
+            </div>
+            <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden'>
+              {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
+              {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexwin.com</p>)}
             </div>
           </div>
           ) : (
@@ -245,7 +265,6 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           </div>
           )}
         </div>
-        
       ) : (ticketsSuccess && lottery)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
           <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
@@ -262,7 +281,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
             </div>
         </div>
       ) : (
-        <p>Hola</p>
+        <p>...</p>
       )}
     </div>
   );

@@ -107,3 +107,20 @@ class Invoice(models.Model):
         indexes = [models.Index(fields=['state']),]
         verbose_name = _("Recarga")
         verbose_name_plural = _("Recargas")
+
+
+class Support(models.Model):
+    uuid = models.UUIDField(_("UUID"),default=uuid.uuid4, unique=True)
+    account = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    date = models.DateField(_("Fecha"), default=timezone.now)
+    subject = models.CharField(_("Asunto"), max_length=128, null=False, blank=False)
+    message = models.TextField(_("Mensaje"), max_length=2048, null=False, blank=False)
+    state = models.BooleanField(_("¿Archivar?"),default=False)
+
+    def __str__(self):
+        return f"{self.id}"
+
+    class Meta:
+        indexes = [models.Index(fields=['state']),]
+        verbose_name = _("Soporte")
+        verbose_name_plural = _("Soportes")

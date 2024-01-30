@@ -175,19 +175,19 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-1 md:my-2">
                     <input type="checkbox" id="checkbox"onChange={toggleAgreed} readOnly={registrationSuccess}/>
-                    <p className="text-[0.55rem] md:text-xs text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos</p>
+                    <p className="text-[0.5rem] md:text-xs xl:text-sm text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos</p>
                 </div>
                 {registrationSuccess ? (
-                  <p onClick={closeModal} className="bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
+                  <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
                     Verificar email
                   </p>
                 ) : (
                   loading ? (
-                    <button type="button" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
+                    <button type="button" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center flex items-center justify-center">
                       <CircleLoader loading={loading} size={25} color="#1c1d1f" />
                     </button>
                   ) : (
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
+                    <button type="submit" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
                       Inscribirse
                     </button>
                   )

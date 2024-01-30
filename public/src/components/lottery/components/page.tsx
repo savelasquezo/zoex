@@ -91,10 +91,9 @@ const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
         {lottery? (
         <div className="relative h-40 md:h-96 items-center">
           <Image width={1280} height={400} src={lottery?.file ?? "/assets/demo/lottery.webp"} loader={imageLoader} className="absolute top-0 left-0 h-full w-full object-cover rounded-md z-0"  alt=""/>
-          <button className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden">
-            <span className='text-white font-semibold text-lg'><AiOutlineShoppingCart /></span>
-            <span className="block text-white shadow-inner text-sm py-2 px-4 tracking-wide uppercase font-bold"
-              onClick={() => openModal('buyTicket')}>
+          <button onClick={() => openModal('buyTicket')} className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden">
+            <span className='text-white font-semibold text-base p-2 sm:p-0'><AiOutlineShoppingCart /></span>
+            <span className="text-white shadow-inner text-sm py-2 px-4 tracking-wide uppercase font-bold hidden md:block">
               Comprar
             </span>
           </button>

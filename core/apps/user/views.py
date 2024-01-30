@@ -165,4 +165,23 @@ class requestInvoice(generics.GenericAPIView):
 
             return Response({'apiInvoice': apiInvoice}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class requestMessage(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        account = models.UserAccount.objects.get(email=self.request.user.email)
+        subject = request.data.get('subject', '')
+        message = request.data.get('message', '')
+
+        data = {'subject':subject,'message':message}
+    
+        try:
+            obj = models.Support.objects.create(account=account, **data)
+            return Response({'detail': 'The message request has been sent.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            date = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("requestMessage {} --> Error: {}\n".format(date, str(e)))
+            return Response({'error': 'NotFound Support.'}, status=status.HTTP_404_NOT_FOUND)
+        

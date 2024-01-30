@@ -45,11 +45,11 @@ class requestTicketLottery(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        email = str(request.data.get('email', ''))
-        ticket = str(request.data.get('ticket', ''))
+        email = request.data.get('email', '')
+        ticket = request.data.get('ticket', '')
         apiVoucher = str(uuid.uuid4())[:8]
 
-        user = UserAccount.objects.get(email=email) 
+        user = UserAccount.objects.get(email=email)
 
         data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
 

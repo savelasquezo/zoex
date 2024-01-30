@@ -6,4 +6,5 @@ urlpatterns = [
     path('fetch-withdrawals/', view.fetchWithdrawals.as_view(), name='fetch-withdrawals'),
     path('request-invoice/', view.requestInvoice.as_view(), name='request-invoice'),
     path('refresh-invoices/', view.refreshInvoices.as_view(), name='refresh-invoices'),
+    path('request-message/', view.requestMessage.as_view(), name='request-message'),
 ]
