@@ -27,7 +27,6 @@ interface LotteryData {
   date_results: string;
   stream: null,
   amount: number;
-  is_active: boolean
 }
 
 const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, session  }) => {

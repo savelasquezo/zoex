@@ -1,62 +1,59 @@
 import os
 from django.conf import settings
 from django.utils import timezone
+from django.contrib import messages
 
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from . import models
-from ..core.models import Core
+from .models import Lottery, TicketsLottery
+from apps.core.models import Core
+from apps.user.models import UserAccount
 
 def getLottery():
-    return models.Lottery.objects.get(is_active=True)
+    return Lottery.objects.get(is_active=True)
 
 def getTickets(lottery):
-    return list(models.TicketsLottery.objects.filter(lottery=lottery).values_list('ticket', flat=True))
+    return list(TicketsLottery.objects.filter(lottery=lottery).values_list('ticket', flat=True))
 
 def geAviableTickets(lottery):
     lottery = getLottery()
-    AviableTickets = [str(i).zfill(len(str(lottery.tickets))) for i in range((lottery.tickets+1))]
-    Tickets = getTickets(lottery)
-    iTickets = [i for i in AviableTickets if i not in Tickets]
-    return {'iTickets': iTickets}
+    aviable_tickets = [str(i).zfill(len(str(lottery.tickets))) for i in range((lottery.tickets+1))]
+    queryset = getTickets(lottery)
+    tickets = [i for i in aviable_tickets if i not in queryset]
+    return {'tickets': tickets}
 
 
-@receiver(pre_save, sender=models.Lottery)
+@receiver(post_save, sender=Lottery)
 def signalLottery(sender, instance, **kwargs):
     """
     Signal handler for pre-saving Lottery instances.
     """
     # Disconnect the Signal-Temporarily
-    pre_save.disconnect(signalLottery, sender=models.Lottery)
+    post_save.disconnect(signalLottery, sender=Lottery)
 
     try:
-        getWinner = models.TicketsLottery.objects.filter(lottery=instance,ticket=instance.winner, is_active=True)
+        getWinner = TicketsLottery.objects.filter(lottery=instance,ticket=instance.winner)
         if instance.winner is not None and getWinner.exists():
+
+            #Disable Current Lottery
             instance.is_active = False
             instance.stream = Core.objects.all().first().stream
+            instance.total = instance.amount - instance.prize
             instance.date_results = timezone.now()
-
             instance.save()
 
-            newLottery = models.Lottery.objects.create(file=instance.file)
-            newHistoryTotal = instance.amount - instance.prize
+            #Disable All Current Tickets
+            TicketsLottery.objects.filter(lottery=instance).update(state=False)
 
-            obj, newHistoryLottery = models.HistoryLottery.objects.get_or_create(
-                lottery=instance.lottery,
-                prize=instance.prize,
-                tickets=instance.tickets,
-                price=instance.price,
-                winner=instance.winner,
-                sold=instance.sold,
-                amount=instance.amount,
-                total = newHistoryTotal,
-                date_results=instance.date_results,
-                stream=instance.stream
+            #Update Balance Winner
+            user = UserAccount.objects.get(email=getWinner.first().email)
+            user.balance =+ user.balance + instance.prize
+            user.save()
 
-            )
+            ##AVISAR POR CORREO (PENDIENTE)
 
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
@@ -64,11 +61,16 @@ def signalLottery(sender, instance, **kwargs):
             f.write("signalLottery {} --> Error: {}\n".format(eDate, str(e)))
 
     finally:
-        pre_save.connect(signalLottery, sender=models.Lottery)
+        #Delete current ticket without winner
+        if instance.winner is not None and not getWinner.exists():
+            instance.winner = ""
+            instance.save()
+        post_save.connect(signalLottery, sender=Lottery)
+
+
+
         
-        
-@receiver(post_save, sender=models.TicketsLottery)
-@receiver(post_delete, sender=models.TicketsLottery)
+@receiver(post_save, sender=TicketsLottery)
 def signalTicketsLottery(sender, instance, **kwargs):
     """
     Signal handler for post-save and post-delete events of TicketsLottery instances.
@@ -76,21 +78,25 @@ def signalTicketsLottery(sender, instance, **kwargs):
     the associated Lottery instance's sold and amount fields based on the current active tickets.
     Additionally, it sends an asynchronous signal to update available tickets to clients.
     """
-    lottery = models.Lottery.objects.filter(is_active=True).first()
-    currentTickets = models.TicketsLottery.objects.filter(lottery=lottery, is_active=True).count()
 
-    lottery.sold = currentTickets
-    lottery.amount = lottery.price*currentTickets
-    lottery.save()
+    try:
+        lottery = Lottery.objects.filter(is_active=True).first()
+        currentTickets = TicketsLottery.objects.filter(lottery=lottery).count()
+        lottery.sold = currentTickets
+        lottery.amount = lottery.price*currentTickets
+        lottery.save()
 
-    channel_layer = get_channel_layer()
-    data = geAviableTickets(lottery=instance)
-    async_to_sync(channel_layer.group_send)(
-        "groupTicketsLottery",
-        {
-            "type": "asyncSignal",
-            "data": data,
-        }
-    )
+        channel_layer = get_channel_layer()
+        data = geAviableTickets(lottery=instance)
+        async_to_sync(channel_layer.group_send)(
+            "groupTicketsLottery",
+            {
+                "type": "asyncSignal",
+                "data": data,
+            }
+        )
 
-
+    except Exception as e:
+        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        with open(os.path.join(settings.BASE_DIR, 'logs/signals.log'), 'a') as f:
+            f.write("signalTicketsLottery {} --> Error: {}\n".format(eDate, str(e)))

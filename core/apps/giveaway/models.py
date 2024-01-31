@@ -66,12 +66,18 @@ class Giveaway(models.Model):
 
 class TicketsGiveaway(models.Model):
     giveaway = models.ForeignKey(Giveaway, on_delete=models.CASCADE)
+    uuid = models.CharField(_("Sorteo"), max_length=32, null=True, blank=True)
+
     email = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
-    is_active = models.BooleanField(_("¿Activo?"),default=True)
+    state = models.BooleanField(_("¿Estado?"),default=True)
+
+    def save(self, *args, **kwargs):
+        self.uuid = self.giveaway.giveaway if self.giveaway else None
+        super(TicketsGiveaway, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.ticket}"

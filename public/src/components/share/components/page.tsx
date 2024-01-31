@@ -82,12 +82,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
           <WhatsappIcon size={32} round />
         </WhatsappShareButton>
       </div>
-      <p className='mt-12 text-xs font-thin text-center text-white'>Genera ingresos de forma pasiva compartiendo el Link de referido con tus amigos, gana el 5% de todoas las recargas que realicen, puedes usar este saldo para jugar o retirarlo a tu cuenta bancaria</p>
+      <p className='mt-12 text-[0.5rem] md:text-xs font-thin text-center text-white'>Genera ingresos de forma pasiva compartiendo el Link de referido con tus amigos, gana el 5% de todoas las recargas que realicen, puedes usar este saldo para jugar o retirarlo a tu cuenta bancaria</p>
       <div className='w-full h-18 mt-4 px-4 flex flex-col justify-center items-center'>
         <span onClick={handleCopyClick} className='w-4/5 h-12 bg-slate-950 text-gray-300 flex items-center justify-center rounded-lg cursor-copy'>{session?.user?.uuid || ''}</span>
         {copySuccess !== null && (<span className={`ml-2 p-2 h-6 uppercase text-xs font-semibold ${copySuccess ? 'text-green-500' : ''}`}>{copySuccess ? '¡Copiado al portapapeles!' : ''}</span>)}
       </div>
-      <p className='mt-6 text-xs font-thin text-center text-white'>Usando tu link de registro tus amigos o seguidores 
+      <p className='mt-6 text-[0.5rem] md:text-xs font-thin text-center text-white'>Usando tu link de registro tus amigos o seguidores 
       recibiran un 50% de saldo en su primera recarga, disponible para jugar en cualquiera de nuestros sorteos, Aplican Terminos & condiciones</p>
     </div>
   );

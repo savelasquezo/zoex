@@ -13,8 +13,6 @@ import Lottery from '@/components/lottery/index';
 import Giveaways from '@/components/giveaways/index';
 import History from '@/components/history/index';
 
-import '@/styles/styles.css';
-
 export default function Home() {
   return (
     <SessionProvider >

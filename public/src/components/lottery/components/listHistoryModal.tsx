@@ -75,7 +75,7 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
                             <thead className="font-medium text-white">
                                 <tr className="border-b border-slate-900 uppercase text-xs">
                                     <th scope="col" className=" px-6 py-2">Loteria</th>
-                                    <th scope="col" className=" px-6 py-2">Fecha</th>
+                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
                                     <th scope="col" className=" px-6 py-2">Ticket</th>
                                     <th scope="col" className=" px-6 py-2">Link</th>
                                 </tr>
@@ -83,7 +83,7 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
                             {hisotryList?.slice(pageNumber * HisotryPage, (pageNumber + 1) * HisotryPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
                                     <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.lottery}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.date_results}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date_results}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.winner}</td>
                                     <td className="whitespace-nowrap px-6 py-2 flex justify-center">
                                         <a href={obj.stream} target='blank' className='hover:text-blue-500 transition-colors duration-300'><FaLink /></a>

@@ -115,3 +115,31 @@ class fetchTicketsGiveaway(generics.ListAPIView):
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("fetchTicketsGiveaway {} --> Error: {}\n".format(date, str(e)))
             return Response({'error': 'NotFound Giveaway.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class fetchAllTicketsGiveaway(generics.ListAPIView):
+    """
+    Endpoint to retrieve a list of lottery tickets purchased by the authenticated user.
+    Requires authentication.
+    """
+    serializer_class = TicketsGiveawaySerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = UserAccount.objects.get(email=self.request.user.email)
+        return TicketsGiveaway.objects.filter(email=user)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset()
+            serialized_data = self.serializer_class(queryset, many=True).data
+            serialized_data = sorted(serialized_data, key=lambda x: x['id'], reverse=True)
+
+            for obj in serialized_data:
+                obj['is_active'] = Giveaway.objects.get(id=obj['giveaway']).is_active
+            return Response(serialized_data)
+        
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("fetchAllTicketsGiveaway {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound Any-Lottery.'}, status=status.HTTP_404_NOT_FOUND)

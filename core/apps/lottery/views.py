@@ -9,8 +9,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-from .models import Lottery, TicketsLottery, HistoryLottery
-from .serializers import LotterySerializer, TicketsLotterySerializer, HistoryLotterySerializer
+from .models import Lottery, TicketsLottery
+from .serializers import LotterySerializer, TicketsLotterySerializer
 
 from apps.user.models import UserAccount
 
@@ -104,16 +104,43 @@ class fetchTicketsLottery(generics.ListAPIView):
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("fetchTicketsLottery {} --> Error: {}\n".format(eDate, str(e)))
             return Response({'error': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+        
+class fetchAllTicketsLottery(generics.ListAPIView):
+    """
+    Endpoint to retrieve a list of lottery tickets purchased by the authenticated user.
+    Requires authentication.
+    """
+    serializer_class = TicketsLotterySerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        user = UserAccount.objects.get(email=self.request.user.email)
+        return TicketsLottery.objects.filter(email=user)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset()
+            serialized_data = self.serializer_class(queryset, many=True).data
+            serialized_data = sorted(serialized_data, key=lambda x: x['id'], reverse=True)
+            
+            for obj in serialized_data:
+                obj['is_active'] = Lottery.objects.get(id=obj['lottery']).is_active
+            return Response(serialized_data)
+        
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("fetchAllTicketsLottery {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound Any-Lottery.'}, status=status.HTTP_404_NOT_FOUND)
 
 class fetchHistoryLottery(generics.ListAPIView):
     """
     Endpoint to retrieve a list of history lottery by the any user.
     Requires no authentication.
     """
-    serializer_class = HistoryLotterySerializer
+    serializer_class = LotterySerializer
     permission_classes = [AllowAny]
     def get_queryset(self):
-        return HistoryLottery.objects.all().order_by("-id")
+        return Lottery.objects.filter(is_active=False).order_by("-id")
 
     def get(self, request, *args, **kwargs):
         try:
@@ -125,4 +152,4 @@ class fetchHistoryLottery(generics.ListAPIView):
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("fetchHistoryLottery {} --> Error: {}\n".format(eDate, str(e)))
-            return Response({'error': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'NotFound List Lottery.'}, status=status.HTTP_404_NOT_FOUND)

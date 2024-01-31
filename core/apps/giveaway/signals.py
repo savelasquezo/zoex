@@ -1,15 +1,21 @@
-from django.db.models.signals import post_save, post_delete
+import os
+from django.conf import settings
+from django.utils import timezone
+from django.contrib import messages
+
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-import apps.giveaway.models as models
+from .models import Giveaway, TicketsGiveaway
+from ..core.models import Core
 
 def getGiveaway(id):
-    return models.Giveaway.objects.get(pk=id)
+    return Giveaway.objects.get(pk=id)
 
 def getTickets(giveaway):
-    return list(models.TicketsGiveaway.objects.filter(giveaway=giveaway).values_list('ticket', flat=True))
+    return list(TicketsGiveaway.objects.filter(giveaway=giveaway).values_list('ticket', flat=True))
 
 def geAviableTickets(id):
     giveaway = getGiveaway(id)
@@ -19,8 +25,37 @@ def geAviableTickets(id):
     return {'iTickets': iTickets}
 
 
-@receiver(post_save, sender=models.TicketsGiveaway)
-@receiver(post_delete, sender=models.TicketsGiveaway)
+@receiver(pre_save, sender=Giveaway)
+def signalGiveaway(sender, instance, **kwargs):
+    """
+    Signal handler for pre-saving Giveaway instances.
+    """
+    # Disconnect the Signal-Temporarily
+    pre_save.disconnect(signalGiveaway, sender=Giveaway)
+
+    try:
+        getWinner = TicketsGiveaway.objects.filter(giveaway=instance,ticket=instance.winner, state=True)
+        if instance.winner is not None and getWinner.exists():
+            instance.is_active = False
+            instance.stream = Core.objects.all().first().stream
+            instance.date_results = timezone.now()
+
+            instance.save()
+
+            #Disable OldTickets
+            TicketsGiveaway.objects.filter(giveaway=instance).update(state=False)
+
+    except Exception as e:
+        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        with open(os.path.join(settings.BASE_DIR, 'logs/signals.log'), 'a') as f:
+            f.write("signalGiveaway {} --> Error: {}\n".format(eDate, str(e)))
+
+    finally:
+        pre_save.connect(signalGiveaway, sender=Giveaway)
+
+
+@receiver(post_save, sender=TicketsGiveaway)
+@receiver(post_delete, sender=TicketsGiveaway)
 def signalTicketsGiveaway(sender, instance, **kwargs):
     channel_layer = get_channel_layer()
     data = geAviableTickets(id=instance.giveaway.id)

@@ -28,10 +28,12 @@ class Lottery(models.Model):
 
     date_lottery = models.DateField(_("Fecha"), default=timezone.now)
 
-    sold = models.SmallIntegerField (_("Vendidos"), default=0, null=False, blank=False, help_text="#Tickets Totales")
     date_results = models.DateField(_("Fecha"), default=timezone.now)
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
+
+    sold = models.SmallIntegerField (_("Vendidos"), default=0, null=False, blank=False, help_text="#Tickets Totales")
+    total = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
 
     is_active = models.BooleanField(_("¿Activo?"),default=True)
 
@@ -63,12 +65,18 @@ class Lottery(models.Model):
 
 class TicketsLottery(models.Model):
     lottery = models.ForeignKey(Lottery, on_delete=models.CASCADE)
+    uuid = models.CharField(_("Loteria"), max_length=32, null=True, blank=True)
+
     email = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     ticket = models.CharField (_("Ticket"),max_length=4, null=False, blank=False, help_text="#Ticket")
     date = models.DateField(_("Fecha"), default=timezone.now)
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
-    is_active = models.BooleanField(_("¿Activo?"),default=True)
+    state = models.BooleanField(_("¿Estado?"),default=True)
+
+    def save(self, *args, **kwargs):
+        self.uuid = self.lottery.lottery if self.lottery else None
+        super(TicketsLottery, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.ticket}"
@@ -76,30 +84,3 @@ class TicketsLottery(models.Model):
     class Meta:
         verbose_name = _("Ticket")
         verbose_name_plural = _("Tickets")
-
-
-class HistoryLottery(models.Model):
-
-    lottery = models.CharField(_("ID"), max_length=128, unique=False, null=False, blank=False)
-    prize = models.IntegerField(_("Acumulado"), default=500, null=False, blank=False, help_text="$Acumulado Valor (USD)")
-
-    tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets")
-    price = models.IntegerField(_("Valor"), null=False, default=1, blank=False, help_text="$Ticket (USD)",
-        validators=[MaxValueValidator(limit_value=100, message='Max. $100 USD')])
-    
-    winner = models.CharField (_("Ticket"), max_length=4, null=True, blank=True, help_text="#Ticket Ganador")
-
-    sold = models.SmallIntegerField (_("Tickets"), default=0, null=False, blank=False, help_text="#Tickets Totales")
-    amount = models.IntegerField(_("Recaudado"), default=0, null=False, blank=False, help_text="$Volumen (USD)")
-    total = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
-    
-    date_results = models.DateField(_("Fecha"), default=timezone.now)
-    stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
-
-
-    def __str__(self):
-        return f"{self.lottery}"
-
-    class Meta:
-        verbose_name = _("Historial")
-        verbose_name_plural = _("Historial")

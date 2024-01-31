@@ -5,8 +5,6 @@ import { NextResponse } from 'next/server';
 import { Session } from 'next-auth';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import { GoAlertFill } from "react-icons/go";
-import { FaCheckCircle } from "react-icons/fa";
 
 
 interface ListTicketsLotteryModalProps {
@@ -19,7 +17,6 @@ type TicketType = {
     ticket: string;
     date: string;
     voucher: string;
-    is_active: boolean;
     lottery: number;
     email: any;
     lotteryID: string;
@@ -94,9 +91,8 @@ const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ close
                                 <tr className="border-b border-slate-900 uppercase text-xs">
                                     <th scope="col" className=" px-6 py-2">Ticket</th>
                                     <th scope="col" className=" px-6 py-2 hidden lg:table-cell">Loteria</th>
-                                    <th scope="col" className=" px-6 py-2">PIN</th>
-                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                                    <th scope="col" className=" px-6 py-2"></th>
+                                    <th scope="col" className=" px-6 py-2 hidden lg:table-cell">PIN</th>
+                                    <th scope="col" className=" px-6 py-2">Fecha</th>
                                 </tr>
                             </thead>
                             {ticketList?.slice(pageNumber * TicketsPage, (pageNumber + 1) * TicketsPage).map((obj, index) => (
@@ -105,9 +101,6 @@ const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ close
                                     <td className="whitespace-nowrap px-6 py-2 hidden lg:table-cell">{obj.lotteryID}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
                                     <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date}</td>
-                                    <td className="whitespace-nowrap px-6 py-2 flex justify-center">
-                                        {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
-                                    </td>
                                 </tr>
                             ))}
                         </table>
@@ -129,7 +122,7 @@ const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ close
                 </div>
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
-                    <span className='text-center text-gray-300 my-4 text-sm'>
+                    <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                         <p>¡Aun No has adquirido ningun ticket para esta Loteria!</p>
                         <p>Adquierlo ahora y participa en el siguiente Sorteo</p>
                     </span>
@@ -137,7 +130,7 @@ const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ close
                 )
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
-                    <span className='text-center text-gray-300 my-4 text-sm'>
+                    <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                         <p>¡Requerido Inicio de Sesion!</p>
                         <p>El Historial de Ticket solo esta disponible para usuarios registrados</p>
                     </span>

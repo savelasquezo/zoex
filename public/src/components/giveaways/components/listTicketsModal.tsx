@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 
-import { GoAlertFill } from "react-icons/go";
-import { FaCheckCircle } from "react-icons/fa";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 interface ListTicketsGiveawayModalProps {
@@ -19,7 +17,6 @@ type TicketType = {
     ticket: string;
     date: string;
     voucher: string;
-    is_active: boolean;
     giveaway: number;
     email: any;
     giveawayID: string;
@@ -91,20 +88,16 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
                                 <tr className="border-b border-slate-900 uppercase text-xs">
                                     <th scope="col" className=" px-6 py-2">Ticket</th>
                                     <th scope="col" className=" px-6 py-2 hidden lg:table-cell">Sorteo</th>
-                                    <th scope="col" className=" px-6 py-2">PIN</th>
-                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                                    <th scope="col" className=" px-6 py-2"></th>
+                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">PIN</th>
+                                    <th scope="col" className=" px-6 py-2">Fecha</th>
                                 </tr>
                             </thead>
                             {ticketList?.slice(pageNumber * TicketsPage, (pageNumber + 1) * TicketsPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
                                     <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.ticket}</td>
                                     <td className="whitespace-nowrap px-6 py-2 hidden lg:table-cell">{obj.giveawayID}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
-                                    <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date}</td>
-                                    <td className="whitespace-nowrap px-6 py-2 flex justify-center">
-                                        {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
-                                    </td>
+                                    <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.voucher}</td>
+                                    <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
                                 </tr>
                             ))}
                         </table>

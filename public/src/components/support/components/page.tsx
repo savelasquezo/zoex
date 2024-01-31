@@ -158,17 +158,8 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
               readOnly={registrationSuccess}
           />
         </div>
-        <div className="inline-flex items-start gap-x-2 my-2">
-          <input className="bg-transparent transition-all appearance-none focus:!appearance-none"
-              type="checkbox"
-              id="show-agreed"
-              onChange={toggleAgreed}
-              required
-              readOnly={registrationSuccess}
-          />
-          <p className="text-xs text-gray-300">Confirmo que tengo 18+ años y que he leído y aceptado todos los 
-          Términos del servicio y Tratamiento de datos, Acepto la respuesta via email que será emitida en las próximas 24 horas.</p>
-        </div>
+        <p className="text-[0.5rem] md:text-xs text-gray-300">Confirmo que he leído y aceptado todos los 
+        Términos del servicio y Tratamiento de datos, Acepto la respuesta via email que será emitida en las próximas 24 horas.</p>
         {registrationSuccess ? (
           <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
             Enviado

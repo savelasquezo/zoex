@@ -1,16 +1,18 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django.conf.locale.es import formats as es_formats
+from django.contrib import messages
 
-import apps.giveaway.models as model
+from .models import Giveaway, TicketsGiveaway
+from apps.user.models import UserAccount
 
 class TicketsGiveawayInline(admin.StackedInline):
-    model = model.TicketsGiveaway
+    model = TicketsGiveaway
     extra = 0
 
     fieldsets = (
         (" ", {"fields": (
-            ('is_active','ticket','email'),
+            ('state','uuid','ticket','email'),
             ('date','voucher'),
                 )
             }
@@ -18,7 +20,7 @@ class TicketsGiveawayInline(admin.StackedInline):
     )
 
     def get_readonly_fields(self, request, obj=None):
-        return ['email','ticket','date','voucher']
+        return ['uuid','email','ticket','date','voucher']
 
 class GiveawayAdmin(admin.ModelAdmin):
 
@@ -67,4 +69,12 @@ class GiveawayAdmin(admin.ModelAdmin):
             self.inlines = []
         return fieldsets
 
-admin.site.register(model.Giveaway, GiveawayAdmin)
+    def save_model(self, request, obj, form, change):
+        getWinner = TicketsGiveaway.objects.filter(giveaway=obj,ticket=obj.winner, state=True)
+        if getWinner.exists():
+            username = UserAccount.objects.get(email=getWinner.first().email).username
+            messages.warning(request, f'¡Advertencia! ¡El Usuario {username} ha Ganado!')
+
+        super(TicketsGiveaway, self).save_model(request, obj, form, change)
+
+admin.site.register(Giveaway, GiveawayAdmin)

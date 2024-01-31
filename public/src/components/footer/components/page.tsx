@@ -61,25 +61,25 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
             </div>
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-1/2 bg-gray-800 rounded-lg p-6">
-                    <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
-                    <div>
-                      <div style={{ display: activeTab === 'history' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'history' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'history' ? 'hidden' : ''}`}>
-                        <ProfileModal />
-                      </div>
-                      <div style={{ display: activeTab === 'tickets' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'tickets' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'tickets' ? 'hidden' : ''}`}>
-                        <TicketsModal />
-                      </div>
-                      <div style={{ display: activeTab === 'wallet' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'wallet' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'wallet' ? 'hidden' : ''}`}>
-                        <AccountWallet />
-                      </div>
-                      <div style={{ display: activeTab === 'share' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'share' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'share' ? 'hidden' : ''}`}>
-                        <ShareModal />
-                      </div>
-                      <div style={{ display: activeTab === 'support' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'support' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab !== 'support' ? 'hidden' : ''}`}>
-                        <SupportModal />
-                      </div>
+                <div className="relative w-4/5 sm:3/5 md:w-1/2 bg-gray-800 rounded-lg p-6">
+                  <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
+                  <div>
+                    <div className={`h-full my-4 ${activeTab === 'history' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <ProfileModal />
                     </div>
+                    <div className={`h-full my-4 ${activeTab === 'tickets' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <TicketsModal />
+                    </div>
+                    <div className={`h-full my-4 ${activeTab === 'wallet' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <AccountWallet />
+                    </div>
+                    <div className={`h-full my-4 ${activeTab === 'share' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <ShareModal />
+                    </div>
+                    <div className={`h-full my-4 ${activeTab === 'support' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
+                      <SupportModal />
+                    </div>
+                  </div>
                 </div>
               </div>
           )}
