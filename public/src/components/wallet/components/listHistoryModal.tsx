@@ -7,87 +7,90 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 
 
-interface ListHistoryLotteryModalProps {
+interface ListHistoryWalletModalProps {
   closeModal: () => void;
   session: Session | null | undefined;
 }
 
-type TicketType = {
-    lottery: string;
-    date_results: string;
-    winner: string;
-    stream: string;
+type WithdrawType = {
+    id: string;
+    amount: number;
+    date: string;
+    voucher: string;
+    state: boolean;
 };
 
-
-export const fetchLotteryHistory = async () => {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/fetch-lottery-history/`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+export const fetchWithdrawals = async (accessToken: any) => {
+try {
+    const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/fetch-withdrawals/`,
+    {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `JWT ${accessToken}`,
         },
-      );
-      if (!res.ok) {
-        return NextResponse.json({ error: 'Server responded with an error' });
-      }
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      return NextResponse.json({ error: 'There was an error with the network request' });
+    },
+    );
+    if (!res.ok) {
+    return NextResponse.json({ error: 'Server responded with an error' });
     }
-  }
+    const data = await res.json();
+    return data;
+    } catch (error) {
+        return NextResponse.json({ error: 'There was an error with the network request' });
+    }
+}
 
-const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ closeModal, session  }) => {
+
+const ListHistoryWalletModal: React.FC<ListHistoryWalletModalProps> = ({ closeModal, session  }) => {
+    const [withdrawList, setWithdrawList] = useState<WithdrawType[]>([]);
 
     const [pageNumber, setPageNumber] = useState(0);
-    const HisotryPage = 5;
+    const withdrawPerPage = 5;
 
-    const [hisotryList, setHisotryList] = useState<TicketType[]>([]);
-    const pageCount = Math.ceil(hisotryList.length) / HisotryPage;
+    const pageCount = Math.ceil(withdrawList.length) / withdrawPerPage;
     const changePage = ({ selected }: { selected: number }) => {
-        setPageNumber(selected);
-        };
+      setPageNumber(selected);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
+          if (session) {
+            const accessToken = session.user.accessToken;
             try {
-                const HisotryList = await fetchLotteryHistory();
-                setHisotryList(HisotryList || []);
-                
+              const withdrawalData = await fetchWithdrawals(accessToken);
+              setWithdrawList(withdrawalData || []);
+              
             } catch (error) {
-                console.error('Error fetching data:', error);
+              console.error('Error fetching data:', error);
             }
+          }
         };
+      
         fetchData();
-    }, [session]);
-
+      }, [session]);
 
     return (
-        <div className='w-full h-full mt-10'>
-            {hisotryList.length > 0 ? (
+        <div className="relative h-full w-full text-gray-500">
+            {withdrawList.length > 0 ? (
                 <div className="relative h-[calc(100%-4rem)] w-full text-gray-500">
                     <ul>
                         <table className="min-w-full text-center text-sm font-light">
                             <thead className="font-medium text-white">
                                 <tr className="border-b border-slate-900 uppercase text-xs">
-                                    <th scope="col" className=" px-6 py-2">Loteria</th>
-                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                                    <th scope="col" className=" px-6 py-2">Ticket</th>
-                                    <th scope="col" className=" px-6 py-2">Link</th>
+                                <th scope="col" className=" px-6 py-2">ID</th>
+                                <th scope="col" className=" px-6 py-2">Volumen</th>
+                                <th scope="col" className=" px-6 py-2">Fecha</th>
+                                <th scope="col" className=" px-6 py-2">Voucher</th>
                                 </tr>
                             </thead>
-                            {hisotryList?.slice(pageNumber * HisotryPage, (pageNumber + 1) * HisotryPage).map((obj, index) => (
+                            {withdrawList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.lottery}</td>
-                                    <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date_results}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.winner}</td>
-                                    <td className="whitespace-nowrap px-6 py-2 flex justify-center">
-                                        <a href={obj.stream} target='blank' className='hover:text-blue-500 transition-colors duration-300'><FaLink /></a>
-                                    </td>
+                                <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.id}</td>
+                                <td className="whitespace-nowrap px-6 py-2">{obj.amount}</td>
+                                <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
+                                <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
                                 </tr>
                             ))}
                         </table>
@@ -110,8 +113,8 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                        <p>¡Aun No hay Historial disponible para esta Loteria!</p>
-                        <p>La Loteria se realizara el proximo dia 15</p>
+                        <p>¡Aun No hay Historial disponible!</p>
+                        <p>Realiza una recarga de saldo desde nuestro portal</p>
                     </span>
                 </div>
             )}
@@ -119,4 +122,4 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
     );
 };
 
-export default ListHistoryLotteryModal;
+export default ListHistoryWalletModal;

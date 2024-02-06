@@ -46,6 +46,8 @@ const handler = NextAuth({
           phone: userData.phone,
           balance: userData.balance,
           credits: userData.credits,
+          location: userData.location,
+          billing: userData.billing,
           accessToken: access,
           refreshToken: refresh,
         };
@@ -88,6 +90,8 @@ const handler = NextAuth({
           phone: userData.phone,
           balance: userData.balance,
           credits: userData.credits,
+          location: userData.location,
+          billing: userData.billing,
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,
         };

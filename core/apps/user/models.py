@@ -35,6 +35,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("Email"),unique=True)
     username = models.CharField(_("Usuario"),max_length=64, unique=True)
     phone = models.CharField(_("Telefono"),max_length=64, unique=True, null=False, blank=False)
+    location = models.CharField(_("Ubicacion"),max_length=256, null=True, blank=True)
+    billing = models.CharField(_("Facturacion"),max_length=256, null=True, blank=True)
     date_joined = models.DateField(_("Fecha"),default=timezone.now)
     last_joined = models.DateField(_("Ultimo Ingreso"),default=timezone.now)
     balance = models.FloatField(_("Saldo"),default=0, null=True, blank=True, help_text="Saldo Disponible $USD")

@@ -119,7 +119,7 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
                 </div>
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
-                    <span className='text-center text-gray-300 my-4 text-sm'>
+                    <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                         <p>¡Aun No has adquirido ningun ticket para esta Loteria!</p>
                         <p>Adquierlo ahora y participa en el siguiente Sorteo</p>
                     </span>
@@ -127,7 +127,7 @@ const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ clo
                 )
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
-                    <span className='text-center text-gray-300 my-4 text-sm'>
+                    <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                         <p>¡Requerido Inicio de Sesion!</p>
                         <p>El Historial de Ticket solo esta disponible para usuarios registrados</p>
                     </span>

@@ -23,7 +23,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [phone, setPhone] = useState<string | undefined>();
+    const [phone, setPhone] = useState<string | undefined>('');
+
+    const handlePhoneChange = (value: string, country: string, e: React.ChangeEvent<HTMLInputElement>, formattedValue: string) => {
+      setPhone(formattedValue);
+    };
     
     const [formData, setFormData] = useState({
         phone: '',
@@ -126,17 +130,21 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
         <div>
             <form onSubmit={onSubmit} className="flex flex-col gap-y-4 p-2">
                 <div className="bg-gray-800 text-gray-400 border border-gray-700 px-2 rounded-lg">
-                    <PhoneInput 
-                        country="co"
-                        value={phone} 
-                        onChange={setPhone}
-                        preferredCountries={['co','us']}
-                        buttonClass={'!bg-transparent !border-0'}
-                        inputProps={{className: 'h-10 md:h-12 w-full bg-gray-800 indent-10 text-gray-400 outline-none'}}
-                        disabled={registrationSuccess}
-                    />
+                  <PhoneInput
+                    country="co"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    preferredCountries={['co', 'us']}
+                    buttonClass={'!bg-transparent !border-0'}
+                    inputProps={{ className: 'h-10 md:h-12 w-full bg-gray-800 indent-10 text-gray-400 outline-none' }}
+                    disabled={registrationSuccess}
+                    prefix="+"
+                    specialLabel={''}
+                    alwaysDefaultMask={true}
+                    defaultMask={'...-...-..-..'}
+                  />
                 </div>
-                <div className="relative h-8 md:h-12 w-full flex items-center min-w-[200px]">
+                <div className="relative h-8 md:h-10 w-full flex items-center min-w-[200px]">
                     <div className="absolute text-gray-500 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><AiOutlineUser/></div>
                     <input className="h-8 md:h-12 w-full indent-8 text-gray-200 rounded-lg border border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
                         type="text"
@@ -148,7 +156,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                         readOnly={registrationSuccess}
                     />
                 </div>
-                <div className="relative h-8 md:h-12 w-full flex items-center min-w-[200px]">
+                <div className="relative h-8 md:h-10 w-full flex items-center min-w-[200px]">
                     <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><CiMail/></div>
                     <input className="h-8 md:h-12 w-full indent-8 text-gray-200 rounded-lg border border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
                         type="text"
@@ -161,7 +169,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                         readOnly={registrationSuccess}
                     />
                 </div>
-                 <div className="relative h-8 md:h-12 w-full flex items-center min-w-[200px]">
+                 <div className="relative h-8 md:h-10 w-full flex items-center min-w-[200px]">
                     <div className="absolute text-gray-500 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><FiLock/></div>
                     <input className="h-8 md:h-12 w-full indent-8 text-gray-200 rounded-lg border border-gray-700 focus:border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline-0 ring-0 focus:!ring-0 transition-all focus:outline-0 disabled:border-0"
                         type="password" 
@@ -175,7 +183,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-1 md:my-2">
                     <input type="checkbox" id="checkbox"onChange={toggleAgreed} readOnly={registrationSuccess}/>
-                    <p className="text-[0.5rem] md:text-xs xl:text-sm text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos</p>
+                    <p className="text-[0.5rem] md:text-xs text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos</p>
                 </div>
                 {registrationSuccess ? (
                   <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">

@@ -87,7 +87,7 @@ const Auth: React.FC<AuthProps> = ({ session  }) => {
             )}
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="w-4/5 h-3/5 flex justify-between items-center rounded-2xl bg-gray-800 md:w-3/5 md:h-3/5 lg:w-1/2 lg:h-3/5 xl:h-4/5">
+                <div className="w-4/5 h-3/5 sm:h-4/5 flex justify-between items-center rounded-2xl bg-gray-800 md:w-3/5 md:h-3/5 lg:w-1/2 lg:h-3/5 xl:h-4/5">
                   <Image width={1200} height={800} src={"/assets/image/banner.webp"} alt="" className="hidden lg:block h-full w-[45%] object-cover rounded-l-2xl"/>
                   <div className="relative w-full h-full p-6">
                     <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>

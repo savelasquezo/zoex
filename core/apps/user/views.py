@@ -1,4 +1,5 @@
 import os, re, requests, uuid
+import hashlib
 
 from django.utils import timezone
 from django.conf import settings
@@ -15,6 +16,7 @@ from ..core.models import Core
 
 
 CONFIRMO = settings.CONFIRMO_KEY_TEST
+BOLD = settings.BOLD_SECRET_KEY_TEST
 
 def makeConfirmoInvoice(amount):
     body = {
@@ -42,6 +44,35 @@ def makeConfirmoInvoice(amount):
     }
     response = requests.post('https://confirmo.net/api/v3/invoices', json=body, headers=headers)
     return response
+
+
+def makeBoldInvoice(amount):
+    body = {
+    "product": {
+        "description": "ZoexFund",
+        "name": "topup"
+    },
+    "invoice": {
+        "amount": amount,
+        "currencyFrom": "USD"
+    },
+    "settlement": {
+        "currency": "USD"
+    },
+    "notifyEmail": "noreply@zoexwin.com",
+    "notifyUrl": "https://zoexwin.com/",
+    "returnUrl": "https://zoexwin.com/",
+    "reference": "anything"
+    }
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {CONFIRMO}'
+
+    }
+    response = requests.post('https://confirmo.net/api/v3/invoices', json=body, headers=headers)
+    return response
+
 
 class fetchWithdrawals(generics.ListAPIView):
     serializer_class = serializers.WithdrawalSerializer
@@ -157,8 +188,13 @@ class requestInvoice(generics.GenericAPIView):
                 response = makeConfirmoInvoice(amount)
                 apiInvoice = response.json().get('id') if response.status_code == 201 else ""
                 
-            if method != "crypto":
+            if method == "bold":
                 apiInvoice = str(uuid.uuid4())[:8]
+                hash256 = "{}{}{}{}".format(apiInvoice,amount,"USD",BOLD)
+                m = hashlib.sha256()
+                m.update(hash256.encode())
+                m.hexdigest()
+                
 
             obj.voucher = apiInvoice
             obj.save()
@@ -184,4 +220,17 @@ class requestMessage(generics.GenericAPIView):
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("requestMessage {} --> Error: {}\n".format(date, str(e)))
             return Response({'error': 'NotFound Support.'}, status=status.HTTP_404_NOT_FOUND)
-        
+
+
+class test(generics.GenericAPIView):
+    def post(self, request, *args, **kwargs):
+
+        #apiInvoice = str(uuid.uuid4())[:8]
+        #hash256 = "{}{}{}{}".format("ABCD2000","20000","COP","MUf9gNHj9sPD8-XiMzVr_A")
+        hashString = "ABCD2000"+"20000"+"COP"+"VQlG94mhPXu7C7MhMsIKuA"
+        m = hashlib.sha256()
+        m.update(hashString.encode())
+        #7117d872370e6b3cb0937c88aa40a9de59a644d51602db3dc560ea0ba49b7a19
+        #7117d872370e6b3cb0937c88aa40a9de59a644d51602db3dc560ea0ba49b7a19
+
+        return Response({f'hexdigest --------------------------------------// {m.hexdigest()}'}, status=status.HTTP_200_OK)

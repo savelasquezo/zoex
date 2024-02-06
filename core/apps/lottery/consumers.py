@@ -31,10 +31,6 @@ async def getAsyncAviableTickets():
 
 class AsyncLotteryConsumer(AsyncWebsocketConsumer):
 
-    async def asyncTicketsLottery(self):
-        data = await getAsyncAviableTickets()
-        return data
-
     async def connect(self):
         self.group_name = "groupTicketsLottery"
         await self.channel_layer.group_add(
@@ -51,6 +47,10 @@ class AsyncLotteryConsumer(AsyncWebsocketConsumer):
             self.group_name,
             self.channel_name
         )
+
+    async def asyncTicketsLottery(self):
+        data = await getAsyncAviableTickets()
+        return data
 
     async def asyncSignal(self, event):
         data = event['data']

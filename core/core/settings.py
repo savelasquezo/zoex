@@ -31,7 +31,12 @@ SECRET_KEY = env("SECRET_KEY")
 CONFIRMO_KEY_DEVS = os.getenv('CONFIRMO_KEY_DEVS')
 CONFIRMO_KEY_TEST = os.getenv('CONFIRMO_KEY_TEST')
 
-APILAYER_KEY = os.getenv('APILAYER_KEY')
+BOLD_PUBLIC_KEY_DEVS = os.getenv('BOLD_PUBLIC_KEY_DEVS')
+BOLD_SECRET_KEY_DEVS = os.getenv('BOLD_SECRET_KEY_DEVS')
+
+BOLD_PUBLIC_KEY_TEST = os.getenv('BOLD_PUBLIC_KEY_TEST')
+BOLD_SECRET_KEY_TEST = os.getenv('BOLD_SECRET_KEY_TEST')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "DEBUG" not in os.environ
