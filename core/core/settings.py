@@ -28,15 +28,10 @@ environ.Env.read_env()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
 
-CONFIRMO_KEY_DEVS = os.getenv('CONFIRMO_KEY_DEVS')
-CONFIRMO_KEY_TEST = os.getenv('CONFIRMO_KEY_TEST')
+CONFIRMO_KEY = os.getenv('CONFIRMO_KEY')
 
-BOLD_PUBLIC_KEY_DEVS = os.getenv('BOLD_PUBLIC_KEY_DEVS')
-BOLD_SECRET_KEY_DEVS = os.getenv('BOLD_SECRET_KEY_DEVS')
-
-BOLD_PUBLIC_KEY_TEST = os.getenv('BOLD_PUBLIC_KEY_TEST')
-BOLD_SECRET_KEY_TEST = os.getenv('BOLD_SECRET_KEY_TEST')
-
+BOLD_PUBLIC_KEY = os.getenv('BOLD_PUBLIC_KEY')
+BOLD_SECRET_KEY = os.getenv('BOLD_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "DEBUG" not in os.environ

@@ -15,28 +15,24 @@ interface InvoiceModalProps {
 
 const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => {
 
-  const orderId = "ABCD2000";
-  const amount = "20000";
-  const integritySignature = "a96ac58813e71b0b5232243883851fe19c3dae3269c68ac4fb17ba2352b8084e";
-
-
   const [loading, setLoading] = useState(false);
   const [errorAdd, setErrorAdd] = useState('');
   const [successAdd, setSuccessAdd] = useState('');
 
   const [invoice, setInvoice] = useState('');
+  const [integritySignature, setIntegritySignature] = useState('');
   const [invoiceSuccess, setInvoiceSuccess] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [method, setMethod] = useState('');
   const [paymentInfo, setPaymentInfo] = useState(false);
 
-  const [formData, setFormData] = useState({paymentAmount: ''});
-  const {paymentAmount} = formData;
+  const [formData, setFormData] = useState({amount: ''});
+  const {amount} = formData;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
 
-  const onSubmit = async (e: React.FormEvent, paymentMethod: string) => {
+  const onSubmit = async (e: React.FormEvent, method: string) => {
     e.preventDefault();
     setLoading(true);
     setSuccessAdd('');
@@ -44,13 +40,13 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
 
     await new Promise(resolve => setTimeout(resolve, 1500));
     const amountPattern = /^[1-9][0-9]+$/;
-    if (!amountPattern.test(paymentAmount) || parseInt(paymentAmount, 0) >= 99999 || parseInt(paymentAmount, 0) <= 9) {
+    if (!amountPattern.test(amount) || parseInt(amount, 0) >= 99999 || parseInt(amount, 0) <= 9) {
       setErrorAdd('¡Error - Ingrese un valor Valido entre 10 USD & 99999 USD!');
       setLoading(false);
       return;
     }
 
-    if (!paymentMethod) {
+    if (!method) {
       setErrorAdd('¡Error - Seleccione un Metodo de Pago!');
       setLoading(false);
       return;
@@ -64,16 +60,17 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
           'Authorization': `JWT ${session?.user?.accessToken}`,
         },
         body: JSON.stringify({    
-          paymentMethod,
-          paymentAmount,
+          method,
+          amount,
         }),
       });
       const data = await res.json();
       if (!data.error) {
         setSuccessAdd('¡Facturacion Exitosa!');
         setPaymentInfo(true);
-        setPaymentMethod(paymentMethod)
+        setMethod(method)
         setInvoice(data.apiInvoice);
+        setIntegritySignature(data.integritySignature);
         setInvoiceSuccess(true);
       }
     } catch (error) {
@@ -97,8 +94,8 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
               <div className="absolute text-gray-500 text-lg top-2/4 left-2 grid h-5 w-5 -translate-y-2/4 items-center"><FiDollarSign/></div>
               <input className="h-full w-64 indent-4 text-gray-200 rounded-sm border border-gray-800 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
                   type="number"
-                  name="paymentAmount"
-                  value={paymentAmount}
+                  name="amount"
+                  value={amount}
                   onChange={(e) => onChange(e)}
                   min="1"
                   max="9999"
@@ -114,33 +111,37 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
         {!paymentInfo ? (
           loading ? (
             <div className='w-full h-full text-center'>
-              <BeatLoader color="#F87171" loading margin={20} size={30} speedMultiplier={0.5}/>
+              <BeatLoader color="#ffff" loading margin={20} size={20} speedMultiplier={0.5}/>
             </div>
             ) : (
-            <div className="w-full flex flex-col gap-x-2">
-              <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto.webp"} className="object-fit w-28 h-12 shadow-inner" alt="" /></button>
-              {/*<button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold.webp"} className="object-fit h-12 shadow-current" alt="" /></button>*/}
-              <BoldButton orderId={orderId} amount={amount} integritySignature={integritySignature}/>
+            <div className='w-full flex flex-col gap-y-4 items-start justify-center md:justify-start'>
+              <div className="w-full flex flex-row gap-x-2">
+                <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" /></button>
+                <button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" /></button>
+              </div>
+              <p className='text-[0.55rem] text-justify text-gray-400'>
+                importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta. Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento. <br /> ¿Necesitas Ayuda? support@zoexwin.com
+              </p>
             </div>
           )
         ) : (
-          <div className="w-full h-full flex flex-col justify-center items-center px-4">
+          <div className="w-full h-full flex flex-col justify-center items-start px-4">
             <div className="flex flex-row items-center justify-between w-full">
-              <div className={`flex flex-col leading-none ${paymentMethod === 'crypto' ? 'block' : 'hidden' }`}>
+              <div className={`flex flex-col leading-none ${method === 'crypto' ? 'block' : 'hidden' }`}>
                 <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-                  <Image width={192} height={128} src={"/assets/image/crypto.webp"} className="object-fit h-12 shadow-inner" alt="" />
+                  <Image width={192} height={128} src={"/assets/image/crypto0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" />
                 </Link>
               </div>
-              <div className={`flex flex-col leading-none ${paymentMethod === 'bold' ? 'block' : 'hidden' }`}>
-                <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-                  <Image width={192} height={128} src={"/assets/image/bold.webp"} className={`rounded-lg shadow-inherit h-10 w-22 object-fit hover:shadow-lg transition duration-300`} alt="" />
-                </Link>
+              <div className={`flex flex-col leading-none ${method === 'bold' ? 'block' : 'hidden' }`}>
+                <BoldButton invoice={invoice} amount={amount} integritySignature={integritySignature}/>
               </div>
               <span className="bg-gray-900 rounded-sm py-2 px-4 text-white h-10 -mt-1">{invoice}</span>
             </div>
-            <p className="absolute bottom-8 w-full text-xs text-justify text-gray-400">
-              Incluye en la descripción el código de compra, El tiempo de confirmación es de 24 a 36 horas<br /> 
-              ¿Necesitas Ayuda? support@zoexwin.com</p>
+            <p className='text-[0.55rem] text-justify text-gray-400 mt-6'>
+              Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta. <br /> 
+              Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento. <br />
+              ¿Necesitas Ayuda? support@zoexwin.com
+            </p>
           </div>
         )}
       </div>

@@ -15,8 +15,8 @@ from . import models, serializers
 from ..core.models import Core
 
 
-CONFIRMO = settings.CONFIRMO_KEY_TEST
-BOLD = settings.BOLD_SECRET_KEY_TEST
+CONFIRMO = settings.CONFIRMO_KEY
+BOLD = settings.BOLD_SECRET_KEY
 
 def makeConfirmoInvoice(amount):
     body = {
@@ -49,8 +49,8 @@ def makeConfirmoInvoice(amount):
 def makeBoldInvoice(amount):
     body = {
     "product": {
-        "description": "ZoexFund",
-        "name": "topup"
+        "description": "ZoeXbet",
+        "name": "TOPUP"
     },
     "invoice": {
         "amount": amount,
@@ -59,9 +59,9 @@ def makeBoldInvoice(amount):
     "settlement": {
         "currency": "USD"
     },
-    "notifyEmail": "noreply@zoexwin.com",
-    "notifyUrl": "https://zoexwin.com/",
-    "returnUrl": "https://zoexwin.com/",
+    "notifyEmail": "noreply@zoexbet.com",
+    "notifyUrl": "https://zoexbet.com/",
+    "returnUrl": "https://zoexbet.com/",
     "reference": "anything"
     }
 
@@ -176,32 +176,40 @@ class refreshInvoices(generics.GenericAPIView):
 class requestInvoice(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
 
-        method = str(request.data.get('paymentMethod', ''))
-        amount = int(request.data.get('paymentAmount', 0))
+        method = str(request.data.get('method', ''))
+        amount = int(request.data.get('amount', 0))
 
         data = {'method':method,'amount':amount}
     
         try:
             obj, created = models.Invoice.objects.update_or_create(account=request.user,state='pending', method=method, defaults=data)
-            
+            integritySignature = "N/A"
+
             if method == "crypto":
                 response = makeConfirmoInvoice(amount)
-                apiInvoice = response.json().get('id') if response.status_code == 201 else ""
+                if response.status_code == 201:
+                    apiInvoice = response.json().get('id')
+                    return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature}, status=status.HTTP_200_OK)
+                    
+                return Response({'error': response.errors}, status=status.HTTP_404_NOT_FOUND)
                 
             if method == "bold":
                 apiInvoice = str(uuid.uuid4())[:8]
-                hash256 = "{}{}{}{}".format(apiInvoice,amount,"USD",BOLD)
+                hash256 = "{}{}{}{}".format(apiInvoice,str(amount),"USD",BOLD)
                 m = hashlib.sha256()
                 m.update(hash256.encode())
-                m.hexdigest()
+                integritySignature = m.hexdigest()
                 
 
             obj.voucher = apiInvoice
             obj.save()
-
-            return Response({'apiInvoice': apiInvoice}, status=status.HTTP_200_OK)
+            return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature}, status=status.HTTP_200_OK)
+        
         except Exception as e:
-            return Response({'error': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+            date = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("requestInvoice {} --> Error: {}\n".format(date, str(e)))
+            return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
 class requestMessage(generics.GenericAPIView):
@@ -219,18 +227,4 @@ class requestMessage(generics.GenericAPIView):
             date = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("requestMessage {} --> Error: {}\n".format(date, str(e)))
-            return Response({'error': 'NotFound Support.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-class test(generics.GenericAPIView):
-    def post(self, request, *args, **kwargs):
-
-        #apiInvoice = str(uuid.uuid4())[:8]
-        #hash256 = "{}{}{}{}".format("ABCD2000","20000","COP","MUf9gNHj9sPD8-XiMzVr_A")
-        hashString = "ABCD2000"+"20000"+"COP"+"VQlG94mhPXu7C7MhMsIKuA"
-        m = hashlib.sha256()
-        m.update(hashString.encode())
-        #7117d872370e6b3cb0937c88aa40a9de59a644d51602db3dc560ea0ba49b7a19
-        #7117d872370e6b3cb0937c88aa40a9de59a644d51602db3dc560ea0ba49b7a19
-
-        return Response({f'hexdigest --------------------------------------// {m.hexdigest()}'}, status=status.HTTP_200_OK)
+            return Response({'error': 'NotFound Support.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
