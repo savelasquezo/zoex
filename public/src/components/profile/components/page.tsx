@@ -47,7 +47,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ closeModal, session  }) => 
                 <input className="w-full indent-8 text-gray-200 rounded-sm border border-gray-700 border-b-0 bg-transparent px-3 py-3 !pr-9 text-[0.7rem] outline outline-0 transition-all focus:outline-0 disabled:border-0 lg:text-xs"
                     type="text"
                     name="location"
-                    value={session?.user?.location}
+                    value={session?.user?.location ?? ""}
                     onChange={(e) => onChange(e)}
                     required
                     placeholder="Direccion/Localidad"
@@ -59,7 +59,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ closeModal, session  }) => 
                 <input className="w-full indent-8 text-gray-200 rounded-sm border border-gray-700 border-b-1 bg-transparent px-3 py-3 !pr-9 text-[0.7rem] outline outline-0 transition-all focus:outline-0 disabled:border-0 lg:text-xs"
                     type="text"
                     name="bank"
-                    value={session?.user?.billing}
+                    value={session?.user?.billing ?? ""}
                     onChange={(e) => onChange(e)}
                     required
                     placeholder="Informacion Bancaria (Retiros/Pagos)"
