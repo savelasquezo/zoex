@@ -20,6 +20,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
   const [successAdd, setSuccessAdd] = useState('');
 
   const [invoice, setInvoice] = useState('');
+  const [boldAmmount, setBoldAmmount] = useState('');
   const [integritySignature, setIntegritySignature] = useState('');
   const [invoiceSuccess, setInvoiceSuccess] = useState(false);
 
@@ -71,6 +72,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
         setMethod(method)
         setInvoice(data.apiInvoice);
         setIntegritySignature(data.integritySignature);
+        setBoldAmmount(data.boldAmmount);
         setInvoiceSuccess(true);
       }
     } catch (error) {
@@ -135,7 +137,7 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
                 </Link>
               </div>
               <div className={`flex flex-col leading-none ${method === 'bold' ? 'block' : 'hidden' }`}>
-                <BoldButton invoice={invoice} amount={amount} integritySignature={integritySignature}/>
+                <BoldButton invoice={invoice} amount={boldAmmount} integritySignature={integritySignature}/>
               </div>
               <span className="bg-gray-900 flex items-center justify-center text-xs md:text-base rounded-sm py-2 px-4 text-white h-8 md:h-10 -mt-1">{invoice}</span>
             </div>

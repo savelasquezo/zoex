@@ -24,13 +24,7 @@ const BoldButton = ({ invoice, amount, integritySignature }) => {
   }, []);
 
   return (
-    <div>
-      <p>data-order-id', {invoice}</p>
-      <p>data-amount', {amount}</p>
-      <p>data-api-key', {`${process.env.NEXT_PUBLIC_BOLD_PUBLIC_KEY}`}</p>
-      <p>data-integrity-signature', {integritySignature}</p>
-      <div id="button"></div>
-    </div>
+    <div id="button"></div>
   );
 };
 
