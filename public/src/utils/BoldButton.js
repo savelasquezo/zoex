@@ -8,7 +8,7 @@ const BoldButton = ({ invoice, amount, integritySignature }) => {
       script.src = 'https://checkout.bold.co/library/boldPaymentButton.js';
       script.setAttribute('data-bold-button', 'default');
       script.setAttribute('data-order-id', invoice);
-      script.setAttribute('data-currency', 'USD');
+      script.setAttribute('data-currency', 'COP');
       script.setAttribute('data-amount', amount);
       script.setAttribute('data-api-key', `${process.env.NEXT_PUBLIC_BOLD_PUBLIC_KEY}`);
       script.setAttribute('data-integrity-signature', integritySignature);

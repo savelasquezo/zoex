@@ -9,7 +9,7 @@ def LogoUploadTo(instance, filename):
     return f"uploads/{instance.username}/logo/{filename}"
 
 states = (('pending','Pendiente'),('done','Aprobado'),('expired','Expirado'),('error','Error'))
-methods = (('crypto','Cryptomonedas'),('bank','Transferencia'),('paypal','Paypal'),('nequi','Nequi'),('daviplata','Daviplata'),('pse','PSE'))
+methods = (('crypto','Cryptomonedas'),('bold','Bold'))
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
