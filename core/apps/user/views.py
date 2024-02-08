@@ -3,6 +3,7 @@ import hashlib
 
 from django.utils import timezone
 from django.conf import settings
+from asgiref.sync import sync_to_async
 
 from rest_framework import generics
 from rest_framework import status
@@ -17,10 +18,31 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.core.models import Core
 
-
 CONFIRMO = settings.CONFIRMO_KEY
 BOLD = settings.BOLD_SECRET_KEY
 APILAYER = settings.APILAYER_KEY
+
+@sync_to_async
+def AsyncUSD():
+    from apps.core.models import Core
+    setting = Core.objects.get(default="ZoeXConfig")
+    try:
+        url = "https://api.apilayer.com/fixer/latest?base=USD&symbols=COP"
+        headers = {
+            'apikey': f'{APILAYER}'
+        }
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            latestUSD=data["rates"]["COP"]
+            setting.latestUSD = latestUSD
+            setting.save()
+
+    except Exception as e:
+        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+            f.write("updateUSD {} --> Error: {}\n".format(eDate, str(e)))
+
 
 def makeConfirmoInvoice(amount):
     body = {
@@ -189,34 +211,19 @@ class requestInvoice(generics.GenericAPIView):
                 
             if method == "bold":
                 setting = Core.objects.get(default="ZoeXConfig")
-                try:
-                    url = "https://api.apilayer.com/fixer/latest?base=USD&symbols=COP"
-                    headers = {
-                        'apikey': f'{APILAYER}'
-                    }
-                    response = requests.get(url, headers=headers)
-                    if response.status_code == 200:
-                        data = response.json()
-                        latestUSD=data["rates"]["COP"]
-                        setting.latestUSD = latestUSD
-                        setting.save()
-
-                except Exception as e:
-                    eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-                    with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
-                        f.write("updateUSD {} --> Error: {}\n".format(eDate, str(e)))
-
-                amount=int(amount*setting.latestUSD)
+                AsyncUSD()
+                
+                boldAmmount = int(amount*setting.latestUSD)
                 apiInvoice = str(uuid.uuid4())[:12]
 
-                hash256 = "{}{}{}{}".format(apiInvoice,str(amount),"COP",BOLD)
+                hash256 = "{}{}{}{}".format(apiInvoice,str(boldAmmount),"COP",BOLD)
                 m = hashlib.sha256()
                 m.update(hash256.encode())
                 integritySignature = m.hexdigest()
 
             obj.voucher = apiInvoice
             obj.save()
-            return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature}, status=status.HTTP_200_OK)
+            return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature, 'boldAmmount': boldAmmount}, status=status.HTTP_200_OK)
         
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")
