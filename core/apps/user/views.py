@@ -15,15 +15,18 @@ from .models import UserAccount, Invoice, Withdrawals
 from .serializers import UserSerializer, WithdrawalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from apps.core.models import Core
+
 
 CONFIRMO = settings.CONFIRMO_KEY
 BOLD = settings.BOLD_SECRET_KEY
+APILAYER = settings.APILAYER_KEY
 
 def makeConfirmoInvoice(amount):
     body = {
     "product": {
         "description": "ZoexFund",
-        "name": "topup"
+        "name": "TOPUP"
     },
     "invoice": {
         "amount": amount,
@@ -130,8 +133,6 @@ class requestWithdraw(generics.GenericAPIView):
                     WS = WB.active
 
                 data = [1, date, amount, currentBalance, newBalance, apiWithdraw, method]
-                print(data)
-
                 WS.append(data)
                 WB.save(file)
                 
@@ -187,12 +188,31 @@ class requestInvoice(generics.GenericAPIView):
                     apiInvoice = response.json().get('id')
                 
             if method == "bold":
+                setting = Core.objects.get(default="ZoeXConfig")
+                try:
+                    url = "https://api.apilayer.com/fixer/latest?base=USD&symbols=COP"
+                    headers = {
+                        'apikey': f'{APILAYER}'
+                    }
+                    response = requests.get(url, headers=headers)
+                    if response.status_code == 200:
+                        data = response.json()
+                        latestUSD=data["rates"]["COP"]
+                        setting.latestUSD = latestUSD
+                        setting.save()
+
+                except Exception as e:
+                    eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+                    with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                        f.write("updateUSD {} --> Error: {}\n".format(eDate, str(e)))
+
+                amount=int(amount*setting.latestUSD)
                 apiInvoice = str(uuid.uuid4())[:12]
-                hash256 = "{}{}{}{}".format(apiInvoice,str(amount),"USD",BOLD)
+
+                hash256 = "{}{}{}{}".format(apiInvoice,str(amount),"COP",BOLD)
                 m = hashlib.sha256()
                 m.update(hash256.encode())
                 integritySignature = m.hexdigest()
-                
 
             obj.voucher = apiInvoice
             obj.save()

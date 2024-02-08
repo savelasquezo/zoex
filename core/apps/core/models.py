@@ -6,7 +6,7 @@ def ImageUploadTo(instance, id):
     return f"uploads/files/{id}"
 
 class Core(models.Model):
-    default = models.CharField(_("ZoeXConfig"), max_length=32, blank=True, null=True, default="ZoeXConfig")
+    default = models.CharField(_("ZoeXConfig"), max_length=32, unique=True, blank=True, null=True, default="ZoeXConfig")
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     hashtag = models.CharField(_("Hashtag"), max_length=16, blank=True, null=True, default="zoexbet")
 
@@ -25,6 +25,8 @@ class Core(models.Model):
     
     referredPercent = models.FloatField(_("%Referidos"),default=5, null=True, blank=True,
         help_text="Porcentaje Beneficio en Referidos (%)")
+    
+    latestUSD = models.FloatField(_("USD->COP"),default=4000, null=True, blank=True)
 
     def __str__(self):
         return f"{self.default}"
