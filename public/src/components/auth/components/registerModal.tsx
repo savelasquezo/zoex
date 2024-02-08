@@ -128,7 +128,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
 
     return (
         <div>
-            <form onSubmit={onSubmit} className="flex flex-col gap-y-4 p-2">
+            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-y-4 p-2">
                 <div className="bg-gray-800 text-gray-400 border border-gray-700 px-2 rounded-lg">
                   <PhoneInput
                     country="co"
@@ -201,9 +201,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
                   )
                 )}
             </form>
-            { success && (<div className="text-lime-400 text-sm mt-0 md:mt-2">{success}</div>)}
-            { error && (<div className="text-red-400 text-sm mt-0 md:mt-2">{error}</div>)}
-            { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+            { success && (<div className="text-lime-400 text-xs md:text-sm mt-0 md:mt-2">{success}</div>)}
+            { error && (<div className="text-red-400 text-xs md:text-sm mt-0 md:mt-2">{error}</div>)}
+            { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
         </div>
     );
 };

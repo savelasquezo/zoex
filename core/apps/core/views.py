@@ -33,7 +33,7 @@ class fetchInfo(generics.GenericAPIView):
         except:
             return Response({'detail': 'NotFound ZoeXConfig.'}, status=status.HTTP_404_NOT_FOUND)
 
-class fetchMessage(generics.GenericAPIView):
+class sendMessage(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
@@ -46,14 +46,14 @@ class fetchMessage(generics.GenericAPIView):
             }
             email = render_to_string(email_template_name, c)
             try:
-                send_mail(subject, message=None, from_email='message@zoexwin.com',
-                          recipient_list=['noreply@zoexwin.com'], fail_silently=False, html_message=email)
+                send_mail(subject, message=None, from_email='message@zoexbet.com',
+                          recipient_list=['noreply@zoexbet.com'], fail_silently=False, html_message=email)
                 return Response({'detail': 'Email Enviado.'}, status=status.HTTP_200_OK)
             except BadHeaderError:
                 with open(os.path.join(settings.BASE_DIR, 'logs/email.log'), 'a') as f:
-                    f.write("EmailError {} SingupEmail--> Error: {}\n".format(eDate, str(e)))
+                    f.write("EmailError {} --> Error: {}\n".format(eDate, str(e)))
                 return Response({'error': 'NotFound Email'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             with open(os.path.join(settings.BASE_DIR, 'logs/email.log'), 'a') as f:
-                f.write("EmailError {} SingupConfig--> Error: {}\n".format(eDate, str(e)))
+                f.write("EmailError {} --> Error: {}\n".format(eDate, str(e)))
             return Response({'error': 'Unexpected error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

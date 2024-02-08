@@ -53,6 +53,9 @@ def signalLottery(sender, instance, **kwargs):
             user.balance =+ user.balance + instance.prize
             user.save()
 
+            #Create New Lottery
+            Lottery.objects.create(file=instance.file)
+
             ##AVISAR POR CORREO (PENDIENTE)
 
     except Exception as e:

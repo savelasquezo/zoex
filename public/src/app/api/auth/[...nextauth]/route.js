@@ -41,13 +41,14 @@ const handler = NextAuth({
         const user = {
           id: userData.id,
           uuid: userData.uuid,
-          name: userData.username,
+          username: userData.username,
           email: userData.email,
           phone: userData.phone,
           balance: userData.balance,
           credits: userData.credits,
           location: userData.location,
           billing: userData.billing,
+          frame: userData.frame,
           accessToken: access,
           refreshToken: refresh,
         };
@@ -85,13 +86,14 @@ const handler = NextAuth({
         session.user = {
           id: userData.id,
           uuid: userData.uuid,
-          name: userData.username,
+          username: userData.username,
           email: userData.email,
           phone: userData.phone,
           balance: userData.balance,
           credits: userData.credits,
           location: userData.location,
           billing: userData.billing,
+          frame: userData.frame,
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,
         };

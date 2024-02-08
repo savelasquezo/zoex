@@ -8,7 +8,7 @@ def ImageUploadTo(instance, id):
 class Core(models.Model):
     default = models.CharField(_("ZoeXConfig"), max_length=32, blank=True, null=True, default="ZoeXConfig")
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
-    hashtag = models.CharField(_("Hashtag"), max_length=16, blank=True, null=True, default="zoexwin")
+    hashtag = models.CharField(_("Hashtag"), max_length=16, blank=True, null=True, default="zoexbet")
 
     idx = models.SmallIntegerField(_("Indicativo"), blank=True, null=True, default=57)
     phone = models.CharField(_("Telefono"), max_length=64, blank=True, null=True)
@@ -20,7 +20,7 @@ class Core(models.Model):
     facebook = models.URLField(_("Facebook"), max_length=128, blank=True, null=True)
     instagram = models.URLField(_("Instagram"), max_length=128, blank=True, null=True)
 
-    bonusPercent = models.FloatField(_("%Bonificacion"),default=50, null=True, blank=True, 
+    bonusPercent = models.FloatField(_("%Bonificacion"),default=15, null=True, blank=True, 
         help_text="Porcentaje Adicional en la Primera Recarga (%) ")
     
     referredPercent = models.FloatField(_("%Referidos"),default=5, null=True, blank=True,

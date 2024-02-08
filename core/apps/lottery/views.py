@@ -87,7 +87,7 @@ class fetchTicketsLottery(generics.ListAPIView):
     serializer_class = TicketsLotterySerializer
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        user = UserAccount.objects.get(email=self.request.user.email) 
+        user = UserAccount.objects.get(email=self.request.user.email)
         lottery = Lottery.objects.get(is_active=True)
         return TicketsLottery.objects.filter(lottery=lottery, email=user)
 

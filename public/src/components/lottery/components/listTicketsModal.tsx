@@ -8,8 +8,8 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 
 interface ListTicketsLotteryModalProps {
-  closeModal: () => void;
   session: Session | null | undefined;
+  closeModal: () => void;
 }
 
 type TicketType = {

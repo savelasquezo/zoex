@@ -53,14 +53,6 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
   });
 
   const {email, subject,  message } = formData;
-  const [agreed, setAgreed] = useState(false);
-  const toggleAgreed = () => {
-      if (agreed) {
-        setAgreed(false);
-      } else {
-        setAgreed(true);
-      }
-  };
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,7 +75,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/request-message/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/send-message/`, 
       {
         method: 'POST',
         headers: {
@@ -121,7 +113,7 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
             <button className='bg-instagram-default hover:bg-instagram-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><AiOutlineInstagram/></button>
         </Link>
       </div>
-      <form onSubmit={onSubmit} className="w-full flex flex-col gap-y-4 p-2 mt-10">
+      <form method="POST" onSubmit={onSubmit} className="w-full flex flex-col gap-y-4 p-2 mt-10">
         <div className="relative h-12 w-full">
           <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><CiMail/></div>
           <input className="h-full w-full indent-8 text-gray-200 rounded-lg border border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"

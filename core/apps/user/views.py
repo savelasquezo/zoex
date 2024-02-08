@@ -11,8 +11,9 @@ from rest_framework.response import Response
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
-from . import models, serializers
-from ..core.models import Core
+from .models import UserAccount, Invoice, Withdrawals
+from .serializers import UserSerializer, WithdrawalSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 CONFIRMO = settings.CONFIRMO_KEY
@@ -31,9 +32,9 @@ def makeConfirmoInvoice(amount):
     "settlement": {
         "currency": "USD"
     },
-    "notifyEmail": "noreply@zoexwin.com",
-    "notifyUrl": "https://zoexwin.com/",
-    "returnUrl": "https://zoexwin.com/",
+    "notifyEmail": "noreply@zoexbet.com",
+    "notifyUrl": "https://zoexbet.com/",
+    "returnUrl": "https://zoexbet.com/",
     "reference": "anything"
     }
 
@@ -75,10 +76,10 @@ def makeBoldInvoice(amount):
 
 
 class fetchWithdrawals(generics.ListAPIView):
-    serializer_class = serializers.WithdrawalSerializer
+    serializer_class = WithdrawalSerializer
 
     def get_queryset(self):
-        return models.Withdrawals.objects.filter(account=self.request.user)
+        return Withdrawals.objects.filter(account=self.request.user)
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -103,7 +104,7 @@ class requestWithdraw(generics.GenericAPIView):
             return Response({'detail': 'The requested amount is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            obj, created = models.Withdrawals.objects.update_or_create(account=account,state='pending', method=method)
+            obj, created = Withdrawals.objects.update_or_create(account=account,state='pending', method=method)
             obj.amount = amount if created else obj.amount + amount
             obj.method = method
             
@@ -148,26 +149,21 @@ class refreshInvoices(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         try:
             account= request.user
-            invoices = models.Invoice.objects.filter(account=account,state="pending",method="crypto")
-            if invoices.exists():
+            list_invoices_bold = Invoice.objects.filter(account=account,state="pending",method="bold")
+            list_invoices_crypto = Invoice.objects.filter(account=account,state="pending",method="crypto")
+
+            if list_invoices_crypto.exists():
                 headers = {'Content-Type': 'application/json',
                             'Authorization': f'Bearer {CONFIRMO}'}
                 
-                for obj in invoices:
+                for obj in list_invoices_crypto:
                     response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
-                    currentStatus = response.json().get('status') if response.status_code == 200 else "error"
+                    currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
                     if currentStatus == "done":
-                        account.balance = account.balance + obj.amount
-                        accourtReferred = models.UserAccount.objects.filter(uuid=request.user.referred).first()
-                        if accourtReferred.exists():
-                            coreSettings = Core.objects.first()
-                            accourtReferred.balance = accourtReferred.balance + obj.amount*coreSettings.referredPercent
-                            accourtReferred.save()
+                        obj.state = currentStatus
+                        obj.save()
 
-                    obj.state = currentStatus
-                    obj.save()
-
-            return Response({'detail': 'CryptoInvoices Refresh!'}, status=status.HTTP_200_OK)
+            return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'detail': 'NotFound CryptoInvoices!'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -182,19 +178,16 @@ class requestInvoice(generics.GenericAPIView):
         data = {'method':method,'amount':amount}
     
         try:
-            obj, created = models.Invoice.objects.update_or_create(account=request.user,state='pending', method=method, defaults=data)
+            obj, created = Invoice.objects.update_or_create(account=request.user,state='pending', method=method, defaults=data)
             integritySignature = "N/A"
 
             if method == "crypto":
                 response = makeConfirmoInvoice(amount)
                 if response.status_code == 201:
                     apiInvoice = response.json().get('id')
-                    return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature}, status=status.HTTP_200_OK)
-                    
-                return Response({'error': response.errors}, status=status.HTTP_404_NOT_FOUND)
                 
             if method == "bold":
-                apiInvoice = str(uuid.uuid4())[:8]
+                apiInvoice = str(uuid.uuid4())[:12]
                 hash256 = "{}{}{}{}".format(apiInvoice,str(amount),"USD",BOLD)
                 m = hashlib.sha256()
                 m.update(hash256.encode())
@@ -212,19 +205,31 @@ class requestInvoice(generics.GenericAPIView):
             return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
-class requestMessage(generics.GenericAPIView):
-    def post(self, request, *args, **kwargs):
-        account = models.UserAccount.objects.get(email=self.request.user.email)
-        subject = request.data.get('subject', '')
-        message = request.data.get('message', '')
+class updateAccountInfo(generics.GenericAPIView):
 
-        data = {'subject':subject,'message':message}
-    
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
         try:
-            obj = models.Support.objects.create(account=account, **data)
-            return Response({'detail': 'The message request has been sent.'}, status=status.HTTP_200_OK)
+            frame = str(request.data.get('frame', ''))
+            location = str(request.data.get('location', ''))
+            billing = str(request.data.get('billing', ''))
+            user = UserAccount.objects.get(email=self.request.user.email)
+
+            user.frame = frame
+            user.location = location
+            user.billing = billing
+            user.save()
+
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
         except Exception as e:
-            date = timezone.now().strftime("%Y-%m-%d %H:%M")
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
-                f.write("requestMessage {} --> Error: {}\n".format(date, str(e)))
-            return Response({'error': 'NotFound Support.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                f.write("updateAccountInfo {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound Account.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+        

@@ -40,6 +40,7 @@ class CoreAdmin(admin.ModelAdmin):
         ("stream","hashtag"),
         ("idx","phone"),
         ("email","address"),
+        ("bonusPercent","referredPercent"),
         )}
 
     fSocial = {"fields": (

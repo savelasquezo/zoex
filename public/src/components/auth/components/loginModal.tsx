@@ -49,7 +49,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
 
     return (
         <div>
-            <form onSubmit={onSubmit} method="POST" className="flex flex-col gap-y-4 p-2">
+            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-y-4 p-2">
                 <div className="relative h-12 w-full min-w-[200px]">
                     <div className="absolute text-gray-500 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><CiMail/></div>
                     <input className="h-full w-full indent-8 text-gray-200 rounded-lg border border-gray-700 focus:border-gray-700 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 ring-0 focus:!ring-0 focus:outline-0 disabled:border-0"
@@ -81,7 +81,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
                 )}
             </form>
             { error && (<div className="text-red-400 text-sm mt-2">{error}</div>)}
-            { !error && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+            { !error && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
         </div>
     );
 };

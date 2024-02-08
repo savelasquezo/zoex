@@ -116,32 +116,34 @@ const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => 
             ) : (
             <div className='w-full flex flex-col gap-y-4 items-start justify-center md:justify-start'>
               <div className="w-full flex flex-row gap-x-2">
-                <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" /></button>
-                <button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" /></button>
+                <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto0.webp"} className="object-fit w-40 h-8 md:w-52 md:h-12 shadow-lg rounded-full" alt="" /></button>
+                <button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold0.webp"} className="object-fit w-40 h-8 md:w-52 md:h-12 shadow-lg rounded-full" alt="" /></button>
               </div>
-              <p className='text-[0.55rem] text-justify text-gray-400'>
-                importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta. Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento. <br /> ¿Necesitas Ayuda? support@zoexwin.com
-              </p>
+              <div className='text-[0.55rem] text-justify text-gray-400'>
+                <p>Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta.</p> 
+                <p className='hidden md:block'>Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento.</p>
+                <p className='mt-4'>¿Necesitas Ayuda? support@zoexbet.com</p>
+              </div>
             </div>
           )
         ) : (
-          <div className="w-full h-full flex flex-col justify-center items-start px-4">
+          <div className="w-full h-full flex flex-col justify-center items-start gap-y-4">
             <div className="flex flex-row items-center justify-between w-full">
               <div className={`flex flex-col leading-none ${method === 'crypto' ? 'block' : 'hidden' }`}>
                 <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
-                  <Image width={192} height={128} src={"/assets/image/crypto0.webp"} className="object-fit w-52 h-12 shadow-lg rounded-full" alt="" />
+                  <Image width={192} height={128} src={"/assets/image/crypto0.webp"} className="object-fit w-40 h-8 md:w-52 md:h-12 shadow-lg rounded-full" alt="" />
                 </Link>
               </div>
               <div className={`flex flex-col leading-none ${method === 'bold' ? 'block' : 'hidden' }`}>
                 <BoldButton invoice={invoice} amount={amount} integritySignature={integritySignature}/>
               </div>
-              <span className="bg-gray-900 rounded-sm py-2 px-4 text-white h-10 -mt-1">{invoice}</span>
+              <span className="bg-gray-900 flex items-center justify-center text-xs md:text-base rounded-sm py-2 px-4 text-white h-8 md:h-10 -mt-1">{invoice}</span>
             </div>
-            <p className='text-[0.55rem] text-justify text-gray-400 mt-6'>
-              Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta. <br /> 
-              Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento. <br />
-              ¿Necesitas Ayuda? support@zoexwin.com
-            </p>
+            <div className='text-[0.55rem] text-justify text-gray-400'>
+              <p>Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta.</p> 
+              <p className='hidden md:block'>Te pedimos paciencia durante este periodo, consultar el estado de tu recarga actualizando tu saldo en cualquier momento.</p>
+              <p className='mt-4'>¿Necesitas Ayuda? support@zoexbet.com</p>
+            </div>
           </div>
         )}
       </div>

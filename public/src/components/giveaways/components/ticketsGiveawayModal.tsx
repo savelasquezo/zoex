@@ -196,7 +196,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
-          <form className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
+            <form method="POST" onClick={handleSubmit} className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
               <div className='relative flex flex-col w-full h-32 justify-start items-center lg:h-52 lg:justify-center'>
                   <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
                   <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
@@ -215,7 +215,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
                   <button type="button" className='w-full h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
                 ) : (
                   session && session?.user? (
-                    <input onClick={handleSubmit} type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
+                    <input type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
                     ) : (
                     <span onClick={openLogin} className="w-full h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 lg:w-40">Ingresar</span>
                   )
@@ -247,7 +247,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
                   {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
-                  {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexwin.com</div>)}
+                  {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
                 </div>
               </div>
                 ) : (
@@ -256,7 +256,7 @@ const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal,
             </div>
             <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden'>
               {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
-              {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexwin.com</p>)}
+              {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexbet.com</p>)}
             </div>
           </div>
           ) : (

@@ -13,7 +13,7 @@ class TicketsLotteryInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            ('state','uuid','ticket','email'),
+            ('uuid','ticket','email'),
             ('date','voucher'),
                 )
             }

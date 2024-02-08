@@ -8,7 +8,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --animate-duration: 0.5s; /* animate.css default animate duration (1s)*/
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {

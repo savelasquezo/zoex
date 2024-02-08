@@ -125,7 +125,7 @@ const WithdrawModal: React.FC<withdrawModalProps> = ({ closeModal, session  }) =
                   <p className="text-gray-400 uppercase text-sm">Codigo: {withdraw}</p>
                   <p className="absolute bottom-8 w-full text-xs text-justify text-gray-400">
                     Los fondos seran transferidos en un periodo de 24 a 36 Horas<br /> 
-                    ¿Necesitas Ayuda? support@zoexwin.com</p>
+                    ¿Necesitas Ayuda? support@zoexbet.com</p>
                 </div>
               </div>
         </div>
