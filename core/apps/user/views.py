@@ -1,51 +1,23 @@
-import os, re, requests, uuid
+import os, requests, uuid
 import hashlib
 
 from django.utils import timezone
 from django.conf import settings
-from asgiref.sync import sync_to_async
 
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 
-from openpyxl import Workbook
-from openpyxl import load_workbook
-
-from .models import UserAccount, Invoice, Withdrawals
+from .models import Invoice, Withdrawals
 from .serializers import UserSerializer, WithdrawalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.core.models import Core
 from apps.core.functions import xlsxSave
 
-APILAYER = settings.APILAYER_KEY
 CONFIRMO = settings.CONFIRMO_KEY
 BOLD_PUBLIC_KEY = settings.BOLD_PUBLIC_KEY
 BOLD_SECRET_KEY = settings.BOLD_SECRET_KEY
-
-
-@sync_to_async
-def AsyncUSD():
-    from apps.core.models import Core
-    setting = Core.objects.get(default="ZoeXConfig")
-    try:
-        url = "https://api.apilayer.com/fixer/latest?base=USD&symbols=COP"
-        headers = {
-            'apikey': f'{APILAYER}'
-        }
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            latestUSD=data["rates"]["COP"]
-            setting.latestUSD = latestUSD
-            setting.save()
-
-    except Exception as e:
-        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
-            f.write("updateUSD {} --> Error: {}\n".format(eDate, str(e)))
-
 
 def makeConfirmoInvoice(amount):
     body = {
@@ -208,7 +180,6 @@ class requestInvoice(generics.GenericAPIView):
                     copAmmount = int(amount*setting.latestUSD)
                 
             if method == "bold":
-                AsyncUSD()
                 copAmmount = int(amount*setting.latestUSD)
                 apiInvoice = str(uuid.uuid4())[:12]
 

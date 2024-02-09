@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 
 import CircleLoader from 'react-spinners/CircleLoader';
 
-import { getBitcoinPrice } from '@/utils/cryptoApi';
 import { SessionModal } from '@/lib/types/types';
 
 import { FaWallet } from "react-icons/fa";
@@ -63,16 +62,25 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         if (storedBitcoinPrice) {
           setBitcoinPrice(JSON.parse(storedBitcoinPrice));
         }
-        const newBitcoinPrice = await getBitcoinPrice();
-        setBitcoinPrice(newBitcoinPrice);
-        localStorage.setItem('bitcoinPrice', JSON.stringify(newBitcoinPrice));
+  
+        const storedInfo = localStorage.getItem('infoData');
+        if (storedInfo) {
+          const parsedInfo = JSON.parse(storedInfo);
+          const newBitcoinPrice = parsedInfo.latestBTC;
+          setBitcoinPrice(newBitcoinPrice);
+          localStorage.setItem('bitcoinPrice', JSON.stringify(newBitcoinPrice));
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchData();
   }, [activeTab]);
+  
+
+
+
 
   const userBalanceUSD = session?.user?.balance !== undefined
     ? (session?.user?.balance).toFixed(2)

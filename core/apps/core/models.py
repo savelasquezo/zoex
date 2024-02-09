@@ -27,6 +27,7 @@ class Core(models.Model):
         help_text="Porcentaje Beneficio en Referidos (%)")
     
     latestUSD = models.FloatField(_("USD->COP"),default=4000, null=True, blank=True)
+    latestBTC = models.FloatField(_("BTC->USD"),default=50000, null=True, blank=True)
 
     def __str__(self):
         return f"{self.default}"
