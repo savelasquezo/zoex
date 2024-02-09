@@ -35,7 +35,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
     const [pageNumber, setPageNumber] = useState(0);
     const withdrawPerPage = 5;
 
-    const pageCount = Math.ceil(withdrawList.length) / withdrawPerPage;
+    const pageCount = Math.ceil(withdrawList.length/ withdrawPerPage);
     const changePage = ({ selected }: { selected: number }) => {
       setPageNumber(selected);
     };
@@ -61,26 +61,26 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
         <div className="relative h-full w-full text-gray-500">
             {withdrawList.length > 0 ? (
                 <div className="relative h-[calc(100%-4rem)] w-full text-gray-500">
-                    <ul>
-                        <table className="min-w-full text-center text-sm font-light">
-                            <thead className="font-medium text-white">
-                                <tr className="border-b border-slate-900 uppercase text-xs">
-                                <th scope="col" className=" px-6 py-2">ID</th>
-                                <th scope="col" className=" px-6 py-2">Volumen</th>
-                                <th scope="col" className=" px-6 py-2">Fecha</th>
-                                <th scope="col" className=" px-6 py-2">Voucher</th>
-                                </tr>
-                            </thead>
+                    <table className="min-w-full text-center text-sm font-light">
+                        <thead className="font-medium text-white">
+                            <tr className="border-b border-slate-900 uppercase text-xs">
+                                <th scope="col" className="px-6 py-2">ID</th>
+                                <th scope="col" className="px-6 py-2">Volumen</th>
+                                <th scope="col" className="px-6 py-2">Fecha</th>
+                                <th scope="col" className="px-6 py-2">Voucher</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             {withdrawList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.id}</td>
-                                <td className="whitespace-nowrap px-6 py-2">{obj.amount}</td>
-                                <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
-                                <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.id}</td>
+                                    <td className="whitespace-nowrap px-6 py-2">{obj.amount}</td>
+                                    <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
+                                    <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
                                 </tr>
                             ))}
-                        </table>
-                    </ul>
+                        </tbody>
+                    </table>
                     <ReactPaginate
                         previousLabel={<MdNavigateBefore/>}
                         nextLabel={<MdNavigateNext/>}

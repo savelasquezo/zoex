@@ -59,12 +59,18 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bitcoinPrice = await getBitcoinPrice();
-        setBitcoinPrice(bitcoinPrice);
+        const storedBitcoinPrice = localStorage.getItem('bitcoinPrice');
+        if (storedBitcoinPrice) {
+          setBitcoinPrice(JSON.parse(storedBitcoinPrice));
+        }
+        const newBitcoinPrice = await getBitcoinPrice();
+        setBitcoinPrice(newBitcoinPrice);
+        localStorage.setItem('bitcoinPrice', JSON.stringify(newBitcoinPrice));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
+
     fetchData();
   }, [activeTab]);
 

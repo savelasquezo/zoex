@@ -34,7 +34,7 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
     const HisotryPage = 5;
 
     const [hisotryList, setHisotryList] = useState<LotteryData[]>([]);
-    const pageCount = Math.ceil(hisotryList.length) / HisotryPage;
+    const pageCount = Math.ceil(hisotryList.length/HisotryPage);
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);
         };
@@ -57,16 +57,16 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
         <div className='w-full h-full mt-10'>
             {hisotryList.length > 0 ? (
                 <div className="relative h-[calc(100%-4rem)] w-full text-gray-500">
-                    <ul>
-                        <table className="min-w-full text-center text-sm font-light">
-                            <thead className="font-medium text-white">
-                                <tr className="border-b border-slate-900 uppercase text-xs">
-                                    <th scope="col" className=" px-6 py-2">Loteria</th>
-                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                                    <th scope="col" className=" px-6 py-2">Ticket</th>
-                                    <th scope="col" className=" px-6 py-2">Link</th>
-                                </tr>
-                            </thead>
+                    <table className="min-w-full text-center text-sm font-light">
+                        <thead className="font-medium text-white">
+                            <tr className="border-b border-slate-900 uppercase text-xs">
+                                <th scope="col" className=" px-6 py-2">Loteria</th>
+                                <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
+                                <th scope="col" className=" px-6 py-2">Ticket</th>
+                                <th scope="col" className=" px-6 py-2">Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             {hisotryList?.slice(pageNumber * HisotryPage, (pageNumber + 1) * HisotryPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
                                     <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.lottery}</td>
@@ -77,8 +77,8 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                                     </td>
                                 </tr>
                             ))}
-                        </table>
-                    </ul>
+                        </tbody>
+                    </table>
                     <ReactPaginate
                         previousLabel={<MdNavigateBefore/>}
                         nextLabel={<MdNavigateNext/>}

@@ -53,7 +53,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session 
       }
     }, [session]);
   
-    const pageCount = Math.ceil(giveawayTickets.length) / ticketsPerPage;
+    const pageCount = Math.ceil(giveawayTickets.length/ticketsPerPage);
 
     const changePage = ({ selected }: { selected: number }) => {
       setPageNumber(selected);
@@ -64,32 +64,30 @@ const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session 
         {giveawayTickets? (
           giveawayTickets.length > 0 ? (
             <div>
-              <ul>
-                <table className="min-w-full text-center text-sm font-light">
+              <table className="min-w-full text-center text-sm font-light">
                   <thead className="font-medium text-white">
-                    <tr className="border-b border-slate-900 uppercase text-xs">
-                      <th scope="col" className=" px-6 py-2">Ticket</th>
-                      <th scope="col" className=" px-6 py-2">Sorteo</th>
-                      <th scope="col" className=" px-6 py-2 hidden lg:table-cell">PIN</th>
-                      <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                      <th scope="col" className=" px-6 py-2"></th>
-                    </tr>
+                      <tr className="border-b border-slate-900 uppercase text-xs">
+                          <th scope="col" className=" px-6 py-2">Ticket</th>
+                          <th scope="col" className=" px-6 py-2">Sorteo</th>
+                          <th scope="col" className=" px-6 py-2 hidden lg:table-cell">PIN</th>
+                          <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
+                          <th scope="col" className=" px-6 py-2"></th>
+                      </tr>
                   </thead>
                   <tbody>
-                    {giveawayTickets?.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((obj: any, index: number) => (
-                      <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white justify-center">
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">{obj.ticket}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 font-Courier font-semibold">{obj.uuid}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
-                            {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
-                        </td>
-                      </tr>
-                    ))}
-                    </tbody>
-                </table>
-              </ul>
+                      {giveawayTickets?.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((obj: any, index: number) => (
+                          <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white justify-center">
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">{obj.ticket}</td>
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 font-Courier font-semibold">{obj.uuid}</td>
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
+                                  {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
+                              </td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </table>
               <ReactPaginate
                 previousLabel={<MdNavigateBefore/>}
                 nextLabel={<MdNavigateNext/>}

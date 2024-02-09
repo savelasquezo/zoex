@@ -34,7 +34,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
     const TicketsPage = 5;
 
     const [ticketList, setTicketList] = useState<GiveawayTicketDetails[]>([]);
-    const pageCount = Math.ceil(ticketList.length) / TicketsPage;
+    const pageCount = Math.ceil(ticketList.length/TicketsPage);
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);
         };
@@ -68,16 +68,16 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                 {session && session?.user? (
                 ticketList.length > 0 ? (
                 <div>
-                    <ul>
-                        <table className="min-w-full text-center text-sm font-light">
-                            <thead className="font-medium text-white">
-                                <tr className="border-b border-slate-900 uppercase text-xs">
-                                    <th scope="col" className=" px-6 py-2">Ticket</th>
-                                    <th scope="col" className=" px-6 py-2 hidden lg:table-cell">Sorteo</th>
-                                    <th scope="col" className=" px-6 py-2 hidden sm:table-cell">PIN</th>
-                                    <th scope="col" className=" px-6 py-2">Fecha</th>
-                                </tr>
-                            </thead>
+                    <table className="min-w-full text-center text-sm font-light">
+                        <thead className="font-medium text-white">
+                            <tr className="border-b border-slate-900 uppercase text-xs">
+                                <th scope="col" className=" px-6 py-2">Ticket</th>
+                                <th scope="col" className=" px-6 py-2 hidden lg:table-cell">Sorteo</th>
+                                <th scope="col" className=" px-6 py-2 hidden sm:table-cell">PIN</th>
+                                <th scope="col" className=" px-6 py-2">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             {ticketList?.slice(pageNumber * TicketsPage, (pageNumber + 1) * TicketsPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
                                     <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.ticket}</td>
@@ -86,8 +86,8 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                                     <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
                                 </tr>
                             ))}
-                        </table>
-                    </ul>
+                        </tbody>
+                    </table>
                     <ReactPaginate
                         previousLabel={<MdNavigateBefore/>}
                         nextLabel={<MdNavigateNext/>}

@@ -52,7 +52,7 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
       }
     }, [session]);
   
-    const pageCount = Math.ceil(lotteryTickets.length)/ticketsPerPage;
+    const pageCount = Math.ceil(lotteryTickets.length/ticketsPerPage);
   
     const changePage = ({ selected }: { selected: number }) => {
       setPageNumber(selected);
