@@ -17,6 +17,8 @@ workbook.log
 err.log
 out.log
 
+**/xlsx/*
+
 **/users/
 !users/README.md
 postgresql/
