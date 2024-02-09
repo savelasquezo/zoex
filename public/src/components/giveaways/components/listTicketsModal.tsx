@@ -1,26 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
+
+import { SessionModal, GiveawayTicketDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
-interface ListTicketsGiveawayModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-  giveawayId: string;
-}
-
-type TicketType = {
-    id: number;
-    ticket: string;
-    date: string;
-    voucher: string;
-    giveaway: number;
-    email: any;
-    giveawayID: string;
-};
 
 export const fetchGiveawayTickets = async (accessToken: any, giveawayId: string) => {
     try {
@@ -42,12 +28,12 @@ export const fetchGiveawayTickets = async (accessToken: any, giveawayId: string)
     }
   }
 
-const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
+const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({ closeModal, session, giveawayId  }) => {
 
     const [pageNumber, setPageNumber] = useState(0);
     const TicketsPage = 5;
 
-    const [ticketList, setTicketList] = useState<TicketType[]>([]);
+    const [ticketList, setTicketList] = useState<GiveawayTicketDetails[]>([]);
     const pageCount = Math.ceil(ticketList.length) / TicketsPage;
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);

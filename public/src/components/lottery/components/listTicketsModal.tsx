@@ -2,25 +2,11 @@ import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
-import { Session } from 'next-auth';
+
+import { SessionModal, LotteryTicketDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
-
-interface ListTicketsLotteryModalProps {
-  session: Session | null | undefined;
-  closeModal: () => void;
-}
-
-type TicketType = {
-    id:number;
-    ticket: string;
-    date: string;
-    voucher: string;
-    lottery: number;
-    email: any;
-    lotteryID: string;
-};
 
 export const fetchLotteryTickets = async (accessToken: any) => {
   try {
@@ -45,14 +31,14 @@ export const fetchLotteryTickets = async (accessToken: any) => {
 }
 
 
-const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps> = ({ closeModal, session  }) => {
+const ListTicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
     const [pageNumber, setPageNumber] = useState(0);
     const TicketsPage = 5;
 
     const router = useRouter();
 
-    const [ticketList, setTicketList] = useState<TicketType[]>([]);
+    const [ticketList, setTicketList] = useState<LotteryTicketDetails[]>([]);
     const pageCount = Math.ceil(ticketList.length) / TicketsPage;
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);

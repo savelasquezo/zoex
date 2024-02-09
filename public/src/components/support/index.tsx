@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import SupportModal from './components/page';
 import { useSession } from 'next-auth/react';
+
+import SupportModal from '@/components/support/components/page';
 
 export default function Page() {
   const { data: session } = useSession();

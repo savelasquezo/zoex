@@ -1,15 +1,12 @@
 import React, { Suspense } from 'react';
-import { Session } from 'next-auth';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import Auth from '@/components/auth/components/page';
 
-type HeaderProps = {
-  session: Session | null | undefined;
-};
+import { SessionInfo } from '@/lib/types/types';
 
-const Header: React.FC<HeaderProps> = ({ session  }) => {
+const Header: React.FC<SessionInfo> = ({ session  }) => {
   return (
     <header className="bg-gray-900 px-6 md:px-4 lg:px-2 py-2.5 h-14">
       <div className="flex flex-row justify-between items-center">

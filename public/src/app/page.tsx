@@ -3,7 +3,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import { SessionProvider } from 'next-auth/react';
 
 import Header from '@/components/header/index';
@@ -12,6 +12,7 @@ import Slider from '@/components/slider/index';
 import Lottery from '@/components/lottery/index';
 import Giveaways from '@/components/giveaways/index';
 import History from '@/components/history/index';
+
 
 export default function Home() {
   return (

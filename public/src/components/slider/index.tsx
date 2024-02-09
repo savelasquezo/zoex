@@ -1,6 +1,7 @@
 import React from 'react';
-import Slider from './components/page';
 import { useSession } from 'next-auth/react';
+
+import Slider from '@/components/slider/components/page';
 
 export default function Page() {
   const { data: session } = useSession();

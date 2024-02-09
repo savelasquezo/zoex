@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 
 import BeatLoader from 'react-spinners/BeatLoader';
-import { FiDollarSign } from "react-icons/fi";
-
 import BoldButton from '@/utils/BoldButton';
 
-interface InvoiceModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
+import { SessionModal } from '@/lib/types/types';
 
-const InvoiceModal: React.FC<InvoiceModalProps> = ({ closeModal, session  }) => {
+import { FiDollarSign } from "react-icons/fi";
+
+
+const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

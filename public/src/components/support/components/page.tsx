@@ -1,50 +1,19 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import CircleLoader from 'react-spinners/CircleLoader';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
+import CircleLoader from 'react-spinners/CircleLoader';
+
+import { SessionModal, InfoType } from '@/lib/types/types';
 
 import {AiOutlineWhatsApp, AiOutlineInstagram} from 'react-icons/ai';
 import {BiLogoFacebook} from 'react-icons/bi';
 import {CiMail} from 'react-icons/ci';
 import { MdSubject } from "react-icons/md";
 
-type SupportModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
-};
 
-type InfoType = {
-  phone: string;
-  facebook: string;
-  twitter: string;
-  instagram: string;
-};
-
-export const fetchInfo = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/fetch-info/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Server responded with an error' });
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
-  }
-}
-
-const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => {
+const SupportModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
   const [loading, setLoading] = useState(false);
-  const [info, setInfo] = useState<InfoType>();
+  const [info, setInfo] = useState<InfoType | undefined>(undefined);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -58,15 +27,20 @@ const SupportModal: React.FC<SupportModalProps> = ({ closeModal, session  }) => 
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   useEffect(() => {
-    fetchInfo()
-      .then((data: InfoType) => {
-        setInfo(data);
-      })
-      .catch((error) => {
-        console.error('¡Error al obtener Informacion del Usuario! ', error);
-      });
+    const storedInfo = localStorage.getItem('infoData');
+    if (storedInfo) {
+      try {
+        const parsedInfo = JSON.parse(storedInfo);
+        setInfo(parsedInfo);
+      } catch (error) {
+        console.error('Error parsing stored info data:', error);
+      }
+    }
+    return () => {};
   }, []);
+
 
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const onSubmit = async (e: React.FormEvent) => {

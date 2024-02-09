@@ -1,36 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 
-import TicketsGiveawayModal from "./ticketsGiveawayModal";
+import TicketsGiveawayModal from "@/components/giveaways/components/ticketsGiveawayModal";
 import ListTicketsGiveawayModal from "./listTicketsModal";
 
 import { imageLoader } from '@/utils/imageConfig';
+import { SessionInfo, GiveawayData } from '@/lib/types/types';
 
 import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
 
-interface GiveawaysModalProps {
-    session: Session | null | undefined;
-}
-
-interface GiveawayData {
-    id: any;
-    file: string;
-    giveaway: string;
-    prize: string;
-    value: number;
-    tickets: number;
-    price: number;
-    winner: string | null | undefined;
-    date_giveaway: string;
-    sold: number;
-    date_results: string;
-    stream: string | null | undefined;
-    amount: number;
-    is_active: boolean;
-    progress: number
-}
 
 export const fetchGiveaways = async () => {
   try {
@@ -52,7 +31,7 @@ export const fetchGiveaways = async () => {
 }
 
 
-const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
+const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
     
     const [showModal, setShowModal] = useState(false);
     const [closingModal, setClosingModal] = useState(false);
@@ -76,8 +55,6 @@ const Giveaways: React.FC<GiveawaysModalProps> = ({ session  }) => {
         }, 500);
     };
 
-
-    
     useEffect(() => {
       fetchGiveaways()
         .then((data) => {

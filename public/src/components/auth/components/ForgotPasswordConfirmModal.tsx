@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import { NextResponse } from 'next/server';
-
-import CircleLoader from 'react-spinners/CircleLoader';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { validatePassword } from "../../../utils/passwordValidation";
+import CircleLoader from 'react-spinners/CircleLoader';
+
+import { validatePassword } from "@/utils/passwordValidation";
+import { ForgotPasswordConfirmModal } from '@/lib/types/types';
 
 import {FiLock} from 'react-icons/fi'
 
-type ForgotPasswordConfirmModalProps = {
-  closeModal: () => void;
-  updateForgotPasswordModalState: (value: boolean) => void;
-};
-
-
-const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModalProps> = ({ closeModal, updateForgotPasswordModalState }) => {
+const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModal> = ({ closeModal, updateForgotPasswordModalState }) => {
 
   const searchParams = useSearchParams();
   const router = useRouter();

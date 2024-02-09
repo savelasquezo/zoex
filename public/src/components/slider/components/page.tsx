@@ -1,19 +1,11 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import Image from 'next/image';
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
-
 import { Carousel } from 'flowbite-react';
-
 import { imageLoader } from '@/utils/imageConfig';
 
-type SliderProps = {
-  session: Session | null | undefined;
-}
+import { SessionInfo, ImagenSlider } from '@/lib/types/types';
 
-interface ImagenSlider {
-  file: string;
-}
 
 export const fetchImagenSliders = async () => {
   try {
@@ -36,7 +28,7 @@ export const fetchImagenSliders = async () => {
   }
 }
 
-const Slider: React.FC<SliderProps> = ({ session  }) => {
+const Slider: React.FC<SessionInfo> = ({ session  }) => {
   
     const [imagenSliders, setImagenSliders] = useState<ImagenSlider[]>([]);
 
@@ -56,7 +48,7 @@ const Slider: React.FC<SliderProps> = ({ session  }) => {
       <div className="w-screen h-auto mx-0">
         <div id="default-carousel" className="relative" data-carousel="slide">
             <div className={`overflow-hidden relative z-0 ${session ? 'h-44 md:h-80 lg:h-[calc(100vh-112px)]' : 'h-44 md:h-80 lg:h-[calc(100vh-56px)]'}`}>
-            <Suspense fallback={<p>...</p>}>
+            <Suspense fallback={null}>
               {imagenSliders?.length > 0 ? (
                 <Carousel slide={true} slideInterval={3000} indicators={false}
                   rightControl={<svg className="w-5 h-5 text-gray-400 sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>}

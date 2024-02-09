@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Session } from 'next-auth';
-import Image from 'next/image';
-import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import React, { useState } from 'react';
 import CircleLoader from 'react-spinners/CircleLoader';
+
+import { SessionModal } from '@/lib/types/types';
 
 import { FiDollarSign } from "react-icons/fi";
 import { RiBankCardFill } from "react-icons/ri";
 
-interface withdrawModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
 
-const WithdrawModal: React.FC<withdrawModalProps> = ({ closeModal, session  }) => {
+const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

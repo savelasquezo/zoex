@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import WalletModal from './components/page';
 import { useSession } from 'next-auth/react';
+
+import WalletModal from '@/components/wallet/components/page';
 
 export default function Page() {
   const { data: session } = useSession();

@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Session } from 'next-auth';
+import React, { useState } from "react";
 
-import DashboardModal from "./dashboardModal";
-import InvoiceModal from "./invoiceModal";
-import WithdrawModal from "./withdrawModal";
-import ListHistoryWalletModal from "./listHistoryModal";
+import DashboardModal from "@/components/wallet/components/dashboardModal";
+import InvoiceModal from "@/components/wallet/components/invoiceModal";
+import WithdrawModal from "@/components/wallet/components/withdrawModal";
+import ListHistoryWalletModal from "@/components/wallet/components/listHistoryModal";
 
-type WalletModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
-};
+import { SessionModal } from '@/lib/types/types';
 
 
-const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
+const WalletModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [showModal, setShowModal] = useState(true);
   const [activeTab, setActiveTab] = useState('wallet');
@@ -36,7 +32,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ closeModal, session  }) => {
             <div className={`w-full h-full ${activeSubTab === 'dashboard' ? 'block' : 'hidden' }`}>
               <DashboardModal closeModal={closeModal} session={session}/>
             </div>
-            <div className={`w-full h-full relative ${activeSubTab === 'add' ? 'block' : 'hidden' }`}>
+            <div className={`w-full h-full ${activeSubTab === 'add' ? 'block' : 'hidden' }`}>
               <InvoiceModal closeModal={closeModal} session={session}/>
             </div>
             <div className={`w-full h-full ${activeSubTab === 'withdraw' ? 'block' : 'hidden' }`}>

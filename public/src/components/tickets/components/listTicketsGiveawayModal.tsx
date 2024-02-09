@@ -3,25 +3,11 @@ import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
 
+import { SessionModal, GiveawayTicketDetails  } from '@/lib/types/types';
+
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
-
-type ListTicketsGiveawayModalProps = {
-    session: Session | null | undefined;
-    closeModal: () => void;
-  };
-
-type GiveawayTicketType = {
-    id: number;
-    ticket: string;
-    date: string;
-    voucher: string;
-    is_active: boolean;
-    giveaway: number;
-    email: any;
-    uuid: string;
-};
   
 
 export const fetchGiveawayTickets = async (accessToken: any) => {
@@ -47,9 +33,9 @@ export const fetchGiveawayTickets = async (accessToken: any) => {
 }
 
 
-const ListTicketsGiveawayModal: React.FC<ListTicketsGiveawayModalProps>  = ({closeModal, session }) => {
+const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session }) => {
 
-    const [giveawayTickets, setGiveawayTickets] = useState<GiveawayTicketType[]>([]);
+    const [giveawayTickets, setGiveawayTickets] = useState<GiveawayTicketDetails[]>([]);
     
     const [pageNumber, setPageNumber] = useState(0);
     const ticketsPerPage = 5;

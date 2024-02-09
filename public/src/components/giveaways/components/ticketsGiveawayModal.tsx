@@ -4,36 +4,14 @@ import Image from 'next/image';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { LuRefreshCw } from "react-icons/lu";
 import { NextResponse } from 'next/server';
-import { Session } from 'next-auth';
+
 import CircleLoader from 'react-spinners/CircleLoader';
 
 import { getRandomTickets } from '@/utils/getRandomTickets'
+import { SessionModal, GiveawayData } from '@/lib/types/types';
 
-interface TicketsGiveawayModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-  giveawayId: string;
-}
 
-interface GiveawayData {
-  id: any;
-  file: string;
-  giveaway: string;
-  prize: string;
-  value: number;
-  tickets: number;
-  price: number;
-  winner: string | null | undefined;
-  date_giveaway: string;
-  sold: number;
-  date_results: string;
-  stream: string | null | undefined;
-  amount: number;
-  is_active: boolean;
-  progress: number
-}
-
-const TicketsGiveawayModal: React.FC<TicketsGiveawayModalProps> = ({ closeModal, session, giveawayId  }) => {
+const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({ closeModal, session, giveawayId  }) => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [ticketsSuccess, setTicketsSuccess] = useState(false);

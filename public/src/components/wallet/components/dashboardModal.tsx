@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { NextResponse } from 'next/server';
-import { Session } from 'next-auth';
 
 import CircleLoader from 'react-spinners/CircleLoader';
+
+import { getBitcoinPrice } from '@/utils/cryptoApi';
+import { SessionModal } from '@/lib/types/types';
 
 import { FaWallet } from "react-icons/fa";
 import { GiTwoCoins } from "react-icons/gi";
 import { LuRefreshCw } from "react-icons/lu";
 
-import { getBitcoinPrice } from '@/utils/cryptoApi';
-
-interface DashboardModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
 
 export const fetchRefresh = async (accessToken: any) => {
   try {
@@ -37,7 +33,7 @@ export const fetchRefresh = async (accessToken: any) => {
   }
 }
 
-const DashboardModal: React.FC<DashboardModalProps> = ({ closeModal, session  }) => {
+const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [loading, setLoading] = useState(false);
   const [bitcoinPrice, setBitcoinPrice] = useState(null);

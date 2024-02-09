@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-import AuthModal from "./authModal";
-import LoginModal from "./loginModal";
-import RegisterModal from "./registerModal";
-import ForgotPasswordModal from "./ForgotPasswordModal";
-import ForgotPasswordConfirmModal from "./ForgotPasswordConfirmModal";
+import AuthModal from "@/components/auth/components/authModal";
+import LoginModal from "@/components/auth/components/loginModal";
+import RegisterModal from "@/components/auth/components/registerModal";
+import ForgotPasswordModal from "@/components/auth/components/ForgotPasswordModal";
+import ForgotPasswordConfirmModal from "@/components/auth/components/ForgotPasswordConfirmModal";
+
+import { SessionInfo } from '@/lib/types/types';
 
 import {AiOutlineClose, AiFillLock, AiFillUnlock} from 'react-icons/ai'
 import { GiTwoCoins } from "react-icons/gi";
 
-type AuthProps = {session: Session | null | undefined;};
 
-const Auth: React.FC<AuthProps> = ({ session  }) => {
+const Auth: React.FC<SessionInfo> = ({ session  }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
 

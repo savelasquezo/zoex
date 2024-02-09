@@ -1,8 +1,15 @@
-import React, {useState} from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { NextResponse } from 'next/server';
 
-import { Session } from 'next-auth';
+import ProfileModal from '@/components/profile/index';
+import TicketsModal from '@/components/tickets/index';
+import AccountWallet from '@/components/wallet/index';
+import ShareModal from '@/components/share/index';
+import SupportModal from '@/components/support/index';
+import Tooltip from '@/utils/tooltip';
+
+import { SessionInfo } from '@/lib/types/types';
 
 import {FaUser} from 'react-icons/fa';
 import {HiShare} from 'react-icons/hi';
@@ -10,23 +17,38 @@ import {IoMdHelp} from 'react-icons/io';
 import {IoTicket} from 'react-icons/io5';
 import {AiOutlineClose} from 'react-icons/ai';
 
-import ProfileModal from '@/components/profile/index';
-import TicketsModal from '@/components/tickets/index';
+type InfoType = {
+  phone: string;
+  facebook: string;
+  twitter: string;
+  instagram: string;
+};
 
-import AccountWallet from '@/components/wallet/index';
+export const fetchInfo = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/fetch-info/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
 
-import ShareModal from '@/components/share/index';
-import SupportModal from '@/components/support/index';
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Server responded with an error' });
+    }
 
-import Tooltip from '@/utils/tooltip';
-
-interface FooterProps {
-  session: Session | null | undefined;
+    const data = await res.json();
+    localStorage.setItem('infoData', JSON.stringify(data));
+    return data;
+  } catch (error) {
+    return NextResponse.json({ error: 'There was an error with the network request' });
+  }
 }
 
-const Footer: React.FC<FooterProps> = ({ session  }) => {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+const Footer: React.FC<SessionInfo> = ({ session  }) => {
 
     const [showModal, setShowModal] = useState(false);
     const [closingModal, setClosingModal] = useState(false);
@@ -45,6 +67,16 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
         setClosingModal(false);
         }, 500);
     };
+
+    useEffect(() => {
+      fetchInfo()
+        .then((data: InfoType) => {
+          localStorage.setItem('infoData', JSON.stringify(data));
+        })
+        .catch((error) => {
+          console.error('¡Server responded with an error! ', error);
+        });
+    }, []);
 
     return (
       <main className="fixed bottom-0 w-full h-14 bg-gray-900 z-10">

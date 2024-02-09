@@ -1,24 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
-import { Session } from 'next-auth';
+
+import { SessionModal, WithdrawDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import { FaLink } from "react-icons/fa6";
-
-
-interface ListHistoryWalletModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
-
-type WithdrawType = {
-    id: string;
-    amount: number;
-    date: string;
-    voucher: string;
-    state: boolean;
-};
 
 export const fetchWithdrawals = async (accessToken: any) => {
 try {
@@ -43,8 +29,8 @@ try {
 }
 
 
-const ListHistoryWalletModal: React.FC<ListHistoryWalletModalProps> = ({ closeModal, session  }) => {
-    const [withdrawList, setWithdrawList] = useState<WithdrawType[]>([]);
+const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
+    const [withdrawList, setWithdrawList] = useState<WithdrawDetails[]>([]);
 
     const [pageNumber, setPageNumber] = useState(0);
     const withdrawPerPage = 5;

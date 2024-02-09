@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Session } from 'next-auth';
 import Image from 'next/image';
 import { NextResponse } from 'next/server';
 
 import CircleLoader from 'react-spinners/CircleLoader';
+
+import { InfoProfileModalProps } from '@/lib/types/types';
 
 import { GrUpdate } from "react-icons/gr";
 import { FaPhone } from 'react-icons/fa';
@@ -12,15 +13,7 @@ import { RiBankCardFill } from "react-icons/ri";
 import { BiCheck } from "react-icons/bi";
 
 
-type InfoProfileModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
-  toggleSelectFrame: (value: boolean) => void;
-  formData: any;
-  updateFormData: (data: any) => void,
-};
-
-const InfoProfileModal: React.FC<InfoProfileModalProps> = ({closeModal, session, toggleSelectFrame, formData, updateFormData}) => {
+const InfoProfileModal: React.FC<InfoProfileModalProps & { formData: any }> = ({closeModal, session, toggleSelectFrame, formData, updateFormData}) => {
 
   const [loading, setLoading] = useState(false);
   const {frame, location, billing } = formData;

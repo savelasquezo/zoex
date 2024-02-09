@@ -1,23 +1,20 @@
 import React, { useState } from "react";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { NextResponse } from 'next/server';
-import { validatePassword } from "../../../utils/passwordValidation";
+import { validatePassword } from "@/utils/passwordValidation";
 
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
 import CircleLoader from 'react-spinners/CircleLoader';
 
+import { ModalFunction } from '@/lib/types/types';
+
 import {AiOutlineUser} from 'react-icons/ai'
 import {CiMail} from 'react-icons/ci'
 import {FiLock} from 'react-icons/fi'
-
-
-type RegisterModalProps = {
-  closeModal: () => void;
-};
   
-const RegisterModal: React.FC<RegisterModalProps> = ({ closeModal }) => {
+const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
     const searchParams = useSearchParams();
   
     const [loading, setLoading] = useState(false);

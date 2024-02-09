@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSession } from 'next-auth/react';
 
-import Auth from './components/page';
+import Auth from '@/components/auth/components/page';
 
 export default function Page() {
   const { data: session } = useSession();

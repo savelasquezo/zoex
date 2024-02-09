@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-
 import { getSession, signIn } from 'next-auth/react';
 import CircleLoader from 'react-spinners/CircleLoader';
-import 'react-phone-input-2/lib/style.css'
+
+import { ModalFunction } from '@/lib/types/types';
 
 import {CiMail} from 'react-icons/ci'
 import {FiLock} from 'react-icons/fi'
 
 
-type LoginModalProps = {
-    closeModal: () => void;
-  };
-  
-const LoginModal: React.FC<LoginModalProps> = ({ closeModal }) => {
+const LoginModal: React.FC<ModalFunction> = ({ closeModal }) => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

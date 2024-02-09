@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import CircleLoader from 'react-spinners/CircleLoader';
 import { NextResponse } from 'next/server';
+import CircleLoader from 'react-spinners/CircleLoader';
+
+import { ModalFunction } from '@/lib/types/types';
 
 import {CiMail} from 'react-icons/ci'
 
-type ForgotPasswordModalProps = {
-  closeModal: () => void;
-};
-
-
-const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ closeModal }) => {
+const ForgotPasswordModal: React.FC<ModalFunction> = ({ closeModal }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

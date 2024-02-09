@@ -1,35 +1,17 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useRouter } from 'next/navigation';
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 import Image from 'next/image';
 import CircleLoader from 'react-spinners/CircleLoader';
 
 import { getRandomTickets } from '@/utils/getRandomTickets'
+import { SessionModal, LotteryData } from '@/lib/types/types';
+
 import { LuRefreshCw } from "react-icons/lu";
 
-interface TicketsLotteryModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
 
-interface LotteryData {
-  id: number;
-  file: string;
-  lottery: string;
-  prize: number;
-  tickets: number;
-  price: number;
-  winner: null,
-  date_lottery: string;
-  sold: number;
-  date_results: string;
-  stream: null,
-  amount: number;
-}
-
-const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, session  }) => {
+const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');

@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
-import { Session } from 'next-auth';
+
+import { SessionModal, LotteryData } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
-
-
-interface ListHistoryLotteryModalProps {
-  closeModal: () => void;
-  session: Session | null | undefined;
-}
-
-type TicketType = {
-    lottery: string;
-    date_results: string;
-    winner: string;
-    stream: string;
-};
-
 
 export const fetchLotteryHistory = async () => {
     try {
@@ -39,14 +26,14 @@ export const fetchLotteryHistory = async () => {
     } catch (error) {
       return NextResponse.json({ error: 'There was an error with the network request' });
     }
-  }
+}
 
-const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ closeModal, session  }) => {
+const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
     const [pageNumber, setPageNumber] = useState(0);
     const HisotryPage = 5;
 
-    const [hisotryList, setHisotryList] = useState<TicketType[]>([]);
+    const [hisotryList, setHisotryList] = useState<LotteryData[]>([]);
     const pageCount = Math.ceil(hisotryList.length) / HisotryPage;
     const changePage = ({ selected }: { selected: number }) => {
         setPageNumber(selected);
@@ -86,7 +73,7 @@ const ListHistoryLotteryModal: React.FC<ListHistoryLotteryModalProps> = ({ close
                                     <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date_results}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.winner}</td>
                                     <td className="whitespace-nowrap px-6 py-2 flex justify-center">
-                                        <a href={obj.stream} target='blank' className='hover:text-blue-500 transition-colors duration-300'><FaLink /></a>
+                                        <a href={obj.stream ?? "#"} target='blank' className='hover:text-blue-500 transition-colors duration-300'><FaLink /></a>
                                     </td>
                                 </tr>
                             ))}

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Session } from 'next-auth';
 
-import InfoProfileModal from "./infoProfileModal";
-import SelectFrameModal from "./selectFrameModal";
+import InfoProfileModal from "@/components/profile/components/infoProfileModal";
+import SelectFrameModal from "@/components/profile/components/selectFrameModal";
 
 type ProfileModalProps = {
   closeModal: () => void;

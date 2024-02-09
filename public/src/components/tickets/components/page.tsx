@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import { Session } from 'next-auth';
 
-import ListTicketsLotteryModal from "./listTicketsLotteryModal";
-import ListTicketsGiveawayModal from "./listTicketsGiveawayModal";
+import ListTicketsLotteryModal from "@/components/tickets/components/listTicketsLotteryModal";
+import ListTicketsGiveawayModal from "@/components/tickets/components/listTicketsGiveawayModal";
 
-type TicketsModalProps = {
-  session: Session | null | undefined;
-  closeModal: () => void;
-};
+import { SessionModal } from '@/lib/types/types';
 
-const TicketsModal: React.FC<TicketsModalProps>  = ({closeModal, session }) => {
-
+const TicketsModal: React.FC<SessionModal>  = ({closeModal, session }) => {
   const [activeTab, setActiveTab] = useState('lottery-tickets');
-
   return (
     <div className="h-72 w-full">
       <div className='absolute top-4 inline-flex gap-x-1 w-full justify-start items-center z-0'>
@@ -32,5 +26,4 @@ const TicketsModal: React.FC<TicketsModalProps>  = ({closeModal, session }) => {
     </div>
   );
 };
-
 export default TicketsModal;

@@ -1,18 +1,10 @@
 import React, { useState } from "react";
-import { Session } from 'next-auth';
 import Image from 'next/image';
 
+import { SelectFrameModalProps } from '@/lib/types/types';
 
-type SelectFrameModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
-  toggleSelectFrame: (value: boolean) => void;
-  selectedFrame: any;
-  updateFormData: (data: any) => void,
-};
 
 const SelectFrameModal: React.FC<SelectFrameModalProps> = ({ closeModal, session, toggleSelectFrame, selectedFrame, updateFormData }) => {
-  const [selectFrame, setSelectFrame] = useState(false);
   const handleFrameClick = (i: number) => {
     toggleSelectFrame(false);
     if (session && session.user) {

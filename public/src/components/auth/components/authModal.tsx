@@ -4,11 +4,10 @@ import { NextResponse } from 'next/server';
 import Image from 'next/image';
 import CircleLoader from 'react-spinners/CircleLoader';
 
-type AuthModalProps = {
-  closeModal: () => void;
-};
+import { ModalFunction } from '@/lib/types/types';
+
   
-const AuthModal: React.FC<AuthModalProps> = ({ closeModal }) => {
+const AuthModal: React.FC<ModalFunction> = ({ closeModal }) => {
     const searchParams = useSearchParams();
     const [token, setToken] = useState('');
     const [uid, setUID] = useState('');

@@ -1,50 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Session } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { SessionModal, InfoType } from '@/lib/types/types';
 
 import {FacebookShareButton, FacebookIcon, TelegramShareButton, TelegramIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon,} from 'next-share';
 
-type ShareModalProps = {
-  closeModal: () => void;
-  session: Session | null | undefined;
-};
 
-type InfoType = {
-  hashtag: string;
-};
-
-export const fetchInfo = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/fetch-info/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Server responded with an error' });
-    }
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
-  }
-}
-
-const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
+const ShareModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
   const [info, setInfo] = useState<InfoType>();
 
   useEffect(() => {
-    fetchInfo()
-      .then((data: InfoType) => {
-        setInfo(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener datos iniciales de imagenSliders:', error);
-      });
+    const storedInfo = localStorage.getItem('infoData');
+    if (storedInfo) {
+      try {
+        const parsedInfo = JSON.parse(storedInfo);
+        setInfo(parsedInfo);
+      } catch (error) {
+        console.error('Error parsing stored info data:', error);
+      }
+    }
+    return () => {};
   }, []);
 
   const shareURL = `${process.env.NEXT_PUBLIC_APP_API_URL}/?singup=True&uuid=${session?.user?.uuid || ''}`
@@ -82,13 +55,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ closeModal, session  }) => {
           <WhatsappIcon size={32} round />
         </WhatsappShareButton>
       </div>
-      <p className='mt-12 text-[0.5rem] md:text-xs font-thin text-center text-white'>Genera ingresos de forma pasiva compartiendo el Link de referido con tus amigos, gana el 5% de todoas las recargas que realicen, puedes usar este saldo para jugar o retirarlo a tu cuenta bancaria</p>
+      <p className='mt-12 text-[0.5rem] md:text-xs font-thin text-center text-gray-300'>Genera ingresos de forma pasiva compartiendo el Link de referido con tus amigos, gana el {info?.referredPercent}% de todoas las recargas que realicen, puedes usar este saldo o retirarlo a tu cuenta bancaria</p>
       <div className='w-full h-18 mt-4 px-4 flex flex-col justify-center items-center'>
         <span onClick={handleCopyClick} className='w-4/5 h-12 bg-slate-950 text-gray-300 flex items-center justify-center rounded-lg cursor-copy'>{session?.user?.uuid || ''}</span>
         {copySuccess !== null && (<span className={`ml-2 p-2 h-6 uppercase text-xs font-semibold ${copySuccess ? 'text-green-500' : ''}`}>{copySuccess ? '¡Copiado al portapapeles!' : ''}</span>)}
       </div>
-      <p className='mt-6 text-[0.5rem] md:text-xs font-thin text-center text-white'>Usando tu link de registro tus amigos o seguidores 
-      recibiran un 50% de saldo en su primera recarga, disponible para jugar en cualquiera de nuestros sorteos, Aplican Terminos & condiciones</p>
+      <p className='mt-4 text-[0.5rem] md:text-xs font-thin text-center text-gray-300'>Usando tu link de registro tus amigos o seguidores 
+      recibiran un {info?.bonusPercent}% de saldo en su primera recarga, disponible para jugar en cualquiera de nuestros sorteos, Aplican Terminos & condiciones</p>
     </div>
   );
 };

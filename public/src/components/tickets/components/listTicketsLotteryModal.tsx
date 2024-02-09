@@ -1,27 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
+
+import { SessionModal, LotteryTicketDetails  } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
-
-type ListTicketsLotteryModalProps = {
-    session: Session | null | undefined;
-    closeModal: () => void;
-  };
-
-type LotteryTicketType = {
-    id:number;
-    ticket: string;
-    date: string;
-    voucher: string;
-    is_active: boolean;
-    lottery: number;
-    email: any;
-    uuid: string;
-  };
 
 export const fetchLotteryTickets = async (accessToken: any) => {
     try {
@@ -46,9 +31,9 @@ export const fetchLotteryTickets = async (accessToken: any) => {
 }
 
 
-const ListTicketsLotteryModal: React.FC<ListTicketsLotteryModalProps>  = ({closeModal, session }) => {
+const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }) => {
 
-    const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketType[]>([]);
+    const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketDetails[]>([]);
     
     const [pageNumber, setPageNumber] = useState(0);
     const ticketsPerPage = 5;

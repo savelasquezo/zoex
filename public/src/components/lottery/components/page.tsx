@@ -1,35 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { NextResponse } from 'next/server';
-import { Session } from 'next-auth';
-
 import { imageLoader } from '@/utils/imageConfig';
 
-import TicketsLotteryModal from "./ticketsLotteryModal";
-import ListTicketsLotteryModal from "./listTicketsModal";
-import ListHistoryLotteryModal from "./listHistoryModal";
+import TicketsLotteryModal from "@/components/lottery/components/ticketsLotteryModal";
+import ListTicketsLotteryModal from "@/components/lottery/components/listTicketsModal";
+import ListHistoryLotteryModal from "@/components/lottery/components/listHistoryModal";
+
+import { SessionInfo, LotteryData } from '@/lib/types/types';
 
 import {AiOutlineClose, AiOutlineShoppingCart} from 'react-icons/ai'
-
-interface LotteryModalProps {
-  session: Session | null | undefined;
-}
-interface LotteryData {
-  id: any;
-  file: string;
-  lottery: string;
-  prize: number;
-  tickets: number;
-  price: number;
-  winner: string | null | undefined;
-  date_lottery: string;
-  sold: number;
-  date_results: string;
-  stream: string | null | undefined;
-  amount: number;
-  is_active: boolean
-}
-
 
 export const fetchLottery = async () => {
   try {
@@ -51,8 +31,7 @@ export const fetchLottery = async () => {
 }
 
 
-
-const Lottery: React.FC<LotteryModalProps> = ({ session  }) => {
+const Lottery: React.FC<SessionInfo> = ({ session  }) => {
 
     const [lottery, setLottery] = useState<LotteryData>();
 
