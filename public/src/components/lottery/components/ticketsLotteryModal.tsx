@@ -92,11 +92,10 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
   }, [generateNewNumbers]);
 
   const [formData, setFormData] = useState({
-    email: session?.user?.email || '',
     ticket: '',
   });
 
-  const {ticket, email } = formData;
+  const {ticket} = formData;
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -158,7 +157,6 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
           'Authorization': `JWT ${session?.user?.accessToken}`,
         },
         body: JSON.stringify({    
-          email,
           ticket,
         }),
       });
@@ -283,7 +281,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
               <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
             </span>
             <div className='flex flex-col ml-1'>
-              <p className='text-gray-400 text-xs'>email: {email}</p>
+              <p className='text-gray-400 text-xs'>email: {session?.user.email}</p>
               <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
             </div>
           </div>
@@ -291,8 +289,7 @@ const TicketsLotteryModal: React.FC<TicketsLotteryModalProps> = ({ closeModal, s
               <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>
         </div>
-      ) : (
-        <p>...</p>
+      ) : (null
       )}
     </div>
   );

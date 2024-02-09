@@ -17,10 +17,13 @@ from .serializers import UserSerializer, WithdrawalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.core.models import Core
+from apps.core.functions import xlsxSave
 
-CONFIRMO = settings.CONFIRMO_KEY
-BOLD = settings.BOLD_SECRET_KEY
 APILAYER = settings.APILAYER_KEY
+CONFIRMO = settings.CONFIRMO_KEY
+BOLD_PUBLIC_KEY = settings.BOLD_PUBLIC_KEY
+BOLD_SECRET_KEY = settings.BOLD_SECRET_KEY
+
 
 @sync_to_async
 def AsyncUSD():
@@ -119,49 +122,30 @@ class fetchWithdrawals(generics.ListAPIView):
 class requestWithdraw(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
 
-        method = str(request.data.get('withdrawMethod', ''))
-        amount = int(request.data.get('withdrawAmount', 0))
-
+        user = request.user
+        amount = int(request.data.get('amount', 0))
+        method = user.billing
         data = {'method':method,'amount':amount}
         
-        account = request.user
-        if amount > account.balance or amount <= 0:
+        if amount > user.balance or amount <= 0:
             return Response({'detail': 'The requested amount is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            obj, created = Withdrawals.objects.update_or_create(account=account,state='pending', method=method)
+            obj, created = Withdrawals.objects.update_or_create(account=user,state='pending', method=method)
             obj.amount = amount if created else obj.amount + amount
             obj.method = method
             
-            currentBalance = account.balance
-            account.balance = currentBalance - amount
-            account.save()
+            currentBalance = user.balance
+            user.balance = currentBalance - amount
+            user.save()
 
-            newBalance = account.balance
+            newBalance = user.balance
 
             apiWithdraw = str(uuid.uuid4())[:8]
             obj.voucher = apiWithdraw
             obj.save()
 
-            file = os.path.join(settings.BASE_DIR, 'logs', 'workbook', f'{account.username}.xlsx')
-            try:
-                date = timezone.now().strftime("%Y-%m-%d %H:%M")
-                if not os.path.exists(file):
-                    WB = Workbook()
-                    WS = WB.active
-                    WS.append(["Tipo","Fecha","Volumen","Actual","Final","Voucher","Metodo"])
-                else:
-                    WB = load_workbook(file)
-                    WS = WB.active
-
-                data = [1, date, amount, currentBalance, newBalance, apiWithdraw, method]
-                WS.append(data)
-                WB.save(file)
-                
-            except Exception as e:
-                with open(os.path.join(settings.BASE_DIR, 'logs/workbook.log'), 'a') as f:
-                    f.write("WorkbookError: {}\n".format(str(e)))
-
+            xlsxSave(user.username, "Withdraw", -amount, currentBalance, newBalance, "", "", apiWithdraw, method)
             return Response({'apiWithdraw': apiWithdraw, 'newBalance': newBalance}, status=status.HTTP_200_OK)
 
         except Exception as e:
@@ -186,6 +170,18 @@ class refreshInvoices(generics.GenericAPIView):
                         obj.state = currentStatus
                         obj.save()
 
+
+            if list_invoices_bold.exists():
+                headers = {'Content-Type': 'application/json',
+                            'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
+                
+                for obj in list_invoices_crypto:
+                    response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
+                    currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
+                    if currentStatus == "APPROVED":
+                        obj.state = "done"
+                        obj.save()
+
             return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'detail': 'NotFound CryptoInvoices!'}, status=status.HTTP_404_NOT_FOUND)
@@ -201,29 +197,29 @@ class requestInvoice(generics.GenericAPIView):
         data = {'method':method,'amount':amount}
     
         try:
-            obj, created = Invoice.objects.update_or_create(account=request.user,state='pending', method=method, defaults=data)
+            obj, created = Invoice.objects.update_or_create(account=request.user,state='pending',method=method, defaults=data)
+            setting = Core.objects.get(default="ZoeXConfig")
             integritySignature = "N/A"
 
             if method == "crypto":
                 response = makeConfirmoInvoice(amount)
                 if response.status_code == 201:
                     apiInvoice = response.json().get('id')
+                    copAmmount = int(amount*setting.latestUSD)
                 
             if method == "bold":
-                setting = Core.objects.get(default="ZoeXConfig")
                 AsyncUSD()
-                
-                boldAmmount = int(amount*setting.latestUSD)
+                copAmmount = int(amount*setting.latestUSD)
                 apiInvoice = str(uuid.uuid4())[:12]
 
-                hash256 = "{}{}{}{}".format(apiInvoice,str(boldAmmount),"COP",BOLD)
+                hash256 = "{}{}{}{}".format(apiInvoice,str(copAmmount),"COP",BOLD_SECRET_KEY)
                 m = hashlib.sha256()
                 m.update(hash256.encode())
                 integritySignature = m.hexdigest()
 
             obj.voucher = apiInvoice
             obj.save()
-            return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature, 'boldAmmount': boldAmmount}, status=status.HTTP_200_OK)
+            return Response({'apiInvoice': apiInvoice, 'integritySignature': integritySignature, 'copAmmount': copAmmount}, status=status.HTTP_200_OK)
         
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")
@@ -242,7 +238,8 @@ class updateAccountInfo(generics.GenericAPIView):
             frame = str(request.data.get('frame', ''))
             location = str(request.data.get('location', ''))
             billing = str(request.data.get('billing', ''))
-            user = UserAccount.objects.get(email=self.request.user.email)
+
+            user = request.user
 
             user.frame = frame
             user.location = location

@@ -13,6 +13,7 @@ from .models import Lottery, TicketsLottery
 from .serializers import LotterySerializer, TicketsLotterySerializer
 
 from apps.user.models import UserAccount
+from apps.core.functions import xlsxSave
 
 
 class fetchLottery(generics.GenericAPIView):
@@ -44,32 +45,37 @@ class requestTicketLottery(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-
-        email = request.data.get('email', '')
-        ticket = request.data.get('ticket', '')
-        apiVoucher = str(uuid.uuid4())[:8]
-
-        user = UserAccount.objects.get(email=email)
-
-        data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
-
         try:
+            user = request.user
+            ticket = request.data.get('ticket', '')
+            apiVoucher = str(uuid.uuid4())[:8]
+            data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
+            
             lottery = Lottery.objects.get(is_active=True)
             if TicketsLottery.objects.filter(lottery=lottery,ticket=ticket).first() is not None:
                 return Response({'error': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if user.balance < lottery.price and user.credits < lottery.price:
+            ticket_price = lottery.price
+            if user.balance < ticket_price and user.credits < ticket_price:
                 return Response({'error': 'The balance/credits are insufficient!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            elif user.credits >= lottery.price:
-                user.credits -= lottery.price
+            elif user.credits >= ticket_price:
+                currentCredits = user.credits
+                user.credits -= ticket_price
                 user.save()
 
-            elif user.balance >= lottery.price:
-                user.balance -= lottery.price
+                newCredits = user.credits
+                xlsxSave(user.username, "Buy", ticket_price, "", "", currentCredits, newCredits, apiVoucher, "Lottery")
+
+            elif user.balance >= ticket_price:
+                currentBalance = user.balance
+                user.balance -= ticket_price
                 user.save()
+
+                newBalance = user.balance
+                xlsxSave(user.username, "Buy", ticket_price, currentBalance, newBalance, "", "", apiVoucher, "Lottery")
             
-            obj = TicketsLottery.objects.create(lottery=lottery,**data) 
+            obj = TicketsLottery.objects.create(lottery=lottery,**data)
             return Response({'apiVoucher': apiVoucher}, status=status.HTTP_200_OK)
         
         except Exception as e:

@@ -93,9 +93,9 @@ const InfoProfileModal: React.FC<InfoProfileModalProps> = ({closeModal, session,
         <span className='flex flex-row items-center justify-start gap-x-2 mb-4 text-sm text-gray-300'><FaPhone/> {session?.user.phone}</span>
         <div className="flex flex-col w-full">
           <div className="flex flex-col w-full gap-y-0 p-0 m-0">
+            <input type="hidden" name="frame" value={frame ?? session?.user.frame} />
             <div className="relative w-full flex items-center min-w-[200px]">
               <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><MdLocationCity/></div>
-              <input type="hidden" name="frame" value={frame ?? session?.user.frame} />
               <input className="w-full indent-8 text-gray-200 rounded-sm border border-gray-700 border-b-0 bg-transparent px-3 py-3 !pr-9 text-[0.7rem] outline outline-0 transition-all focus:outline-0 disabled:border-0 lg:text-xs"
                   type="text"
                   name="location"

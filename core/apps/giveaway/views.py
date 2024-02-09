@@ -12,6 +12,7 @@ from .models import Giveaway, TicketsGiveaway
 from .serializers import GiveawaySerializer, TicketsGiveawaySerializer
 
 from apps.user.models import UserAccount
+from apps.core.functions import xlsxSave
 
 class fetchGiveaway(generics.ListAPIView):
     """
@@ -54,33 +55,36 @@ class requestTicketGiveaway(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        email = request.data.get('email', '')
-        ticket = request.data.get('ticket', '')
-        giveawayID = request.data.get('giveawayId', '')
-        apiVoucher = str(uuid.uuid4())[:8]
-
-        user = UserAccount.objects.get(email=email)
-
-        data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
-
-
         try:
-            
+            user = request.user
+            ticket = request.data.get('ticket', '')
+            giveawayID = request.data.get('giveawayId', '')
+            apiVoucher = str(uuid.uuid4())[:8]
+            data = {'email':user, 'ticket':ticket, 'voucher':apiVoucher}
+
             giveaway = Giveaway.objects.get(id=giveawayID)
             if TicketsGiveaway.objects.filter(giveaway=giveaway,ticket=ticket).first() is not None:
                 return Response({'error': 'The ticket has already been purchased!'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if user.balance < giveaway.price and user.credits < giveaway.price:
+            ticket_price = giveaway.price
+            if user.balance < ticket_price and user.credits < ticket_price:
                 return Response({'error': 'The balance/credits are insufficient!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            
-            elif user.credits >= giveaway.price:
-                user.credits -= giveaway.price
+            elif user.credits >= ticket_price:
+                currentCredits = user.credits
+                user.credits -= ticket_price
                 user.save()
 
-            elif user.balance >= giveaway.price:
-                user.balance -= giveaway.price
+                newCredits = user.credits
+                xlsxSave(user.username, "Buy", ticket_price, "", "", currentCredits, newCredits, apiVoucher, "Giveaway")
+
+            elif user.balance >= ticket_price:
+                currentBalance = user.balance
+                user.balance -= ticket_price
                 user.save()
+
+                newBalance = user.balance
+                xlsxSave(user.username, "Buy", ticket_price, currentBalance, newBalance, "", "", apiVoucher, "Giveaway")
 
             obj = TicketsGiveaway.objects.create(giveaway=giveaway,**data) 
             return Response({'apiVoucher': apiVoucher}, status=status.HTTP_200_OK)

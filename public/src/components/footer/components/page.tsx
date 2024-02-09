@@ -47,43 +47,41 @@ const Footer: React.FC<FooterProps> = ({ session  }) => {
     };
 
     return (
-        <main className="fixed bottom-0 w-full h-14 bg-gray-900 z-10">
-            <div className="w-full h-full flex flex-row items-center px-4 py-1">
-                <span onClick={() => openModal('history')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<FaUser />} Text="Perfil"/></span>
-                <span onClick={() => openModal('tickets')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoTicket />} Text="Tickets"/></span>
-                <div className="w-1/5 relative flex justify-center cursor-pointer">
-                    <button onClick={() => openModal('wallet')} className="absolute -top-12 rounded-full px-2 py-1 bg-white h-16 w-16 border-4 border-gray-900 bg-gradient-to-b from-yellow-400 to-red-800">
-                        <Image width={150} height={150} src={"/assets/animations/animatedWallet.gif"} priority={false} className="scale-150" alt="" />
-                    </button>
-                </div>
-                <span onClick={() => openModal('share')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<HiShare />} Text="Compartir"/></span>
-                <span onClick={() => openModal('support')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoMdHelp />} Text="Soporte"/></span>
+      <main className="fixed bottom-0 w-full h-14 bg-gray-900 z-10">
+        <div className="w-full h-full flex flex-row items-center px-4 py-1">
+            <span onClick={() => openModal('history')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<FaUser />} Text="Perfil"/></span>
+            <span onClick={() => openModal('tickets')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoTicket />} Text="Tickets"/></span>
+            <div className="w-1/5 relative flex justify-center cursor-pointer">
+                <button onClick={() => openModal('wallet')} className="absolute -top-12 rounded-full px-2 py-1 bg-white h-16 w-16 border-4 border-gray-900 bg-gradient-to-b from-yellow-400 to-red-800">
+                    <Image width={150} height={150} src={"/assets/animations/animatedWallet.gif"} priority={false} className="scale-150" alt="" />
+                </button>
             </div>
-            {showModal && (
-            <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-4/5 sm:3/5 md:w-1/2 bg-gray-800 rounded-lg p-6">
-                  <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
-                  <div>
-                    <div className={`h-full my-4 ${activeTab === 'history' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                      <ProfileModal />
-                    </div>
-                    <div className={`h-full my-4 ${activeTab === 'tickets' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                      <TicketsModal />
-                    </div>
-                    <div className={`h-full my-4 ${activeTab === 'wallet' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                      <AccountWallet />
-                    </div>
-                    <div className={`h-full my-4 ${activeTab === 'share' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                      <ShareModal />
-                    </div>
-                    <div className={`h-full my-4 ${activeTab === 'support' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
-                      <SupportModal />
-                    </div>
-                  </div>
+            <span onClick={() => openModal('share')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<HiShare />} Text="Compartir"/></span>
+            <span onClick={() => openModal('support')} className="w-1/5 group relative flex flex-col items-center justify-center text-white cursor-pointer"><Tooltip Icon={<IoMdHelp />} Text="Soporte"/></span>
+        </div>
+        {showModal && (
+        <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
+            <div className={`relative w-4/5 sm:3/5 md:w-2/5 bg-gray-800 rounded-lg p-6`}>
+              <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
+                <div className={`h-full my-4 ${activeTab === 'history' ? 'block' : 'hidden'}`}>
+                  <ProfileModal />
                 </div>
-              </div>
-          )}
-        </main>
+                <div className={`h-full my-4 ${activeTab === 'tickets' ? 'block' : 'hidden'}`}>
+                  <TicketsModal />
+                </div>
+                <div className={`h-full my-4 ${activeTab === 'wallet' ? 'block' : 'hidden'}`}>
+                  <AccountWallet />
+                </div>
+                <div className={`h-full my-4 ${activeTab === 'share' ? 'block' : 'hidden'}`}>
+                  <ShareModal />
+                </div>
+                <div className={`h-full my-4 ${activeTab === 'support' ? 'block' : 'hidden'}`}>
+                  <SupportModal />
+                </div>
+            </div>
+          </div>
+        )}
+      </main>
     );
 };
 
