@@ -12,6 +12,7 @@ const LoginModal: React.FC<ModalFunction> = ({ closeModal }) => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    
     const [formData, setFormData] = useState({
         email: '',
         password: '',
