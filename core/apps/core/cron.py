@@ -25,10 +25,6 @@ class UpdateCurrency(CronJobBase):
 
     def do(self):
         setting = Core.objects.get(default="ZoeXConfig")
-        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-        with open(os.path.join(settings.BASE_DIR, 'logs/logcron.txt'), 'a') as f:
-            f.write("ServiceCron Active {}\n".format(eDate))
-            
         try:
             url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
             response = requests.get(url)
@@ -39,6 +35,7 @@ class UpdateCurrency(CronJobBase):
                 setting.save()
 
         except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/cron.log'), 'a') as f:
                 f.write("CronBTC {} --> Error: {}\n".format(eDate, str(e)))
 
@@ -55,5 +52,6 @@ class UpdateCurrency(CronJobBase):
                 setting.save()
 
         except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/cron.log'), 'a') as f:
                 f.write("CronUSD {} --> Error: {}\n".format(eDate, str(e)))     

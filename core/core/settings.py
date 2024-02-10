@@ -222,7 +222,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATICFILES_DIRS = [BASE_DIR/"static"]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static/")]
 
 # Media files (video, text, Images)
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
@@ -291,6 +291,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+
 if not DEBUG:
 
     #SECURE_SSL_REDIRECT = True
@@ -304,9 +305,12 @@ if not DEBUG:
 
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = 'smtp.hostinger.com'
-    EMAIL_HOST_USER = 'noreply@zoexbet.com'
+    EMAIL_HOST_USER = 'noreply'
+    DEFAULT_FROM_EMAIL = 'noreply@zoexbet.com'
+    SERVER_EMAIL = 'noreply@zoexbet.com'
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
     EMAIL_USE_SSL = True
     EMAIL_PORT = 465
+    
 
 

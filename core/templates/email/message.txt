@@ -1,0 +1,8 @@
+{% autoescape off %}
+Mensaje Enviado: {{ send }}
+
+{{ message }}
+
+Servicio de Mensajeria Zoexbet noreply@zoexbet.com 
+Favor no responder este mensaje
+{% endautoescape %}
