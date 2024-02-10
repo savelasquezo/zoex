@@ -240,8 +240,8 @@ REST_FRAMEWORK = {
    ),
 }
 
-LOGIN_REDIRECT_URL = "localhost:3000"
-LOGOUT_REDIRECT_URL = "zoexbet.com"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS =(
