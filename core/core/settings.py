@@ -302,14 +302,14 @@ if not DEBUG:
     MEDIA_ROOT = '/var/www/zoex/media/'
     MEDIA_URL = '/media/'
 
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = 'smtp.hostinger.com'
-    EMAIL_HOST_USER = 'noreply'
-    DEFAULT_FROM_EMAIL = 'noreply@zoexbet.com'
-    SERVER_EMAIL = 'noreply@zoexbet.com'
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-    EMAIL_USE_SSL = True
-    EMAIL_PORT = 465
+    #EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    #EMAIL_HOST = 'smtp.hostinger.com'
+    #EMAIL_HOST_USER = 'noreply'
+    #DEFAULT_FROM_EMAIL = 'noreply@zoexbet.com'
+    #SERVER_EMAIL = 'noreply@zoexbet.com'
+    #EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    #EMAIL_USE_SSL = True
+    #EMAIL_PORT = 465
 
     
 
