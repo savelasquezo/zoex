@@ -12,6 +12,7 @@ const BoldButton = ({ invoice, amount, integritySignature }) => {
       script.setAttribute('data-amount', amount);
       script.setAttribute('data-api-key', `${process.env.NEXT_PUBLIC_BOLD_PUBLIC_KEY}`);
       script.setAttribute('data-integrity-signature', integritySignature);
+      script.setAttribute('data-notification-url', 'https://zoexbet.com/app/user/notify-invoice-bold/');
       script.setAttribute('data-redirection-url', 'https://zoexbet.com');
       const container = document.getElementById('button');
       container?.insertAdjacentElement('afterend', script);

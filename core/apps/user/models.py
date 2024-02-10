@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 def LogoUploadTo(instance, filename):
     return f"uploads/{instance.username}/logo/{filename}"
 
-states = (('pending','Pendiente'),('done','Aprobado'),('expired','Expirado'),('error','Error'))
+states = (('pending','Pendiente'),('done','Aprobado'),('error','Error'))
 methods = (('crypto','Cryptomonedas'),('bold','Bold'))
 
 class UserAccountManager(BaseUserManager):

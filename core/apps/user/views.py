@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .models import Invoice, Withdrawals
-from .serializers import UserSerializer, WithdrawalSerializer
+from .serializers import UserSerializer, InvoiceSerializer, WithdrawalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.core.models import Core
@@ -33,9 +33,9 @@ def makeConfirmoInvoice(amount):
         "currency": "USD"
     },
     "notifyEmail": "noreply@zoexbet.com",
-    "notifyUrl": "https://zoexbet.com/",
+    "notifyUrl": "https://zoexbet.com/app/user/notify-invoice-confirmo/",
     "returnUrl": "https://zoexbet.com/",
-    "reference": "anything"
+    "reference": "Zoexbet"
     }
 
     headers = {
@@ -138,8 +138,8 @@ class refreshInvoices(generics.GenericAPIView):
                 for obj in list_invoices_crypto:
                     response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
                     currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
-                    if currentStatus == "done":
-                        obj.state = currentStatus
+                    if currentStatus == "paid":
+                        obj.state = "done"
                         obj.save()
 
 
@@ -206,15 +206,15 @@ class updateAccountInfo(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
+            user = request.user
+
             frame = str(request.data.get('frame', ''))
             location = str(request.data.get('location', ''))
             billing = str(request.data.get('billing', ''))
 
-            user = request.user
-
-            user.frame = frame
-            user.location = location
-            user.billing = billing
+            user.frame = frame if frame != "" else user.frame
+            user.location = location if location !="" else user.location
+            user.billing = billing if billing !="" else user.billing
             user.save()
 
             serializer = UserSerializer(user)
@@ -227,4 +227,76 @@ class updateAccountInfo(generics.GenericAPIView):
             return Response({'error': 'NotFound Account.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-        
+
+class notifyInvoiceConfirmo(generics.GenericAPIView):
+
+    serializer_class = InvoiceSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        try:
+
+            payment_status = str(request.data.get('status', ''))
+            reference_id = str(request.data.get('id', ''))
+
+            invoice = Invoice.objects.get(voucher=reference_id)
+
+            if invoice.method != "crypto":
+                return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)
+
+            if payment_status == "error" or payment_status == "expired":
+                invoice.state = "error"
+                invoice.save()
+
+            if payment_status == "paid":
+                headers = {'Content-Type': 'application/json',
+                            'Authorization': f'Bearer {CONFIRMO}'}
+                response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{reference_id}', headers=headers)
+                currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
+                if currentStatus == "paid":
+                    invoice.state = "done"
+                    invoice.save()
+
+            return Response({'detail': 'Invoice state has been update!'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("notifyInvoiceBold {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class notifyInvoiceBold(generics.GenericAPIView):
+
+    serializer_class = InvoiceSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            payment_status = str(request.data.get('payment_status', ''))
+            reference_id = str(request.data.get('reference_id', ''))
+
+            invoice = Invoice.objects.get(voucher=reference_id)
+            if invoice.method != "bold":
+                return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)
+
+            if payment_status == "FAILED" or payment_status == "REJECTED":
+                invoice.state = "error"
+                invoice.save()
+
+            if payment_status == "APPROVED":
+                headers = {'Content-Type': 'application/json',
+                            'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
+                response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{reference_id}', headers=headers)
+                currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
+                if currentStatus == "APPROVED":
+                    invoice.state = "done"
+                    invoice.save()
+
+            return Response({'detail': 'Invoices state has been update!'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("notifyInvoiceBold {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)

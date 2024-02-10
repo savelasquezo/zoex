@@ -7,4 +7,6 @@ urlpatterns = [
     path('request-invoice/', view.requestInvoice.as_view(), name='request-invoice'),
     path('refresh-invoices/', view.refreshInvoices.as_view(), name='refresh-invoices'),
     path('update-account-info/', view.updateAccountInfo.as_view(), name='update-account-info'),
+    path('notify-invoice-confirmo/', view.notifyInvoiceConfirmo.as_view(), name='notify-invoice-confirmo'),
+    path('notify-invoice-bold/', view.notifyInvoiceBold.as_view(), name='notify-invoice-bold'),
 ]

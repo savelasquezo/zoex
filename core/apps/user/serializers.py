@@ -3,7 +3,8 @@ from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-import apps.user.models as models
+from apps.user.models import UserAccount, Invoice, Withdrawals
+
 User = get_user_model()
 
 class UserSerializer(UserCreateSerializer):
@@ -11,10 +12,15 @@ class UserSerializer(UserCreateSerializer):
         model = User
         fields = ["id","uuid","email","username","phone","balance","credits","location","billing","frame"]
 
+class InvoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invoice
+        fields = '__all__'
+
 class WithdrawalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Withdrawals
-        fields = ["id","amount","date","voucher","state"]
+        model = Withdrawals
+        fields = '__all__'
 
 class CustomPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):
     def build_password_reset_confirm_url(self, uid, token):
