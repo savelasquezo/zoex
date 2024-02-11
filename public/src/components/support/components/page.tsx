@@ -76,7 +76,7 @@ const SupportModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
   return (
     <div>
       <div className='absolute top-4 inline-flex gap-x-2 w-full justify-start items-center z-0'>
-        <span className="bg-red-700 text-white text-xs uppercase font-semibold py-1 px-2 rounded transition-colors duration-300">Contacto</span>
+        <span className="bg-pink-700 text-white text-xs uppercase font-semibold py-1 px-2 rounded-sm transition-colors duration-300">Contacto</span>
         <Link href={`https://wa.me/${info?.phone}`} target="_blank" rel="noopener noreferrer">
             <button className='bg-whatsapp-default hover:bg-whatsapp-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><AiOutlineWhatsApp/></button>
         </Link>

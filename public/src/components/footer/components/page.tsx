@@ -93,7 +93,7 @@ const Footer: React.FC<SessionInfo> = ({ session  }) => {
         </div>
         {showModal && (
         <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-            <div className={`relative w-4/5 sm:3/5 md:w-2/5 bg-gray-800 rounded-lg p-6`}>
+            <div className={`relative w-4/5 sm:3/5 md:w-2/5 bg-gray-800 rounded-lg p-6 pb-2`}>
               <button onClick={closeModal} className='absolute z-10 top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                 <div className={`h-full my-4 ${activeTab === 'history' ? 'block' : 'hidden'}`}>
                   <ProfileModal />

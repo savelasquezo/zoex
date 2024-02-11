@@ -76,7 +76,7 @@ class requestTicketGiveaway(generics.GenericAPIView):
                 user.save()
 
                 newCredits = user.credits
-                xlsxSave(user.username, "Buy", ticket_price, "", "", currentCredits, newCredits, apiVoucher, "Giveaway")
+                xlsxSave(user.username, "Buy", ticket_price, 0, 0, currentCredits, newCredits, apiVoucher, "Giveaway")
 
             elif user.balance >= ticket_price:
                 currentBalance = user.balance
@@ -84,7 +84,7 @@ class requestTicketGiveaway(generics.GenericAPIView):
                 user.save()
 
                 newBalance = user.balance
-                xlsxSave(user.username, "Buy", ticket_price, currentBalance, newBalance, "", "", apiVoucher, "Giveaway")
+                xlsxSave(user.username, "Buy", ticket_price, currentBalance, newBalance, 0, 0, apiVoucher, "Giveaway")
 
             obj = TicketsGiveaway.objects.create(giveaway=giveaway,**data) 
             return Response({'apiVoucher': apiVoucher}, status=status.HTTP_200_OK)
@@ -130,7 +130,7 @@ class fetchAllTicketsGiveaway(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user = UserAccount.objects.get(email=self.request.user.email)
-        return TicketsGiveaway.objects.filter(email=user)
+        return TicketsGiveaway.objects.filter(email=user).order_by("-id")
 
     def get(self, request, *args, **kwargs):
         try:

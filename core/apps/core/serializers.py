@@ -18,3 +18,5 @@ class ImagenSliderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ImagenSlider
         fields = '__all__'
+
+

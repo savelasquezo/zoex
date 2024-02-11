@@ -96,7 +96,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                         marginPagesDisplayed={0}
                         pageRangeDisplayed={5}
                         onPageChange={changePage}
-                        className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                        className={'absolute -bottom-1 w-full flex flex-row items-center justify-center gap-x-2'}
                         pageClassName={'bg-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}

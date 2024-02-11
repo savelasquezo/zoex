@@ -8,12 +8,12 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 
-from .models import Invoice, Withdrawals
-from .serializers import UserSerializer, InvoiceSerializer, WithdrawalSerializer
+from .models import UserAccount, Invoice, Withdrawals, Fee
+from .serializers import UserSerializer, InvoiceSerializer, WithdrawalSerializer, FeeSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.core.models import Core
-from apps.core.functions import xlsxSave
+from apps.core.functions import xlsxSave, xlsxData
 
 CONFIRMO = settings.CONFIRMO_KEY
 BOLD_PUBLIC_KEY = settings.BOLD_PUBLIC_KEY
@@ -76,19 +76,56 @@ def makeBoldInvoice(amount):
 
 
 class fetchWithdrawals(generics.ListAPIView):
+
     serializer_class = WithdrawalSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Withdrawals.objects.filter(account=self.request.user)
+        return Withdrawals.objects.filter(account=self.request.user).order_by("-id")
 
-    def list(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if queryset:
             serialized_data = self.serializer_class(queryset, many=True).data
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
-            return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'NotFound Withdrawals.'}, status=status.HTTP_404_NOT_FOUND)
 
+class fetchInvoices(generics.ListAPIView):
+
+    serializer_class = InvoiceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Invoice.objects.filter(account=self.request.user).order_by("-id")
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if queryset:
+            serialized_data = self.serializer_class(queryset, many=True).data
+            return Response(serialized_data, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'NotFound Invoices.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class fetchInvoiceRefered(generics.ListAPIView):
+    serializer_class = FeeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, account):
+        return Fee.objects.filter(account=account).order_by("-id")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = self.get_queryset(request.user)
+            serialized_data = self.serializer_class(queryset, many=True).data
+            return Response(serialized_data)
+        
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("fetchInvoiceRefered {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'detail': 'NotFound Account.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class requestWithdraw(generics.GenericAPIView):
@@ -97,7 +134,6 @@ class requestWithdraw(generics.GenericAPIView):
         user = request.user
         amount = int(request.data.get('amount', 0))
         method = user.billing
-        data = {'method':method,'amount':amount}
         
         if amount > user.balance or amount <= 0:
             return Response({'detail': 'The requested amount is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
@@ -117,7 +153,7 @@ class requestWithdraw(generics.GenericAPIView):
             obj.voucher = apiWithdraw
             obj.save()
 
-            xlsxSave(user.username, "Withdraw", -amount, currentBalance, newBalance, "", "", apiWithdraw, method)
+            xlsxSave(user.username, "Withdraw", -amount, currentBalance, newBalance, 0, 0, apiWithdraw, method)
             return Response({'apiWithdraw': apiWithdraw, 'newBalance': newBalance}, status=status.HTTP_200_OK)
 
         except Exception as e:
@@ -161,6 +197,7 @@ class refreshInvoices(generics.GenericAPIView):
 
 
 class requestInvoice(generics.GenericAPIView):
+
     def post(self, request, *args, **kwargs):
 
         method = str(request.data.get('method', ''))
@@ -169,7 +206,7 @@ class requestInvoice(generics.GenericAPIView):
         data = {'method':method,'amount':amount}
     
         try:
-            obj, created = Invoice.objects.update_or_create(account=request.user,state='pending',method=method, defaults=data)
+            obj = Invoice.objects.create(account=request.user,state='pending', defaults=data)
             setting = Core.objects.get(default="ZoeXConfig")
             integritySignature = "N/A"
 

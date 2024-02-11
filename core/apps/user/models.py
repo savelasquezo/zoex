@@ -112,3 +112,19 @@ class Invoice(models.Model):
         verbose_name = _("Recarga")
         verbose_name_plural = _("Recargas")
 
+
+
+class Fee(models.Model):
+    account = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    username = models.CharField(_("Usuario"),max_length=64)
+    fee = models.FloatField(_("Valor"), null=True, blank=True, help_text="Comisión $USD") 
+    date = models.DateField(_("Fecha"), default=timezone.now)
+
+    def __str__(self):
+        return f"{self.id}"
+
+    class Meta:
+        indexes = [models.Index(fields=['account']),]
+        verbose_name = _("Comicion")
+        verbose_name_plural = _("Comiciones")

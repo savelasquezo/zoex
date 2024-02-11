@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
-from .models import UserAccount, Invoice
+from .models import UserAccount, Invoice, Fee
 
 from apps.core.models import Core
 from apps.core.functions import xlsxSave
@@ -14,7 +14,7 @@ from apps.core.functions import xlsxSave
 def updateBalance(sender, instance, **kwargs):
     if instance.state == "done" and not kwargs.get('created', False):
         try:
-            coreSettings = Core.objects.first()
+            coreSettings = Core.objects.get(default="ZoeXConfig")
             account = instance.account
 
             currentBalance = account.balance
@@ -34,14 +34,14 @@ def updateBalance(sender, instance, **kwargs):
                 referred.save()
 
                 newRefered= referred.balance
-
-                xlsxSave(referred.username, "Fees", refFee, refBalance, newRefered, "", "", instance.voucher, instance.method)
+                Fee.objects.create(account=referred,invoice=instance,username=account.username,fee=refFee)
+                xlsxSave(referred.username, "Fees", refFee, refBalance, newRefered, 0, 0, instance.voucher, instance.method)
 
             account.balance = currentBalance + instance.amount
             account.save()
 
             newBalance = account.balance
-            xlsxSave(account.username, "TopUP", instance.amount, currentBalance, newBalance, "", "", instance.voucher, instance.method)
+            xlsxSave(account.username, "TopUP", instance.amount, currentBalance, newBalance, 0, 0, instance.voucher, instance.method)
 
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")

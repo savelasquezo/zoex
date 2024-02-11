@@ -33,7 +33,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
     const [withdrawList, setWithdrawList] = useState<WithdrawDetails[]>([]);
 
     const [pageNumber, setPageNumber] = useState(0);
-    const withdrawPerPage = 5;
+    const withdrawPerPage = 3;
 
     const pageCount = Math.ceil(withdrawList.length/ withdrawPerPage);
     const changePage = ({ selected }: { selected: number }) => {
@@ -89,7 +89,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
                         marginPagesDisplayed={0}
                         pageRangeDisplayed={5}
                         onPageChange={changePage}
-                        className={'absolute bottom-5 w-full flex flex-row items-center justify-center gap-x-2'}
+                        className={'absolute -bottom-1 w-full flex flex-row items-center justify-center gap-x-2'}
                         pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}

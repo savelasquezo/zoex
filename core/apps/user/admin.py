@@ -4,6 +4,25 @@ from django.conf.locale.es import formats as es_formats
 
 import apps.user.models as models
 
+
+class FeesInline(admin.StackedInline):
+    
+    model = models.Fee
+    extra = 0
+
+    fieldsets = (
+        (" ", {"fields": (
+            ('invoice','username'),
+            ('date','fee'),
+                )
+            }
+        ),
+    )
+
+    readonly_fields = ('invoice','username','date','fee')
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class WithdrawalsInline(admin.StackedInline):
     
     model = models.Withdrawals
@@ -124,7 +143,7 @@ class UserAccountAdmin(BaseUserAdmin):
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
-        self.inlines = [WithdrawalsInline, InvoiceInline]
+        self.inlines = [WithdrawalsInline, InvoiceInline,FeesInline]
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None):

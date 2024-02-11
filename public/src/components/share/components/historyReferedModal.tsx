@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
 
-import { SessionModal, LotteryTicketDetails  } from '@/lib/types/types';
+import { SessionModal, FeesReferedInfo  } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { GoAlertFill } from "react-icons/go";
 import { FaCheckCircle } from "react-icons/fa";
 
-export const fetchLotteryTickets = async (accessToken: any) => {
+export const fetchInvoicesRefered = async (accessToken: any) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/fetch-all-lottery-tickets/`,
+            `${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/fetch-invoice-refered/`,
             {
                 method: 'GET',
                 headers: {
@@ -31,20 +31,20 @@ export const fetchLotteryTickets = async (accessToken: any) => {
 }
 
 
-const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }) => {
+const HistoryReferedModal: React.FC<SessionModal>  = ({closeModal, session }) => {
 
-    const [lotteryTickets, setLotteryTickets] = useState<LotteryTicketDetails[]>([]);
+    const [feesRefered, setFeesRefered] = useState<FeesReferedInfo[]>([]);
     
     const [pageNumber, setPageNumber] = useState(0);
-    const ticketsPerPage = 5;
+    const itemsPerPage = 3;
   
   
     useEffect(() => {
       if (session) {
         const accessToken = session.user.accessToken;
-        fetchLotteryTickets(accessToken)
+        fetchInvoicesRefered(accessToken)
         .then((data) => {
-            setLotteryTickets(data);
+          setFeesRefered(data);
         })
         .catch((error) => {
         console.error('Error getting information about tickets!', error);
@@ -52,7 +52,7 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
       }
     }, [session]);
   
-    const pageCount = Math.ceil(lotteryTickets.length/ticketsPerPage);
+    const pageCount = Math.ceil(feesRefered.length/itemsPerPage);
   
     const changePage = ({ selected }: { selected: number }) => {
       setPageNumber(selected);
@@ -60,30 +60,24 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
   
     return (
       <div className="relative h-full w-full text-gray-500">
-        {lotteryTickets? (
-          lotteryTickets.length > 0 ? (
+        {feesRefered? (
+          feesRefered.length > 0 ? (
             <div>
               <ul>
                 <table className="min-w-full text-center text-sm font-light">
                   <thead className="font-medium text-white">
                     <tr className="border-b border-slate-900 uppercase text-xs">
-                      <th scope="col" className=" px-6 py-2">Ticket</th>
-                      <th scope="col" className=" px-6 py-2">Loteria</th>
-                      <th scope="col" className=" px-6 py-2 hidden lg:table-cell">PIN</th>
-                      <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
-                      <th scope="col" className=" px-6 py-2"></th>
+                      <th scope="col" className=" px-6 py-2">Usuario</th>
+                      <th scope="col" className=" px-6 py-2">Comicion</th>
+                      <th scope="col" className=" px-6 py-2">Fecha</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {lotteryTickets?.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((obj: any, index: number) => (
-                      <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white justify-center">
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">{obj.ticket}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 font-Courier font-semibold">{obj.uuid}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
-                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
-                            {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
-                        </td>
+                    {feesRefered?.slice(pageNumber * itemsPerPage, (pageNumber + 1) * itemsPerPage).map((obj: any, i: number) => (
+                      <tr key={i} className="border-b border-slate-700 uppercase text-xs text-white justify-center">
+                        <td className="text-center align-middle whitespace-nowrap py-2 px-4 lowercase">{obj.username}</td>
+                        <td className="text-center align-middle whitespace-nowrap py-2 px-4">${obj.fee}</td>
+                        <td className="text-center align-middle whitespace-nowrap py-2 px-4">{obj.date}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -107,8 +101,8 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
           ) : (
             <div className='w-full h-full flex flex-col justify-start items-center'>
               <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                <p>¡Aun No has adquirido ningun ticket para esta Loteria!</p>
-                <p>Adquierlo ahora y participa en el siguiente Sorteo</p>
+                <p>¡Aún no has recibido comisiones de referidos de plataforma!</p>
+                <p>comparte ahora tu link y genera comisiones de forma pasiva</p>
               </span>
             </div>
           )) : ( null
@@ -117,5 +111,5 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
     );
   };
   
-  export default ListTicketsLotteryModal;
+  export default HistoryReferedModal;
   

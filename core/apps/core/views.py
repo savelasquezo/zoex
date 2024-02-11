@@ -9,10 +9,11 @@ from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from . import models, serializers
+from . import models
+from apps.core.serializers import CoreSerializer, ImagenSliderSerializer
 
 class fetchInfo(generics.GenericAPIView):
-    serializer_class = serializers.CoreSerializer
+    serializer_class = CoreSerializer
     def get(self, request, *args, **kwargs):
         try:
             queryset = models.Core.objects.get(default="ZoeXConfig")
@@ -24,7 +25,7 @@ class fetchInfo(generics.GenericAPIView):
 
 class fetchImagesSlider(generics.ListAPIView):
     queryset = models.ImagenSlider.objects.all()
-    serializer_class = serializers.ImagenSliderSerializer
+    serializer_class = ImagenSliderSerializer
 
     def get(self, request, *args, **kwargs):
         try:
