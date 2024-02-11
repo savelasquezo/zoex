@@ -78,7 +78,7 @@ class Withdrawals(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.uuid:
-            self.uuid = str(uuid.uuid4())[:8]
+            self.uuid = str(uuid.uuid4())[:12]
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -101,7 +101,7 @@ class Invoice(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.uuid:
-            self.uuid = str(uuid.uuid4())[:8]
+            self.uuid = str(uuid.uuid4())[:12]
         super().save(*args, **kwargs)
 
     def __str__(self):

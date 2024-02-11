@@ -2,81 +2,122 @@ import React, { useEffect, useState } from 'react';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
 
-import { SessionModal, WithdrawDetails } from '@/lib/types/types';
+import { SessionModal, HistoryDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import { GoAlertFill } from "react-icons/go";
+import { FaCheckCircle } from "react-icons/fa";
 
 export const fetchWithdrawals = async (accessToken: any) => {
-try {
-    const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/fetch-withdrawals/`,
-    {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${accessToken}`,
+    try {
+        const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/fetch-withdrawals/`,
+        {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${accessToken}`,
+            },
         },
-    },
-    );
-    if (!res.ok) {
-    return NextResponse.json({ error: 'Server responded with an error' });
+        );
+        if (!res.ok) {
+        return NextResponse.json({ error: 'Server responded with an error' });
+        }
+        const data = await res.json();
+        return data;
+        } catch (error) {
+            return NextResponse.json({ error: 'There was an error with the network request' });
     }
-    const data = await res.json();
-    return data;
-    } catch (error) {
-        return NextResponse.json({ error: 'There was an error with the network request' });
+}
+
+export const fetchInvoices = async (accessToken: any) => {
+    try {
+        const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_API_URL}/app/user/fetch-invoices/`,
+        {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${accessToken}`,
+            },
+        },
+        );
+        if (!res.ok) {
+        return NextResponse.json({ error: 'Server responded with an error' });
+        }
+        const data = await res.json();
+        return data;
+        } catch (error) {
+            return NextResponse.json({ error: 'There was an error with the network request' });
     }
 }
 
 
 const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
-    const [withdrawList, setWithdrawList] = useState<WithdrawDetails[]>([]);
 
+    const [historyList, setHistoryList] = useState<HistoryDetails[]>([]);
     const [pageNumber, setPageNumber] = useState(0);
-    const withdrawPerPage = 3;
+    const withdrawPerPage = 5;
 
-    const pageCount = Math.ceil(withdrawList.length/ withdrawPerPage);
+    const pageCount = Math.ceil(historyList.length/ withdrawPerPage);
     const changePage = ({ selected }: { selected: number }) => {
       setPageNumber(selected);
     };
 
     useEffect(() => {
         const fetchData = async () => {
-          if (session) {
-            const accessToken = session.user.accessToken;
-            try {
-              const withdrawalData = await fetchWithdrawals(accessToken);
-              setWithdrawList(withdrawalData || []);
-              
-            } catch (error) {
-              console.error('Error fetching data:', error);
+            if (session) {
+                const accessToken = session.user.accessToken;
+                try {
+                    const withdrawalData = await fetchWithdrawals(accessToken);
+                    const invoiceData = await fetchInvoices(accessToken);
+
+                    const combinedList = withdrawalData.concat(invoiceData);
+    
+                    combinedList.sort((a: any, b: any) => {
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+    
+                        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+                            return 0;
+                        }
+                        return dateA.getTime() - dateB.getTime();
+                    });
+    
+                    setHistoryList(combinedList);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
             }
-          }
         };
-      
+    
         fetchData();
-      }, [session]);
+    }, [session]);
 
     return (
         <div className="relative h-full w-full text-gray-500">
-            {withdrawList.length > 0 ? (
+            {historyList.length > 0 ? (
                 <div className="relative h-[calc(100%-4rem)] w-full text-gray-500">
                     <table className="min-w-full text-center text-sm font-light">
                         <thead className="font-medium text-white">
                             <tr className="border-b border-slate-900 uppercase text-xs">
-                                <th scope="col" className="px-6 py-2">ID</th>
-                                <th scope="col" className="px-6 py-2">Volumen</th>
+                                <th scope="col" className="px-6 py-2">Tipo</th>
+                                <th scope="col" className="px-6 py-2">Valor</th>
                                 <th scope="col" className="px-6 py-2">Fecha</th>
                                 <th scope="col" className="px-6 py-2">Voucher</th>
+                                <th scope="col" className="px-6 py-2"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {withdrawList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
+                            {historyList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.id}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.amount}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.type == "Invoice" ? "ADD" :obj.type == "Withdraw" ? "OUT": "N/A"}</td>
+                                    <td className="whitespace-nowrap px-6 py-2">${obj.amount}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.date}</td>
-                                    <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 text-[0.65rem]">{obj.voucher}</td>
+                                    <td className="text-center align-middle whitespace-nowrap py-2 px-4">
+                                        {obj.state ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

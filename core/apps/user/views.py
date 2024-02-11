@@ -87,6 +87,8 @@ class fetchWithdrawals(generics.ListAPIView):
         queryset = self.get_queryset()
         if queryset:
             serialized_data = self.serializer_class(queryset, many=True).data
+            for item in serialized_data:
+                item['type'] = "Withdraw"
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'NotFound Withdrawals.'}, status=status.HTTP_404_NOT_FOUND)
@@ -103,6 +105,8 @@ class fetchInvoices(generics.ListAPIView):
         queryset = self.get_queryset()
         if queryset:
             serialized_data = self.serializer_class(queryset, many=True).data
+            for item in serialized_data:
+                item['type'] = "Invoice"
             return Response(serialized_data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'NotFound Invoices.'}, status=status.HTTP_404_NOT_FOUND)
@@ -149,7 +153,7 @@ class requestWithdraw(generics.GenericAPIView):
 
             newBalance = user.balance
 
-            apiWithdraw = str(uuid.uuid4())[:8]
+            apiWithdraw = str(uuid.uuid4())[:12]
             obj.voucher = apiWithdraw
             obj.save()
 
