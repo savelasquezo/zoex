@@ -45,7 +45,7 @@ def updateBalance(sender, instance, **kwargs):
 
         except Exception as e:
             date = timezone.now().strftime("%Y-%m-%d %H:%M")
-            with open(os.path.join(settings.BASE_DIR, 'logs/signals.log'), 'a') as f:
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("updateBalance {} --> Error: {}\n".format(date, str(e)))
 
 

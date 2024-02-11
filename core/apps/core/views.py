@@ -53,6 +53,6 @@ class sendMessage(generics.GenericAPIView):
             
         except Exception as e:
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-            with open(os.path.join(settings.BASE_DIR, 'logs/email.log'), 'a') as f:
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("GET EmailError {} --> Error: {}\n".format(eDate, str(e)))
             return Response({'error': 'Unexpected error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

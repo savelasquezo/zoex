@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { validatePassword } from "@/utils/passwordValidation";
+import Image from 'next/image';
 
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -16,6 +17,7 @@ import {FiLock} from 'react-icons/fi'
   
 const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
     const searchParams = useSearchParams();
+    const [infoRefered, setInfoRefered] = useState(false);
   
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -43,6 +45,12 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
           setAgreed(true);
         }
     };
+
+    useEffect(() => {
+      if (searchParams.get('uuid')) {
+        setInfoRefered(true);
+      }
+    }, [searchParams]);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -124,8 +132,8 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
     };
 
     return (
-        <div>
-            <form method="POST" onSubmit={onSubmit} className="flex flex-col gap-y-4 p-2">
+        <div className="">
+            <form method="POST" onSubmit={onSubmit} className="relative flex flex-col gap-y-4 p-2">
                 <div className="bg-gray-800 text-gray-400 border border-gray-700 px-2 rounded-lg">
                   <PhoneInput
                     country="co"
@@ -192,11 +200,15 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
                       <CircleLoader loading={loading} size={25} color="#1c1d1f" />
                     </button>
                   ) : (
-                    <button type="submit" className="h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
-                      Inscribirse
+                    <button type="submit" className="relative h-10 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full text-center">
+                      <p>Inscribirse</p>
+                      {infoRefered ? (
+                        <Image width={1200} height={800} src={"/assets/image/bonus.webp"} alt="" className="absolute top-2/4 right-2 grid w-20 -translate-y-2/4 object-contain"/>
+                      ) : ( null)}            
                     </button>
                   )
                 )}
+                
             </form>
             { success && (<div className="text-lime-400 text-xs md:text-sm mt-0 md:mt-2">{success}</div>)}
             { error && (<div className="text-red-400 text-xs md:text-sm mt-0 md:mt-2">{error}</div>)}

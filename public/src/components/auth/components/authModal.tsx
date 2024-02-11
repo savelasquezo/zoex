@@ -63,7 +63,7 @@ const AuthModal: React.FC<ModalFunction> = ({ closeModal }) => {
     return (
         <div className="w-full h-full">
             <div className="relative w-full h-full flex flex-col items-center justify-start">
-                <Image priority width={405} height={200} src={"/assets/image/logo1.webp"} className="object-fit self-start scale-75" alt="" />
+                <Image priority width={400} height={200} src={"/assets/image/logoX.webp"} className="object-fit self-start scale-75" alt="" />
                 <div className="px-4">
                     <p className="text-sm text-white">¡Bienvenido a Zoexbet!</p><br />
                     <p className="text-xs text-white font-thin text-justify">¡Nos emociona darte la bienvenida a nuestra comunidad de apuestas y rifas! Activa tu cuenta dando click en el boton "Activar", y ahora estaras listo para sumergirte en la emocionante experiencia de ZoexBet.</p>

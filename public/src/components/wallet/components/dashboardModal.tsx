@@ -130,7 +130,7 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
             <span className="bg-blue-800 text-white rounded-md py-3 px-4"><FaWallet /></span>
             <div className="flex flex-col items-start justify-center">
               <p className="text-gray-300 text-sm">Saldo</p>
-              <p className="text-gray-400 text-[0.6rem] hidden md:block lg:text-xs">Disponibles</p>
+              <p className="text-gray-400 text-[0.55rem] md:text-[0.65rem] lg:text-xs">Disponibles</p>
             </div>
           </div>
           <div className="flex flex-col leading-3 text-right">
@@ -143,7 +143,7 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
             <span className="bg-green-600 text-white rounded-md py-3 px-4"><GiTwoCoins /></span>
             <div className="flex flex-col items-start justify-center">
               <p className="text-gray-300 text-sm">Creditos</p>
-              <p className="text-gray-400 text-[0.6rem] hidden md:block lg:text-xs">Promocional (No-Retirables)</p>
+              <p className="text-gray-400 text-[0.55rem] md:text-[0.65rem] lg:text-xs">Promocional (No-Retirables)</p>
             </div>
           </div>
           <div className="flex flex-col leading-3 text-right">

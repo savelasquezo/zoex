@@ -77,15 +77,21 @@ const SupportModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
     <div>
       <div className='absolute top-4 inline-flex gap-x-2 w-full justify-start items-center z-0'>
         <span className="bg-pink-700 text-white text-xs uppercase font-semibold py-1 px-2 rounded-sm transition-colors duration-300">Contacto</span>
-        <Link href={`https://wa.me/${info?.phone}`} target="_blank" rel="noopener noreferrer">
-            <button className='bg-whatsapp-default hover:bg-whatsapp-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><AiOutlineWhatsApp/></button>
-        </Link>
+        {info?.phone !== null && (
+          <Link href={`https://wa.me/${info?.phone}`} target="_blank" rel="noopener noreferrer">
+              <button className='bg-whatsapp-default hover:bg-whatsapp-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><AiOutlineWhatsApp/></button>
+          </Link>
+        )}
+        {info?.facebook !== null && (
         <Link href={`${info?.facebook}`} target="_blank" rel="noopener noreferrer">
             <button className='bg-facebook-default hover:bg-facebook-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><BiLogoFacebook/></button>
         </Link>
+        )}
+        {info?.instagram !== null && (
         <Link href={`${info?.instagram}`} target="_blank" rel="noopener noreferrer">
             <button className='bg-instagram-default hover:bg-instagram-hover shadow-inner text-gray-50 p-1 rounded-full transition duration-300'><AiOutlineInstagram/></button>
         </Link>
+        )}
       </div>
       <form method="POST" onSubmit={onSubmit} className="w-full flex flex-col gap-y-4 p-2 mt-10">
         <div className="relative h-12 w-full">

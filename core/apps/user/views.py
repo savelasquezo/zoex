@@ -143,6 +143,7 @@ class requestWithdraw(generics.GenericAPIView):
             return Response({'detail': 'The requested amount is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            print(method)
             obj, created = Withdrawals.objects.update_or_create(account=user,state='pending', method=method)
             obj.amount = amount if created else obj.amount + amount
             obj.method = method
@@ -208,9 +209,9 @@ class requestInvoice(generics.GenericAPIView):
         amount = int(request.data.get('amount', 0))
 
         data = {'method':method,'amount':amount}
-    
+
         try:
-            obj = Invoice.objects.create(account=request.user,state='pending', defaults=data)
+            obj = Invoice.objects.create(account=request.user,state='pending',**data)
             setting = Core.objects.get(default="ZoeXConfig")
             integritySignature = "N/A"
 

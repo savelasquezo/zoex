@@ -36,7 +36,7 @@ class UpdateCurrency(CronJobBase):
 
         except Exception as e:
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-            with open(os.path.join(settings.BASE_DIR, 'logs/cron.log'), 'a') as f:
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("CronBTC {} --> Error: {}\n".format(eDate, str(e)))
 
         try:
@@ -53,5 +53,5 @@ class UpdateCurrency(CronJobBase):
 
         except Exception as e:
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-            with open(os.path.join(settings.BASE_DIR, 'logs/cron.log'), 'a') as f:
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("CronUSD {} --> Error: {}\n".format(eDate, str(e)))     

@@ -8,9 +8,14 @@ from apps.user.models import UserAccount, Invoice, Withdrawals, Fee
 User = get_user_model()
 
 class UserSerializer(UserCreateSerializer):
+    bonus = serializers.SerializerMethodField()
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ["id","uuid","email","username","phone","balance","credits","location","billing","frame"]
+        fields = ["id","uuid","referred","email","username","phone","balance","credits","location","billing","frame","bonus"]
+
+    def get_bonus(self, obj):
+        has_invoice = Invoice.objects.filter(account=obj).exists()
+        return has_invoice
 
 class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:

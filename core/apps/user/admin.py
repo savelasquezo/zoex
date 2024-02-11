@@ -4,8 +4,7 @@ from django.conf.locale.es import formats as es_formats
 
 import apps.user.models as models
 
-
-class FeesInline(admin.StackedInline):
+class FeesAccountInline(admin.StackedInline):
     
     model = models.Fee
     extra = 0
@@ -23,6 +22,24 @@ class FeesInline(admin.StackedInline):
     def has_add_permission(self, request, obj=None):
         return False
 
+class FeesInvoiceInline(admin.StackedInline):
+    
+    model = models.Fee
+    extra = 0
+
+    fieldsets = (
+        (" ", {"fields": (
+            ('account','username'),
+            ('date','fee'),
+                )
+            }
+        ),
+    )
+
+    readonly_fields = ('invoice','username','date','fee')
+    def has_add_permission(self, request, obj=None):
+        return False
+
 class WithdrawalsInline(admin.StackedInline):
     
     model = models.Withdrawals
@@ -30,7 +47,6 @@ class WithdrawalsInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            'uuid',
             ('method','state'),
             ('amount','date','voucher'),
                 )
@@ -39,7 +55,7 @@ class WithdrawalsInline(admin.StackedInline):
     )
 
     radio_fields = {'state': admin.HORIZONTAL}
-    readonly_fields = ('uuid','method','amount','date','voucher')
+    readonly_fields = ('method','amount','date','voucher')
     def has_add_permission(self, request, obj=None):
         return False
 
@@ -50,7 +66,6 @@ class InvoiceInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            'uuid',
             ('method','state'),
             ('amount','date','voucher'),
                 )
@@ -59,18 +74,17 @@ class InvoiceInline(admin.StackedInline):
     )
 
     radio_fields = {'state': admin.HORIZONTAL}
-    readonly_fields = ('uuid','method','amount','date','voucher')
+    readonly_fields = ('method','amount','date','state','voucher')
     def has_add_permission(self, request, obj=None):
         return False
 
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
+        'voucher',
         'account',
         'amount',
         'date',
-        'voucher',
         'state'
         )
 
@@ -81,23 +95,27 @@ class InvoiceAdmin(admin.ModelAdmin):
     es_formats.DATETIME_FORMAT = "d M Y"
     
     fieldsets = (
-        (None, {'fields': (('account','uuid'),('method','state'),)}),
-            ('Información', {'fields': (
+        (None, {'fields': (
+            ('account','method','state'),
             ('amount','date','voucher'),
         )}),
     )
 
-    readonly_fields=['account','uuid','method','amount','date','voucher']
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        self.inlines = [FeesInvoiceInline]
+        return fieldsets
+
+    readonly_fields=['account','method','amount','date','state','voucher']
     def has_add_permission(self, request):
          return False
 
 class WithdrawalsAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
+        'voucher',
         'account',
         'amount',
         'date',
-        'voucher',
         'state'
         )
 
@@ -108,13 +126,13 @@ class WithdrawalsAdmin(admin.ModelAdmin):
     es_formats.DATETIME_FORMAT = "d M Y"
     
     fieldsets = (
-        (None, {'fields': (('account','uuid'),('method','state'),)}),
-            ('Información', {'fields': (
+        (None, {'fields': (
+            ('account','method','state'),
             ('amount','date','voucher'),
         )}),
     )
 
-    readonly_fields=['account','uuid','method','amount','date']
+    readonly_fields=['account','uuid','method','amount','date','voucher']
     def has_add_permission(self, request):
          return False
 
@@ -128,7 +146,7 @@ class UserAccountAdmin(BaseUserAdmin):
             ('Información', {'fields': (
             ('username','phone','referred'),
             ('balance','credits'),
-            ('frame','location','billing'),
+            ('location','billing'),
         )}),
     )
 
@@ -143,7 +161,7 @@ class UserAccountAdmin(BaseUserAdmin):
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
-        self.inlines = [WithdrawalsInline, InvoiceInline,FeesInline]
+        self.inlines = [WithdrawalsInline, InvoiceInline,FeesAccountInline]
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None):

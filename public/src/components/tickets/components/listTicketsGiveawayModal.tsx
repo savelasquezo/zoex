@@ -6,8 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { SessionModal, GiveawayTicketDetails  } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import { GoAlertFill } from "react-icons/go";
-import { FaCheckCircle } from "react-icons/fa";
+import { GiCheckMark , GiCrossMark } from "react-icons/gi";
   
 
 export const fetchGiveawayTickets = async (accessToken: any) => {
@@ -43,13 +42,16 @@ const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session 
     useEffect(() => {
       if (session) {
         const accessToken = session.user.accessToken;
-        fetchGiveawayTickets(accessToken)
-        .then((data) => {
-          setGiveawayTickets(data);
-        })
-        .catch((error) => {
-          console.error('Error getting information about tickets!', error);
-        }); 
+        const fetchData = async () => {
+          await fetchGiveawayTickets(accessToken)
+          .then((data) => {
+            setGiveawayTickets(data);
+          })
+          .catch((error) => {
+            console.error('Error getting information about tickets!', error);
+          }); 
+        };
+        fetchData();
       }
     }, [session]);
   
@@ -82,7 +84,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session 
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
-                                  {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
+                                  {obj.is_active ? <p className='text-green-300'><GiCheckMark  /></p> : <p className='text-red-500'><GiCrossMark /></p>}
                               </td>
                           </tr>
                       ))}

@@ -100,7 +100,7 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         {registrationSuccess ? (
           <p className="text-[0.55rem] text-gray-400 text-justify px-1">La Facturacion ha sido Exitosa! Los fondos seran transferidos a la cuenta configurada, veras reflejado el pago en las proxima 24 a 36 horas, identifica el pago con el codigo de referencia suministrado</p>
         ) : (
-          <p className="text-[0.55rem] text-gray-400 text-justify px-1">Los fondos seran transferidos en un periodo de 24 a 36 Horas a la cuenta especificada a continuacion, al solicitar la transferencia reconoce y acepta que los datos suministrados de facturacion son correctos</p>
+          <p className="text-[0.55rem] text-gray-400 text-justify px-1">Los fondos seran transferidos en un periodo de 24 a 36 Horas a la cuenta especificada a continuacion, al solicitar la transferencia reconoce y acepta que los datos suministrados son correctos</p>
         )}
         <div className="relative w-full flex items-center">
           <div className="absolute text-gray-400 text-lg top-2/4 left-4 grid h-5 w-5 -translate-y-2/4 items-center"><RiBankCardFill/></div>

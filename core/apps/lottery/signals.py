@@ -60,7 +60,7 @@ def signalLottery(sender, instance, **kwargs):
 
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-        with open(os.path.join(settings.BASE_DIR, 'logs/signals.log'), 'a') as f:
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
             f.write("signalLottery {} --> Error: {}\n".format(eDate, str(e)))
 
     finally:
@@ -101,5 +101,5 @@ def signalTicketsLottery(sender, instance, **kwargs):
 
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
-        with open(os.path.join(settings.BASE_DIR, 'logs/signals.log'), 'a') as f:
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
             f.write("signalTicketsLottery {} --> Error: {}\n".format(eDate, str(e)))

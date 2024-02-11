@@ -42,15 +42,19 @@ const HistoryReferedModal: React.FC<SessionModal>  = ({closeModal, session }) =>
     useEffect(() => {
       if (session) {
         const accessToken = session.user.accessToken;
-        fetchInvoicesRefered(accessToken)
-        .then((data) => {
-          setFeesRefered(data);
-        })
-        .catch((error) => {
-        console.error('Error getting information about tickets!', error);
-        });  
+        const fetchData = async () => {
+          await fetchInvoicesRefered(accessToken)
+          .then((data) => {
+            setFeesRefered(data);
+          })
+          .catch((error) => {
+            console.error('Error getting information about tickets!', error);
+          }); 
+        };
+        fetchData();
       }
     }, [session]);
+
   
     const pageCount = Math.ceil(feesRefered.length/itemsPerPage);
   
@@ -102,7 +106,7 @@ const HistoryReferedModal: React.FC<SessionModal>  = ({closeModal, session }) =>
             <div className='w-full h-full flex flex-col justify-start items-center'>
               <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                 <p>¡Aún no has recibido comisiones de referidos de plataforma!</p>
-                <p>comparte ahora tu link y genera comisiones de forma pasiva</p>
+                <p>comparte ahora tu link y genera comisiones</p>
               </span>
             </div>
           )) : ( null

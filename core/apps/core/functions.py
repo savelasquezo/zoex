@@ -24,7 +24,7 @@ def xlsxSave(account, types, amount, balance, newBalance, credits, newCredits, i
         WB.save(file)
 
     except Exception as e:
-        with open(os.path.join(settings.BASE_DIR, 'logs/xlsx.log'), 'a') as f:
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
             f.write("WorkbookError: {}\n".format(str(e)))
 
 
@@ -35,5 +35,5 @@ def xlsxData(account, obj):
         return data
 
     except Exception as e:
-        with open(os.path.join(settings.BASE_DIR, 'logs/xlsx.log'), 'a') as f:
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
             f.write("xlsxData: {}\n".format(str(e)))

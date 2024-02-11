@@ -5,8 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { SessionModal, LotteryTicketDetails  } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import { GoAlertFill } from "react-icons/go";
-import { FaCheckCircle } from "react-icons/fa";
+import { GiCheckMark , GiCrossMark } from "react-icons/gi";
 
 export const fetchLotteryTickets = async (accessToken: any) => {
     try {
@@ -38,17 +37,19 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
     const [pageNumber, setPageNumber] = useState(0);
     const ticketsPerPage = 5;
   
-  
     useEffect(() => {
       if (session) {
         const accessToken = session.user.accessToken;
-        fetchLotteryTickets(accessToken)
-        .then((data) => {
+        const fetchData = async () => {
+          await fetchLotteryTickets(accessToken)
+          .then((data) => {
             setLotteryTickets(data);
-        })
-        .catch((error) => {
-        console.error('Error getting information about tickets!', error);
-        });  
+          })
+          .catch((error) => {
+            console.error('Error getting information about tickets!', error);
+          }); 
+        };
+        fetchData();
       }
     }, [session]);
   
@@ -82,7 +83,7 @@ const ListTicketsLotteryModal: React.FC<SessionModal>  = ({closeModal, session }
                         <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
                         <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
                         <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
-                            {obj.is_active ? <p className='text-green-300'><FaCheckCircle /></p> : <p className='text-yellow-300'><GoAlertFill /></p>}
+                            {obj.is_active ? <p className='text-green-300'><GiCheckMark  /></p> : <p className='text-red-500'><GiCrossMark /></p>}
                         </td>
                       </tr>
                     ))}

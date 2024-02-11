@@ -90,6 +90,7 @@ const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
               { error && (<div className="text-red-400 text-xs">{error}</div>)}
             </div>
             <div className="relative h-8 w-full">
+              { session?.user.referred && !session?.user.bonus && (<Image width={1200} height={800} src={"/assets/image/bonus.webp"} alt="" className="absolute top-2/4 -right-2 grid w-20 -translate-y-2/4 object-contain"/>)}
               <div className="absolute text-gray-500 text-lg top-2/4 left-2 grid h-5 w-5 -translate-y-2/4 items-center"><FiDollarSign/></div>
               <input className="h-full w-full indent-4 text-gray-200 rounded-sm border border-gray-800 bg-transparent px-3 py-2 !pr-9 text-sm outline outline-0 transition-all focus:outline-0 disabled:border-0"
                   type="number"
@@ -106,7 +107,7 @@ const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col justify-center items-center mt-8 mb-2 gap-y-4">
+      <div className="w-full flex flex-col justify-center items-center mt-4 mb-2 gap-y-4">
         {!registrationSuccess ? (
           loading ? (
             <div className='w-full h-full text-center'>
@@ -129,20 +130,20 @@ const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-start gap-y-4">
             <div className="flex flex-row items-center justify-between w-full">
-              <div className={`flex flex-col leading-none ${method === 'crypto' ? 'block' : 'hidden' }`}>
+              <div className={`${method === 'crypto' ? 'block' : 'hidden' }`}>
                 <Link href={`https://confirmo.net/public/invoice/${invoice}`} target="_blank" rel="noopener noreferrer">
                   <Image width={192} height={128} src={"/assets/image/crypto0.webp"} className="object-fit w-40 h-8 md:w-52 md:h-12 shadow-lg rounded-full" alt="" />
                 </Link>
               </div>
-              <div className={`flex flex-col leading-none ${method === 'bold' ? 'block' : 'hidden' }`}>
-                <BoldButton invoice={invoice} amount={copAmmount} integritySignature={integritySignature}/>
+              <div className={`${method === 'bold' ? 'block' : 'hidden' }`}>
+                  <BoldButton invoice={invoice} amount={copAmmount} integritySignature={integritySignature}/>
               </div>
               <span className="bg-gray-900 flex items-center justify-center text-xs md:text-base rounded-sm py-2 px-4 text-white h-8 md:h-10 -mt-1">{invoice}</span>
             </div>
             <div className='text-[0.55rem] text-justify text-gray-400'>
-              <p>Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta.</p> 
-              <p className='mt-4'>¿Necesitas Ayuda? support@zoexbet.com</p>
+              <p>Importante tener en cuenta que la actualización de tu saldo puede experimentar una breve demora antes de reflejarse en tu cuenta. ¿Necesitas Ayuda? support@zoexbet.com</p> 
             </div>
+            <p className='text-[0.60rem] text-gray-300 -mt-2 -lg:mt-4'>¿Necesitas Ayuda? support@zoexbet.com</p> 
           </div>
         )}
       </div>

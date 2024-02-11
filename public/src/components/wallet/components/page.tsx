@@ -17,13 +17,13 @@ const WalletModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
   return (
     <div className="h-72">
       <div className='absolute top-4 inline-flex gap-x-1 w-full justify-start items-center z-0'>
-        <button onClick={() => setActiveTab('wallet')} className={`text-gray-100 rounded-lg px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'wallet' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Wallet</button>
-        <button onClick={() => setActiveTab('history')} className={`text-gray-100 rounded-lg px-4 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'history' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Historial</button>
+        <button onClick={() => setActiveTab('wallet')} className={`text-gray-100 rounded-sm px-2 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'wallet' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Wallet</button>
+        <button onClick={() => setActiveTab('history')} className={`text-gray-100 rounded-sm px-2 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'history' ? 'bg-pink-700 hover:bg-pink-800' : ''}`}>Historial</button>
       </div>
       <hr className='border-slate-700 shadow-inner mt-10'/>
       {showModal && (
-        <div className="mt-10 h-full w-full">
-          <div className={`h-full w-full ${activeTab === 'wallet' ? 'block' : 'hidden'}`}>
+        <div className="h-full w-full">
+          <div className={`mt-10 h-full w-full ${activeTab === 'wallet' ? 'block' : 'hidden'}`}>
             <div className="flex flex-row items-center gap-x-2 -mt-8 py-2 uppercase">
               <span onClick={() => setActiveSubTab('dashboard')} className="bg-yellow-600 text-white text-xs rounded-sm px-1 py-0.5 text-md hover:bg-yellow-700 cursor-pointer transition-colors duration-300">Balance</span>
               <span onClick={() => setActiveSubTab('add')} className="bg-green-600 text-white text-xs rounded-sm px-1 py-0.5 text-md hover:bg-green-700 cursor-pointer transition-colors duration-300">Agregar</span>
@@ -39,7 +39,7 @@ const WalletModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
               <WithdrawModal closeModal={closeModal} session={session}/>
             </div>
           </div>
-          <div style={{ display: activeTab === 'history' ? 'block' : 'none' }} className={`h-full w-full ${activeTab === 'wallet' ? 'hidden' : ''}`}>
+          <div className={`mt-4 h-full w-full ${activeTab === 'history' ? 'block' : 'hidden'}`}>
             <ListHistoryWalletModal closeModal={closeModal} session={session}/>
           </div>
         </div>

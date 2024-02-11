@@ -31,7 +31,7 @@ class UserAccountManager(BaseUserManager):
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(_("ID"),default=uuid.uuid4, unique=True, primary_key=True)
     uuid = models.CharField(_("Codigo"),max_length=8)
-    referred = models.CharField(_("Ref"),max_length=8)
+    referred = models.CharField(_("Ref"),default="N/A", max_length=8)
     email = models.EmailField(_("Email"),unique=True)
     username = models.CharField(_("Usuario"),max_length=64, unique=True)
     phone = models.CharField(_("Telefono"),max_length=64, unique=True, null=False, blank=False)
@@ -72,7 +72,7 @@ class Withdrawals(models.Model):
     amount = models.FloatField(_("Volumen"),blank=False,null=False,default=0,
         help_text=_("Volumen de Capital Solicitado (USD)"),)
     date = models.DateField(_("Fecha"), default=timezone.now)
-    method = models.CharField(_("Metodo"), choices=methods, max_length=128, null=False, blank=False)
+    method = models.CharField(_("Metodo"), max_length=128, null=False, blank=False)
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
     state = models.CharField(_("¿Estado?"), choices=states, default="pending", max_length=16)
 
@@ -82,7 +82,7 @@ class Withdrawals(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.voucher}"
 
     class Meta:
         indexes = [models.Index(fields=['state']),]
@@ -105,7 +105,7 @@ class Invoice(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.voucher}"
 
     class Meta:
         indexes = [models.Index(fields=['state']),]
@@ -122,7 +122,7 @@ class Fee(models.Model):
     date = models.DateField(_("Fecha"), default=timezone.now)
 
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.invoice}"
 
     class Meta:
         indexes = [models.Index(fields=['account']),]
