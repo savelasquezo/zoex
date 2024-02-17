@@ -18,7 +18,10 @@ class Lottery(models.Model):
     prize = models.IntegerField(_("Acumulado"), default=500, null=False, blank=False, help_text="$Acumulado Valor (USD)")
 
     file = models.ImageField(_("Banner"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False, 
-            help_text="width-(1280px) - height-(400px)")
+            help_text="Width-(1440px) - Height-(600px)")
+
+    mfile = models.ImageField(_("Mini-Banner"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False, 
+            help_text="Width-(760px) - Height-(640px)")
     
     tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets")
     price = models.IntegerField(_("Valor"), null=False, default=1, blank=False, help_text="$Ticket (USD)",
@@ -73,6 +76,8 @@ class TicketsLottery(models.Model):
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
     state = models.BooleanField(_("¿Estado?"),default=True)
+
+    send = models.BooleanField(_("¿Enviado?"),default=False)
 
     def save(self, *args, **kwargs):
         self.uuid = self.lottery.lottery if self.lottery else None

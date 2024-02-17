@@ -1,4 +1,4 @@
-import os
+import os, base64
 from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
@@ -9,8 +9,9 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from .models import Lottery, TicketsLottery
-from apps.core.models import Core
 from apps.user.models import UserAccount
+from apps.core.models import Core
+from apps.core.functions import sendEmailTicket
 
 def getLottery():
     return Lottery.objects.get(is_active=True)
@@ -54,9 +55,11 @@ def signalLottery(sender, instance, **kwargs):
             user.save()
 
             #Create New Lottery
-            Lottery.objects.create(file=instance.file)
+            Lottery.objects.create(file=instance.file,mfile=instance.mfile)
 
-            ##AVISAR POR CORREO (PENDIENTE)
+            #SendMail Winner
+            image64 = base64.b64encode(instance.file).decode('utf-8')
+            sendEmailTicket('email/congratulations.html',f'¡Felicidades! {instance.winner} - Ticket Ganador!', user.email, image64)
 
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")

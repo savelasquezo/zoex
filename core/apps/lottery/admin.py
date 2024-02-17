@@ -44,8 +44,8 @@ class LotteryAdmin(admin.ModelAdmin):
             }
         ),
         ("Informacion", {"fields": 
-            (('prize','file'),
-             ('price','tickets'),)
+            (('file','mfile'),
+             ('prize','price','tickets'),)
             }
         ),
         (" ", {"fields": 

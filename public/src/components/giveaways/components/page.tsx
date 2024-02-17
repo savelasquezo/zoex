@@ -71,7 +71,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
             {itemsGiveaway?.length > 0 ? (
               (itemsGiveaway).map((itemGiveaway, i) => (
                   <div key={i} className="relative flex flex-col items-center rounded-sm h-40 md:h-80 shadow-inner">
-                    <Image width={630} height={300} src={itemGiveaway.file} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-cover rounded-t-sm z-0" loader={imageLoader} alt="" />
+                    <Image width={630} height={300} src={itemGiveaway.file} className="absolute top-0 left-0 h-[calc(100%-16px)] w-full object-fill rounded-t-sm z-0" loader={imageLoader} alt="" />
                     <div className="absolute top-0 h-2 w-full flex flex-row items-center gap-x-1">
                         <div className='absolute top-0 h-full w-full bg-gradient-to-r from-lime-500 to-red-500 transition-all duration-200'/>
                         <div className="absolute top-0 h-full w-full flex items-end justify-end">
@@ -89,7 +89,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
             ) : null}
             {showModal && (
             <div className={`fixed top-0 left-0 w-full h-full flex items-center justify-center transition bg-opacity-50 bg-gray-900 backdrop-blur-sm z-40 ${closingModal ? "animate-fade-out animate__animated animate__fadeOut" : "animate-fade-in animate__animated animate__fadeIn"}`}>
-                <div className="relative w-4/5 md:w-[55%] flex justify-between items-center h-[26rem]">
+              <div className="relative w-11/12 md:w-1/2 flex justify-between items-center h-[26rem]">
                   <button onClick={closeModal} className='absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600 transition-colors duration-300' ><AiOutlineClose /></button>
                   <div className="w-full h-full bg-gray-800 rounded-2xl p-6">
                     <button onClick={() => openModal('buyTicket',giveawayId)} className={`text-gray-100 rounded-sm px-2 py-1 inline-flex text-sm font-semibold transition duration-300 mr-2 ${activeTab === 'buyTicket' ? 'bg-red-500 hover:bg-red-600' : ''}`}>Sorteo</button>
@@ -103,7 +103,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
                   </div>
                 </div>
               </div>
-          )}
+            )}
         </div>
     );
 };

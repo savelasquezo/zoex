@@ -4,8 +4,24 @@ from django.conf import settings
 
 import pandas as pd
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from openpyxl import Workbook
 from openpyxl import load_workbook
+
+
+def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
+    try:
+        email = render_to_string(Template, {"imageTicket": requestImage})
+        send_mail(requestSubject, message=None, from_email='noreply@zoexbet.com',
+                    recipient_list=[requestEmail], fail_silently=False, html_message=email)
+        
+    except Exception as e:
+        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+            f.write("TicketEmailError {} --> Error: {}\n".format(eDate, str(e)))
+
 
 def xlsxSave(account, types, amount, balance, newBalance, credits, newCredits, id, method):
     try:

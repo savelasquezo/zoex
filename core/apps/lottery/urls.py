@@ -7,5 +7,6 @@ urlpatterns = [
     path('request-ticketlottery/', view.requestTicketLottery.as_view(), name='request-ticketlottery'),
     path('fetch-lottery-tickets/', view.fetchTicketsLottery.as_view(), name='fetch-lottery-tickets'),
     path('fetch-all-lottery-tickets/', view.fetchAllTicketsLottery.as_view(), name='fetch-all-lottery-tickets'),
-    path('fetch-lottery-history/', view.fetchHistoryLottery.as_view(), name='fetch-lottery-history'),
+    path('make-ticket-lottery/', view.makeTicketLottery.as_view(), name='make-ticket-lottery'),
+    path('fetch-lottery-history/', view.fetchHistoryLottery.as_view(), name='fetch-lottery-history'),    
 ]

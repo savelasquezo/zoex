@@ -26,7 +26,7 @@ export const fetchGiveawayTickets = async (accessToken: any, giveawayId: string)
     } catch (error) {
       return NextResponse.json({ error: 'There was an error with the network request' });
     }
-  }
+}
 
 const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({ closeModal, session, giveawayId  }) => {
 

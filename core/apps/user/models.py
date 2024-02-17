@@ -62,7 +62,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return f"{self.email}"
 
     class Meta:
-        indexes = [models.Index(fields=['email']),]
+        indexes = [models.Index(fields=['email','uuid']),]
         verbose_name = _("Usuario")
         verbose_name_plural = _("Usuarios")
 
@@ -85,7 +85,7 @@ class Withdrawals(models.Model):
         return f"{self.voucher}"
 
     class Meta:
-        indexes = [models.Index(fields=['state']),]
+        indexes = [models.Index(fields=['uuid','state']),]
         verbose_name = _("Retiro")
         verbose_name_plural = _("Retiros")
 
@@ -108,7 +108,7 @@ class Invoice(models.Model):
         return f"{self.voucher}"
 
     class Meta:
-        indexes = [models.Index(fields=['state']),]
+        indexes = [models.Index(fields=['uuid','state']),]
         verbose_name = _("Recarga")
         verbose_name_plural = _("Recargas")
 
@@ -126,5 +126,5 @@ class Fee(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['account']),]
-        verbose_name = _("Comicion")
-        verbose_name_plural = _("Comiciones")
+        verbose_name = _("Comision")
+        verbose_name_plural = _("Comisiones")

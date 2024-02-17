@@ -39,16 +39,21 @@ class sendMessage(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             subject = request.data.get('subject')
-            email_template_name = 'email/message.txt'
+            requestEmail = request.data.get('email', None),
+            requestMessaje = request.data.get('message', None)
+
+            email_template_name = 'email/message.html'
+
+            print(f'{subject}{requestEmail}{requestMessaje}')
 
             c = {
-                "send": request.data.get('email', None),
-                "message": request.data.get('message', None),
+                "send": requestEmail,
+                "message": requestMessaje,
             }
 
             email = render_to_string(email_template_name, c)
-            send_mail(subject, message=None, from_email='admin@zoexbet.com',
-                        recipient_list=['noreply@zoexbet.com'], fail_silently=False, html_message=email)
+            send_mail(subject, message=None, from_email='noreply@zoexbet.com',
+                        recipient_list=['admin@zoexbet.com'], fail_silently=False, html_message=email)
             return Response({'detail': 'Email Enviado.'}, status=status.HTTP_200_OK)
             
         except Exception as e:

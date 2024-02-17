@@ -32,7 +32,6 @@ def makeConfirmoInvoice(amount):
     "settlement": {
         "currency": "USD"
     },
-    "notifyEmail": "noreply@zoexbet.com",
     "notifyUrl": "https://zoexbet.com/app/user/notify-invoice-confirmo/",
     "returnUrl": "https://zoexbet.com/",
     "reference": "Zoexbet"

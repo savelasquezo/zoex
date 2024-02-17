@@ -12,7 +12,7 @@ class TicketsGiveawayInline(admin.StackedInline):
 
     fieldsets = (
         (" ", {"fields": (
-            ('state','uuid','ticket','email'),
+            ('uuid','ticket','email'),
             ('date','voucher'),
                 )
             }
@@ -33,6 +33,7 @@ class GiveawayAdmin(admin.ModelAdmin):
         "tickets",
         "price",
         "date_giveaway",
+        'is_active'
         )
 
     fieldsets = (
@@ -42,8 +43,8 @@ class GiveawayAdmin(admin.ModelAdmin):
             }
         ),
         ("Informacion", {"fields": 
-            (("prize","file"),
-             ("price","tickets"),)
+            (("file","mfile"),
+             ("prize","price","tickets"),)
             }
         ),
         (" ", {"fields": 
@@ -75,6 +76,6 @@ class GiveawayAdmin(admin.ModelAdmin):
             username = UserAccount.objects.get(email=getWinner.first().email).username
             messages.warning(request, f'¡Advertencia! ¡El Usuario {username} ha Ganado!')
 
-        super(TicketsGiveaway, self).save_model(request, obj, form, change)
+        super(GiveawayAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Giveaway, GiveawayAdmin)

@@ -9,6 +9,11 @@ class GiveawaySerializer(serializers.ModelSerializer):
             return obj.file.url.lstrip('')
         return None
     
+    def get_mfile(self, obj):
+        if obj.mfile:
+            return obj.mfile.url.lstrip('')
+        return None
+
     class Meta:
         model = models.Giveaway
         fields = '__all__'

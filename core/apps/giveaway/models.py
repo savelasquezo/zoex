@@ -19,8 +19,11 @@ class Giveaway(models.Model):
     prize = models.CharField(_("Objeto"), max_length=128, null=False, blank=False)
     value = models.IntegerField(_("Inversion"), default=1000, null=False, blank=False, help_text="$Valor del Objeto (USD)")
 
-    file = models.ImageField(_("Imagen"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
-        help_text="Width-(630px) - Height-(300px)")
+    file = models.ImageField(_("Banner"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
+        help_text="Width-(1440px) - Height-(600px)")
+
+    mfile = models.ImageField(_("Mini-Banner"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False,
+        help_text="Width-(760px) - Height-(640px)")
 
     tickets = models.SmallIntegerField (_("Tickets"), default=999, null=False, blank=False, help_text="#Tickets Totales")
     price = models.SmallIntegerField(_("Valor"), null=False, blank=False, help_text="$Ticket (USD)")
@@ -74,6 +77,8 @@ class TicketsGiveaway(models.Model):
 
     voucher = models.CharField(_("Voucher"), max_length=128, null=False, blank=False)
     state = models.BooleanField(_("¿Estado?"),default=True)
+
+    send = models.BooleanField(_("¿Enviado?"),default=False)
 
     def save(self, *args, **kwargs):
         self.uuid = self.giveaway.giveaway if self.giveaway else None

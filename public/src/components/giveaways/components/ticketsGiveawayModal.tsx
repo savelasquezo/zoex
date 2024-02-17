@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
@@ -12,19 +13,21 @@ import { SessionModal, GiveawayData } from '@/lib/types/types';
 
 
 const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({ closeModal, session, giveawayId  }) => {
+
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
-  const [ticketsSuccess, setTicketsSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   
-  const [loading, setLoading] = useState(false);
-  const [invoice, setInvoice] = useState('');
-
-  const [aviableTickets, setAviableTickets] = useState<string[]>([]);
-  const [listTickets, setListTickets] = useState<string[]>([]);
-
   const [giveaway, setGiveaway] = useState<GiveawayData>();
+  const [imageTicket1, setImageTicket1] = useState<string | null>(null);
+  const [imageTicket2, setImageTicket2] = useState<string | null>(null);
+
+  const [ticketsSuccess, setTicketsSuccess] = useState(false);
+
+  const [listTickets, setListTickets] = useState<string[]>([]);
+  const [aviableTickets, setAviableTickets] = useState<string[]>([]);
 
   const [enteredLength, setEnteredLength] = useState<number>();
   const [generateNewNumbers, setGenerateNewNumbers] = useState<boolean>(true);
@@ -39,6 +42,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
       ticket: obj.toString(),
     });
   };
+
 
   useEffect(() => {
     const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/app/ws/tickets_giveaway/${giveawayId}/`;
@@ -71,7 +75,6 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
       }
     };
   }, [generateNewNumbers, giveawayId]);
-
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -145,20 +148,57 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           giveawayId,
         }),
       });
+
       const data = await res.json();
+
       if (!data.error) {
-        setSuccess('¡Ya casi es tuyo! Confirma el pago y enviarmos el Ticket a tu Email');
-        setInvoice(data.apiVoucher)
-        setTicketsSuccess(true)
+        setSuccess('¡Adquirido! Enviamos el Ticket a tu email');
         if (session && session.user) {
           session.user.balance = data.newBalance;
         }
+
+
+        const requestOptions = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${session?.user?.accessToken}`,
+          }
+        };
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=${"False"}`, requestOptions)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al hacer la solicitud');
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            const imageUrl1 = URL.createObjectURL(blob);
+            setImageTicket1(imageUrl1);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+        });
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=${"True"}`, requestOptions)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al hacer la solicitud');
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            const imageUrl2 = URL.createObjectURL(blob);
+            setImageTicket2(imageUrl2);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+        });
       }
       } catch (error) {
         return NextResponse.json({ error: 'There was an error with the network request' });
         
       } finally {
         handleGenerateNewNumbers();
+        setTicketsSuccess(true)
         setLoading(false);
     }
   };
@@ -176,28 +216,35 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
             <form method="POST" onClick={handleSubmit} className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
               <div className='relative flex flex-col w-full h-32 justify-start items-center lg:h-52 lg:justify-center'>
-                  <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
-                  <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
-                    type="text"
-                    name="ticket"
-                    id="ticket"
-                    minLength={enteredLength}
-                    maxLength={enteredLength}
-                    value={ticket}
-                    onChange={(e) => onChange(e)}
-                    readOnly={ticketsSuccess}
-                    required
-                  />
+                <div className='absolute -top-12 right-0 lg:hidden'>
+                  <span className='relative h-full w-full flex items-center'>
+                    <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${giveaway.price}</p>
+                  </span>
                 </div>
-                {loading ? (
-                  <button type="button" className='w-full h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
-                ) : (
-                  session && session?.user? (
-                    <input type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
-                    ) : (
-                    <span onClick={openLogin} className="w-full h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 lg:w-40">Ingresar</span>
-                  )
-                )}
+                <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
+                <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
+                  type="text"
+                  name="ticket"
+                  id="ticket"
+                  minLength={enteredLength}
+                  maxLength={enteredLength}
+                  value={ticket}
+                  onChange={(e) => onChange(e)}
+                  readOnly={ticketsSuccess}
+                  required
+                />
+
+              </div>
+              {loading ? (
+                <button type="button" className='w-full h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
+              ) : (
+                session && session?.user? (
+                  <input type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
+                  ) : (
+                  <span onClick={openLogin} className="w-full h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 lg:w-40">Ingresar</span>
+                )
+              )}
             </form>
             <div className='w-full flex flex-col justify-start items-center gap-y-2 my-4 lg:w-3/5 lg:my-10'>
               <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
@@ -227,10 +274,16 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                   {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
                   {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
                 </div>
+                <div className='absolute -bottom-8 right-4'>
+                  <span className='relative h-full w-full flex items-center'>
+                    <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${giveaway.price}</p>
+                  </span>
+                </div>
               </div>
-                ) : (
-                  null
-                )}
+              ) : (
+                null
+              )}
             </div>
             <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden'>
               {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
@@ -238,31 +291,24 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             </div>
           </div>
           ) : (
-          <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
-            <span className='text-center text-gray-300 my-4 text-sm'>
-                <p>¡No hay Tickets disponibles para este Sorteo!</p>
-                <p>El Sorteo se realizara el proximo dia 15</p>
-            </span>
-          </div>
+
+            <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
+              <span className='text-center text-gray-300 my-4 text-sm'>
+                  <p>¡No hay Tickets disponibles para este Sorteo!</p>
+                  <p>El Sorteo se realizara el proximo dia 15</p>
+              </span>
+            </div>
           )}
         </div>
-      ) : (ticketsSuccess && giveaway)? (
+      ) : (ticketsSuccess)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
-          <div className='flex flex-row gap-x-4 w-96 justify-start bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
-            <span className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-6'>
-              <p className='absolute h-full w-full flex justify-center items-center text-lg uppercase font-semibold underline'>{ticket}</p>
-            </span>
-            <div className='flex flex-col ml-1'>
-              <p className='text-gray-400 text-xs'>email: {email}</p>
-              <p className='text-gray-400 text-xs'>Voucher: {invoice}</p>
-            </div>
-          </div>
+          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='hidden lg:block'/>}
+          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='block lg:hidden'/>}
           <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
-              <button type="button" onClick={handleSubmit} className='w-32 h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
+              <button type="button" onClick={handleSubmit} className='w-full h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>
         </div>
-      ) : (
-        <p>...</p>
+      ) : (null
       )}
     </div>
   );
