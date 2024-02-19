@@ -303,7 +303,7 @@ class notifyInvoiceConfirmo(generics.GenericAPIView):
         except Exception as e:
             eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
-                f.write("notifyInvoiceBold {} --> Error: {}\n".format(eDate, str(e)))
+                f.write("notifyInvoiceConfirmo {} --> Error: {}\n".format(eDate, str(e)))
             return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)
 
 

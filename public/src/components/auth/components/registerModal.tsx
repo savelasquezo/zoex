@@ -3,12 +3,9 @@ import { useSearchParams } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { validatePassword } from "@/utils/passwordValidation";
 import Image from 'next/image';
-
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-
 import CircleLoader from 'react-spinners/CircleLoader';
-
 import { ModalFunction } from '@/lib/types/types';
 
 import {AiOutlineUser} from 'react-icons/ai'

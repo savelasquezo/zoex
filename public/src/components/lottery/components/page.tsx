@@ -67,7 +67,7 @@ const Lottery: React.FC<SessionInfo> = ({ session  }) => {
 
     return (
       <div className="w-full h-full z-10">
-        {lottery? (
+        {lottery?.file? (
         <div className="relative h-32 md:h-64 lg:h-96 items-center">
           <Image width={1280} height={400} src={lottery.file} loader={imageLoader} className="absolute top-0 left-0 h-full w-full object-fill rounded-md z-0"  alt=""/>
           <button onClick={() => openModal('buyTicket')} className="z-10 absolute bottom-3 right-3 flex items-center justify-between bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-2 rounded border-b-2 overflow-hidden">

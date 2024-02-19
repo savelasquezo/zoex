@@ -160,7 +160,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             'Authorization': `JWT ${session?.user?.accessToken}`,
           }
         };
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=${"False"}`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=false`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
@@ -176,7 +176,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
         });
 
 
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=${"True"}`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=true`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');

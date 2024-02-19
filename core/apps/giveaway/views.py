@@ -162,10 +162,12 @@ class makeTicketGiveaway(generics.GenericAPIView):
         voucher = request.GET.get('voucher')
         rsize = request.GET.get('rsize')
 
+        rsize = True if rsize == "true" else False
+
         objTicket = TicketsGiveaway.objects.get(voucher=voucher)
         ticket = objTicket.ticket
         obj = Giveaway.objects.get(id=giveawayId)
-        url = obj.mfile.url if rsize =="True" else obj.file.url
+        url = obj.mfile.url if rsize else obj.file.url
 
         image = Image.open(os.path.join(str(settings.BASE_DIR) + url))
         image = Image.open(os.path.join(str(settings.BASE_DIR) + url))

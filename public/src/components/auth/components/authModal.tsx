@@ -3,7 +3,6 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import Image from 'next/image';
 import CircleLoader from 'react-spinners/CircleLoader';
-
 import { ModalFunction } from '@/lib/types/types';
 
   

@@ -29,7 +29,7 @@ class fetchLottery(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         try: 
-            queryset = Lottery.objects.get(is_active=True)
+            queryset = Lottery.objects.latest('id')
             serializer = self.get_serializer(queryset)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -171,12 +171,14 @@ class makeTicketLottery(generics.GenericAPIView):
         voucher = request.GET.get('voucher')
         rsize = request.GET.get('rsize')
 
+        rsize = True if rsize == "true" else False
+
         objTicket = TicketsLottery.objects.get(voucher=voucher)
         ticket = objTicket.ticket
         obj = Lottery.objects.get(is_active=True)
-        url = obj.mfile.url if rsize =="True" else obj.file.url
+        url = obj.mfile.url if rsize else obj.file.url
 
-        image = Image.open(os.path.join(str(settings.BASE_DIR) + url))
+        image = Image.open(os.path.join(str(settings.MEDIA_ROOT) + url))
         draw = ImageDraw.Draw(image)
 
         pndX = 110 if rsize else 80

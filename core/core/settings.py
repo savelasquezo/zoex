@@ -290,6 +290,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 #EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_HOST_USER = 'noreply@zoexbet.com'
 DEFAULT_FROM_EMAIL = 'noreply@zoexbet.com'
@@ -310,8 +311,5 @@ if not DEBUG:
 
     MEDIA_ROOT = '/var/www/zoex/media/'
     MEDIA_URL = '/media/'
-
-
-    
 
 

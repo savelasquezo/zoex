@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NextResponse } from 'next/server';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CircleLoader from 'react-spinners/CircleLoader';
-
 import { validatePassword } from "@/utils/passwordValidation";
 import { ForgotPasswordConfirmModal } from '@/lib/types/types';
 

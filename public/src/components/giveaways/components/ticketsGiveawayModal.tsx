@@ -164,7 +164,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             'Authorization': `JWT ${session?.user?.accessToken}`,
           }
         };
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=${"False"}`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=false`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
@@ -178,7 +178,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           .catch(error => {
             console.error('Error:', error);
         });
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=${"True"}`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=true`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');

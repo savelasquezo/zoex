@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NextResponse } from 'next/server';
 import CircleLoader from 'react-spinners/CircleLoader';
-
 import { ModalFunction } from '@/lib/types/types';
 
 import {CiMail} from 'react-icons/ci'
