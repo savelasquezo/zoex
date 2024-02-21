@@ -44,12 +44,10 @@ const AuthModal: React.FC<ModalFunction> = ({ closeModal }) => {
             token,
           }),
         });
-        if (res.status !== 204) {
-          const data = await res.json();
-          console.log('No pudimos activar este pedido, verifica si la cuenta ya esta activa.');
-        } else {
+        if (res.status === 204) {
           setActivated(true);
         }
+        
       } catch (error) {
         return NextResponse.json({ error: 'There was an error with the network request' });
   
@@ -66,7 +64,7 @@ const AuthModal: React.FC<ModalFunction> = ({ closeModal }) => {
                 <Image priority width={400} height={200} src={"/assets/image/logoX.webp"} className="object-fit self-start scale-75" alt="" />
                 <div className="px-4">
                     <p className="text-sm text-white">¡Bienvenido a Zoexbet!</p><br />
-                    <p className="text-xs text-white font-thin text-justify">¡Nos emociona darte la bienvenida a nuestra comunidad de apuestas y rifas! Activa tu cuenta dando click en el boton "Activar", y ahora estaras listo para sumergirte en la emocionante experiencia de ZoexBet.</p>
+                    <p className="text-xs text-white font-thin text-justify">¡Nos emociona darte la bienvenida a nuestra comunidad de apuestas y rifas! Activa tu cuenta dando clic en el botón "Activar", y ahora estarás listo para sumergirte en la emocionante experiencia de ZoexBet.</p>
                 </div>
                 <div className="absolute bottom-10 w-full px-4 ">
                     {activated ? (

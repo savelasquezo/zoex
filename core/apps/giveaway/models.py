@@ -30,10 +30,10 @@ class Giveaway(models.Model):
     
     winner = models.SmallIntegerField (_("Ticket"), null=True, blank=True, help_text="#Ticket Ganador")
 
-    date_giveaway = models.DateField(_("Fecha"), default=timezone.now)
+    date_giveaway = models.DateField(_("Sortea"), default=datetime(2000, 1, 1))
 
-    sold = models.SmallIntegerField (_("Tickets"), default=0, null=False, blank=False, help_text="#Tickets Totales")
-    date_results = models.DateField(_("Fecha"), default=timezone.now)
+    sold = models.SmallIntegerField (_("Vendidos"), default=0, null=False, blank=False, help_text="#Tickets Totales")
+    date_results = models.DateField(_("Fecha"), default=datetime(2000, 1, 1))
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
 
@@ -62,6 +62,7 @@ class Giveaway(models.Model):
         return f"{self.giveaway}"
 
     class Meta:
+        indexes = [models.Index(fields=['giveaway']),]
         verbose_name = _("Sorteo")
         verbose_name_plural = _("Sorteos")
 
@@ -88,5 +89,6 @@ class TicketsGiveaway(models.Model):
         return f"{self.ticket}"
 
     class Meta:
+        indexes = [models.Index(fields=['giveaway']),]
         verbose_name = _("Ticket")
         verbose_name_plural = _("Tickets")

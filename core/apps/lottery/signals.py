@@ -38,7 +38,6 @@ def signalLottery(sender, instance, **kwargs):
     try:
         getWinner = TicketsLottery.objects.filter(lottery=instance,ticket=instance.winner)
         if instance.winner is not None and getWinner.exists():
-
             #Disable Current Lottery
             instance.is_active = False
             instance.stream = Core.objects.all().first().stream
@@ -75,8 +74,8 @@ def signalLottery(sender, instance, **kwargs):
 
 
 
-        
 @receiver(post_save, sender=TicketsLottery)
+@receiver(post_delete, sender=TicketsLottery)
 def signalTicketsLottery(sender, instance, **kwargs):
     """
     Signal handler for post-save and post-delete events of TicketsLottery instances.
@@ -86,11 +85,12 @@ def signalTicketsLottery(sender, instance, **kwargs):
     """
 
     try:
-        lottery = Lottery.objects.filter(is_active=True).first()
-        currentTickets = TicketsLottery.objects.filter(lottery=lottery).count()
-        lottery.sold = currentTickets
-        lottery.amount = lottery.price*currentTickets
-        lottery.save()
+        #Calculate current sold ammount
+        currentLottery = instance.lottery
+        currentTickets = TicketsLottery.objects.filter(lottery=currentLottery).count()
+        currentLottery.sold = currentTickets
+        currentLottery.amount = currentLottery.price*currentTickets
+        currentLottery.save()
 
         channel_layer = get_channel_layer()
         data = geAviableTickets(lottery=instance)

@@ -6,6 +6,7 @@ import { SessionModal, HistoryDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { GiCheckMark , GiCrossMark } from "react-icons/gi";
+import { GoAlertFill } from "react-icons/go";
 
 export const fetchWithdrawals = async (accessToken: any) => {
     try {
@@ -72,15 +73,8 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
                     const invoiceData = await fetchInvoices(accessToken);
 
                     const combinedList = withdrawalData.concat(invoiceData);
-    
                     combinedList.sort((a: any, b: any) => {
-                        const dateA = new Date(a.date);
-                        const dateB = new Date(b.date);
-    
-                        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-                            return 0;
-                        }
-                        return dateA.getTime() - dateB.getTime();
+                        return b.id - a.id;
                     });
     
                     setHistoryList(combinedList);
@@ -115,7 +109,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
                                     <td className="whitespace-nowrap px-4 py-2">{obj.date}</td>
                                     <td className="whitespace-nowrap px-4 py-2 text-[0.65rem] hidden lg:table-cell">{obj.voucher}</td>
                                     <td className="whitespace-nowrap px-4 py-2text-center align-middle">
-                                        {obj.state ? <p className='text-green-300'><GiCheckMark /></p> : <p className='text-yellow-300'><GiCrossMark /></p>}
+                                        {obj.state == "pending" ? <p className='text-yellow-300'><GoAlertFill /></p> : obj.state == "done" ? <p className='text-green-300'><GiCheckMark /></p> : <p className='text-red-700'><GiCrossMark /></p>}
                                     </td>
                                 </tr>
                             ))}
@@ -130,7 +124,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
                         pageRangeDisplayed={5}
                         onPageChange={changePage}
                         className={'absolute bottom-3 w-full flex flex-row items-center justify-center gap-x-2'}
-                        pageClassName={'bg-slate-700 text-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
+                        pageClassName={'bg-slate-700 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         activeClassName={'bg-slate-600 text-slate-600 rounded-full !px-3 !py-0 transition-colors duration-300'}
                         previousClassName={'absolute left-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'}
                         nextClassName={'absolute right-5 bg-slate-700 rounded-full p-1 transition-colors duration-300'} 

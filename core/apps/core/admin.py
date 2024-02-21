@@ -54,8 +54,11 @@ class CoreAdmin(admin.ModelAdmin):
         ("Social", fSocial),
         )
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
     def has_add_permission(self, request):
-         return False if model.Core.objects.exists() else True
+        return False if model.Core.objects.exists() else True
 
     readonly_fields=['default',]
 

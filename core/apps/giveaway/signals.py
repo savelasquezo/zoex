@@ -57,14 +57,26 @@ def signalGiveaway(sender, instance, **kwargs):
 @receiver(post_save, sender=TicketsGiveaway)
 @receiver(post_delete, sender=TicketsGiveaway)
 def signalTicketsGiveaway(sender, instance, **kwargs):
-    channel_layer = get_channel_layer()
-    data = geAviableTickets(id=instance.giveaway.id)
-    async_to_sync(channel_layer.group_send)(
-        "groupTicketsGiveaway",
-        {
-            "type": "asyncSignal",
-            "data": data,
-        }
-    )
+        
+    try:
+        #Calculate current sold ammount
+        currentGiveaway = instance.giveaway
+        currentTickets = TicketsGiveaway.objects.filter(giveaway=currentGiveaway).count()
+        currentGiveaway.sold = currentTickets
+        currentGiveaway.amount = currentGiveaway.price*currentTickets
+        currentGiveaway.save()
 
+        channel_layer = get_channel_layer()
+        data = geAviableTickets(id=instance.giveaway.id)
+        async_to_sync(channel_layer.group_send)(
+            "groupTicketsGiveaway",
+            {
+                "type": "asyncSignal",
+                "data": data,
+            }
+        )
 
+    except Exception as e:
+        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+            f.write("signalTicketsGiveaway {} --> Error: {}\n".format(eDate, str(e)))

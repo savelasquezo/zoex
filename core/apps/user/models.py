@@ -44,9 +44,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     frame = models.CharField(_("Avatar"),default=0,max_length=2, null=True, blank=True)
 
-    is_active = models.BooleanField(_("¿Activo?"),default=True)
+    is_active = models.BooleanField(_("¿Activo?"),default=False)
     is_staff = models.BooleanField(_("¿Staff?"),default=False)
-    is_verified = models.BooleanField(_("¿Verificado?"),default=False)
 
     objects = UserAccountManager()
 
@@ -85,7 +84,7 @@ class Withdrawals(models.Model):
         return f"{self.voucher}"
 
     class Meta:
-        indexes = [models.Index(fields=['uuid','state']),]
+        indexes = [models.Index(fields=['account','voucher','state']),]
         verbose_name = _("Retiro")
         verbose_name_plural = _("Retiros")
 
@@ -108,7 +107,7 @@ class Invoice(models.Model):
         return f"{self.voucher}"
 
     class Meta:
-        indexes = [models.Index(fields=['uuid','state']),]
+        indexes = [models.Index(fields=['account','voucher','state']),]
         verbose_name = _("Recarga")
         verbose_name_plural = _("Recargas")
 

@@ -31,7 +31,7 @@ class Lottery(models.Model):
 
     date_lottery = models.DateField(_("Fecha"), default=timezone.now)
 
-    date_results = models.DateField(_("Fecha"), default=timezone.now)
+    date_results = models.DateField(_("Fecha"), default=datetime(2000, 1, 1))
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     amount = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
 
@@ -63,6 +63,7 @@ class Lottery(models.Model):
         return f"{self.lottery}"
 
     class Meta:
+        indexes = [models.Index(fields=['lottery']),]
         verbose_name = _("Loteria")
         verbose_name_plural = _("Loteria")
 
@@ -87,5 +88,6 @@ class TicketsLottery(models.Model):
         return f"{self.ticket}"
 
     class Meta:
+        indexes = [models.Index(fields=['lottery']),]
         verbose_name = _("Ticket")
         verbose_name_plural = _("Tickets")

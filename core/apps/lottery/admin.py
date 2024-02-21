@@ -26,6 +26,9 @@ class TicketsLotteryInline(admin.StackedInline):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 class LotteryAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -72,7 +75,7 @@ class LotteryAdmin(admin.ModelAdmin):
         return fieldsets
 
     def has_add_permission(self, request):
-         return False if Lottery.objects.filter(is_active=True).exists() else True
+        return False if Lottery.objects.filter(is_active=True).exists() else True
 
     def save_model(self, request, obj, form, change):
         getWinner = TicketsLottery.objects.filter(lottery=obj,ticket=obj.winner, state=True)

@@ -122,13 +122,12 @@ class fetchAllTicketsLottery(generics.ListAPIView):
     """
     serializer_class = TicketsLotterySerializer
     permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = UserAccount.objects.get(email=self.request.user.email)
-        return TicketsLottery.objects.filter(email=user).order_by("-id")
+    def get_queryset(self, request):
+        return TicketsLottery.objects.filter(email=request.user.email).order_by("-id")
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = self.get_queryset()
+            queryset = self.get_queryset(request)
             serialized_data = self.serializer_class(queryset, many=True).data
             serialized_data = sorted(serialized_data, key=lambda x: x['id'], reverse=True)
             

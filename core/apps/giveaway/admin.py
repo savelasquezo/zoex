@@ -22,6 +22,12 @@ class TicketsGiveawayInline(admin.StackedInline):
     def get_readonly_fields(self, request, obj=None):
         return ['uuid','email','ticket','date','voucher']
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 class GiveawayAdmin(admin.ModelAdmin):
 
     inlines = [TicketsGiveawayInline]
@@ -29,8 +35,8 @@ class GiveawayAdmin(admin.ModelAdmin):
     list_display = (
         "giveaway",
         "prize",
-        "value",
-        "tickets",
+        "sold",
+        "amount",
         "price",
         "date_giveaway",
         'is_active'

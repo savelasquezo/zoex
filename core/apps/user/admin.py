@@ -142,7 +142,7 @@ class UserAccountAdmin(BaseUserAdmin):
     search_fields = ('username', 'email')
 
     fieldsets = (
-        (None, {'fields': (('email','uuid','is_active','is_verified','is_staff'), 'password')}),
+        (None, {'fields': (('email','uuid','is_active','is_staff'), 'password')}),
             ('Información', {'fields': (
             ('username','phone','referred'),
             ('balance','credits'),

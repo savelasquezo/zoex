@@ -26,7 +26,6 @@ export const validatePassword = (password) => {
   }
 
   if (error) {
-    console.log(error);
     return error;
   }
 

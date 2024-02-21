@@ -62,7 +62,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         const usernamePattern = /^[a-zA-Z0-9]+$/;
         if (!usernamePattern.test(username)) {
-          setError('¡Email Invalido! Unicamente Alfanumericos');
+          setError('¡Email invalido! Unicamente Alfanuméricos');
           setLoading(false);
           return;
         } else {
@@ -71,7 +71,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
 
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         if (!emailPattern.test(email)) {
-          setError('¡Email Invalido! example@domain.com');
+          setError('¡Email invalido! example@domain.com');
           setLoading(false);
           return;
         } else {
@@ -88,7 +88,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
         }
 
         if (!agreed) {
-          setError(' ¡Acepta los Terminos del Servicio!');
+          setError('¡Acepta los Términos del Servicio!');
           setLoading(false);
           return;
         }
@@ -113,14 +113,14 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
           const data = await res.json();
           if (!res.ok) {
             setLoading(false);
-            return setError("¡Email no Encontrado! Intentalo Nuevamente ");
+            return setError("¡Email no encontrado! Intentalo nuevamente.");
           }
 
-          setSuccess("¡Enviamos un Correo Electronio de Verificacion! ");
+          setSuccess("¡Enviamos un correo electrónico de verificación.! ");
           setRegistrationSuccess(true);
 
         } catch (error) {
-          return NextResponse.json({ error: 'There was an error with the network request' });
+          return NextResponse.json({ error: 'There was an error with the network request.' });
 
         } finally  {
           setLoading(false);
@@ -185,7 +185,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-1 md:my-2">
                     <input type="checkbox" id="checkbox"onChange={toggleAgreed} readOnly={registrationSuccess}/>
-                    <p className="text-[0.5rem] md:text-xs text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos</p>
+                    <p className="text-[0.5rem] md:text-xs text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos.</p>
                 </div>
                 {registrationSuccess ? (
                   <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
@@ -209,7 +209,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
             </form>
             { success && (<div className="text-lime-400 text-xs md:text-sm mt-0 md:mt-2">{success}</div>)}
             { error && (<div className="text-red-400 text-xs md:text-sm mt-0 md:mt-2">{error}</div>)}
-            { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
+            { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas ayuda? support@zoexbet.com</div>)}
         </div>
     );
 };
