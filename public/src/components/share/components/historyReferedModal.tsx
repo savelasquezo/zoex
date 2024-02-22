@@ -26,7 +26,7 @@ export const fetchInvoicesRefered = async (accessToken: any) => {
         const data = await res.json();
             return data;
     } catch (error) {
-        return NextResponse.json({ error: 'There was an error with the network request' });
+        return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
 }
 
@@ -48,7 +48,7 @@ const HistoryReferedModal: React.FC<SessionModal>  = ({closeModal, session }) =>
             setFeesRefered(data);
           })
           .catch((error) => {
-            console.error('Error getting information about tickets!', error);
+            NextResponse.json({ error: 'Server responded with an error' });
           }); 
         };
         fetchData();

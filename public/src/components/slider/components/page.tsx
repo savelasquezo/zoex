@@ -24,7 +24,7 @@ export const fetchImagenSliders = async () => {
     const data = await res.json();
     return data;
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -40,7 +40,7 @@ const Slider: React.FC<SessionInfo> = ({ session  }) => {
           localStorage.setItem('imagenSliders', JSON.stringify(data));
         })
         .catch((error) => {
-          console.error('Error al obtener datos iniciales de imagenSliders:', error);
+          NextResponse.json({ error: 'Server responded with an error' });
         });
     },[]);
 

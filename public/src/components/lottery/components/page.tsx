@@ -26,7 +26,7 @@ export const fetchLottery = async () => {
     const data = await res.json();
     return data;
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -60,7 +60,7 @@ const Lottery: React.FC<SessionInfo> = ({ session  }) => {
           localStorage.setItem('lottery', JSON.stringify(data));
         })
         .catch((error) => {
-          console.error('Server responded with an error :', error);
+          NextResponse.json({ error: 'Server responded with an error' });
         });
     }, []);
 

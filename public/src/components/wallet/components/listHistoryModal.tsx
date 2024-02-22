@@ -26,7 +26,7 @@ export const fetchWithdrawals = async (accessToken: any) => {
         const data = await res.json();
         return data;
         } catch (error) {
-            return NextResponse.json({ error: 'There was an error with the network request' });
+            return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
 }
 
@@ -42,13 +42,12 @@ export const fetchInvoices = async (accessToken: any) => {
             },
         },
         );
-        if (!res.ok) {
-        return NextResponse.json({ error: 'Server responded with an error' });
+        if (res.ok) {
+            const data = await res.json();
+            return data;
         }
-        const data = await res.json();
-        return data;
         } catch (error) {
-            return NextResponse.json({ error: 'There was an error with the network request' });
+            NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
 }
 
@@ -79,7 +78,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
     
                     setHistoryList(combinedList);
                 } catch (error) {
-                    console.error('Error fetching data:', error);
+                    NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
                 }
             }
         };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { NextResponse } from 'next/server';
 
 import BeatLoader from 'react-spinners/BeatLoader';
 import BoldButton from '@/utils/BoldButton';
@@ -73,7 +74,7 @@ const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         setInvoiceSuccess(true);
       }
     } catch (error) {
-      console.error('RequestInvoice Error:', error);
+      NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
     
     setLoading(false);

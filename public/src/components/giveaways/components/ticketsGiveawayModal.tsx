@@ -65,7 +65,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           setGenerateNewNumbers(false);
         }
       } catch (error) {
-        console.error("Error parsing message:", error);
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
       }
     };
   
@@ -176,7 +176,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             setImageTicket1(imageUrl1);
           })
           .catch(error => {
-            console.error('Error:', error);
+            NextResponse.json({ error: 'Server responded with an error' });
         });
         await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/giveaway/make-ticket-giveaway/?giveawayId=${giveawayId}&voucher=${data.apiVoucher}&rsize=true`, requestOptions)
           .then(response => {
@@ -190,11 +190,11 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             setImageTicket2(imageUrl2);
           })
           .catch(error => {
-            console.error('Error:', error);
+            NextResponse.json({ error: 'Server responded with an error' });
         });
       }
       } catch (error) {
-        return NextResponse.json({ error: 'There was an error with the network request' });
+        return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
         
       } finally {
         handleGenerateNewNumbers();
@@ -270,10 +270,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                   <p className='text-gray-400 text-xs'>Premio: {giveaway.prize}</p>
                 </div >
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
-                <div className='absolute w-full bottom-0 flex items-center h-6'>
-                  {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
-                  {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
-                </div>
+                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
@@ -284,14 +281,13 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
               ) : (
                 null
               )}
+              </div>
+              <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden bg-blue-200 z-50'>
+                {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
+                {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexbet.com</p>)}
+              </div>
             </div>
-            <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden'>
-              {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
-              {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexbet.com</p>)}
-            </div>
-          </div>
-          ) : (
-
+            ) : (
             <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
               <span className='text-center text-gray-300 my-4 text-sm'>
                   <p>¡No hay Tickets disponibles para este Sorteo!</p>
@@ -300,7 +296,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             </div>
           )}
         </div>
-      ) : (ticketsSuccess)? (
+      ) : (ticketsSuccess && giveaway)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
           {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='hidden lg:block'/>}
           {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='block lg:hidden'/>}

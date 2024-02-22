@@ -26,7 +26,7 @@ export const fetchGiveaways = async () => {
     const data = await res.json();
     return data;
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -62,7 +62,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
             localStorage.setItem('itemsGiveaway', JSON.stringify(data));
         })
         .catch((error) => {
-            console.error('Error al obtener datos iniciales de imagenSliders:', error);
+            NextResponse.json({ error: 'Server responded with an error' });
         });
     }, []);
 

@@ -26,7 +26,7 @@ export const fetchLotteryTickets = async (accessToken: any) => {
     const data = await res.json();
     return data;
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -53,7 +53,7 @@ const ListTicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                     setTicketList(TicketsList || []);
                     
                 } catch (error) {
-                    console.error('Error fetching data:', error);
+                    NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
                 }
             }
         };
@@ -118,7 +118,7 @@ const ListTicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                        <p>¡Requerido Inicio de Sesion!</p>
+                        <p>¡Requerido Inicio de Sesión!</p>
                         <p>El Historial de Ticket solo esta disponible para usuarios registrados</p>
                     </span>
                     <button onClick={openLogin} className="w-1/4 bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300">Ingresar</button>

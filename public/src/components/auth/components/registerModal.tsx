@@ -115,12 +115,12 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
             setLoading(false);
             return setError("¡Email no encontrado! Intentalo nuevamente.");
           }
-
-          setSuccess("¡Enviamos un correo electrónico de verificación.! ");
           setRegistrationSuccess(true);
+          setSuccess("¡Enviamos un correo electrónico de verificación.! ");
+          NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
 
         } catch (error) {
-          return NextResponse.json({ error: 'There was an error with the network request.' });
+          return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
 
         } finally  {
           setLoading(false);

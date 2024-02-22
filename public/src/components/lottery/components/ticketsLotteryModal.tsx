@@ -65,7 +65,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
           setGenerateNewNumbers(false);
         }
       } catch (error) {
-        console.error("Error parsing message:", error);
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
       }
     };
 
@@ -92,6 +92,17 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
+    if (ticketsSuccess) {
+      setGenerateNewNumbers(true);
+      setTicketsSuccess(false)
+      setFormData({
+        ...formData,
+        ticket: '',
+      });
+      setLoading(false);
+      return
+    }
+
     if (!session?.user) {
       setError('¡Error - Requerido Inicio de Session!');
       setLoading(false);
@@ -108,17 +119,6 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
       setError('¡Saldo Insuficiente!');
       setLoading(false);
       return;
-    }
-    
-    if (ticketsSuccess) {
-      setGenerateNewNumbers(true);
-      setTicketsSuccess(false)
-      setFormData({
-        ...formData,
-        ticket: '',
-      });
-      setLoading(false);
-      return
     }
 
     const isTicketValid = /^[0-9]+$/.test(ticket.toString());
@@ -172,7 +172,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             setImageTicket1(imageUrl1);
           })
           .catch(error => {
-            console.error('Error:', error);
+            NextResponse.json({ error: 'Server responded with an error' });
         });
 
 
@@ -188,11 +188,11 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             setImageTicket2(imageUrl2);
           })
           .catch(error => {
-            console.error('Error:', error);
+            NextResponse.json({ error: 'Server responded with an error' });
         });
       }
       } catch (error) {
-        return NextResponse.json({ error: 'There was an error with the network request' });
+        return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
 
       } finally {
         handleGenerateNewNumbers();
@@ -208,7 +208,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
 
   return (
     <div className='w-full h-[22rem]'>
-      {(!ticketsSuccess)? (
+      {(!ticketsSuccess && lottery )? (
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
@@ -268,8 +268,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                 </div >
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! Tu Boleta sera validad para este sorteo hasta que este tenga un ganador, compra ahora tus numeros de la suerte.</p>
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
-                  {error && (<div className="text-red-400 text-sm mt-2 h-6">{error}</div>)}
-                  {!error && !success && (<div className="text-gray-400 text-xs mt-2 h-6">¿Necesitas Ayuda? support@zoexbet.com</div>)}
+                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 </div>
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>

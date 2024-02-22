@@ -24,7 +24,7 @@ export const fetchGiveawayTickets = async (accessToken: any, giveawayId: string)
       const data = await res.json();
       return data;
     } catch (error) {
-      return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
 }
 
@@ -48,7 +48,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                     setTicketList(TicketsList || []);
                     
                 } catch (error) {
-                    console.error('Error fetching data:', error);
+                    NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
                 }
             }
         };
@@ -106,16 +106,16 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                        <p>¡Aun No has adquirido ningun ticket para esta Loteria!</p>
-                        <p>Adquierlo ahora y participa en el siguiente Sorteo</p>
+                        <p>¡Aun no has adquirido ningún ticket para esta lotería!</p>
+                        <p>Adquierlo ahora y participa en el siguiente sorteo.</p>
                     </span>
                 </div>
                 )
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                        <p>¡Requerido Inicio de Sesion!</p>
-                        <p>El Historial de Ticket solo esta disponible para usuarios registrados</p>
+                        <p>¡Requerido Inicio de Sesión!</p>
+                        <p>El historial de ticket solo está disponible para usuarios registrados.</p>
                     </span>
                     <button onClick={openLogin} className="w-1/4 bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300">Ingresar</button>
                 </div>

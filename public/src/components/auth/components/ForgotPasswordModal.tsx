@@ -42,9 +42,9 @@ const ForgotPasswordModal: React.FC<ModalFunction> = ({ closeModal }) => {
       if (res.status !== 200) {
         return setError("¡Email no fue Encontrado! ");
       }
-      
-      setSuccess("¡Enviamos un Correo Electronio de Restablecimiento! ");
       setRegistrationSuccess(true);
+      setSuccess("¡Enviamos un Correo Electronio de Restablecimiento! ");
+      NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
 
       } catch (error) {
         setError('¡Error al Actualizar! Inténtalo Nuevamente!');

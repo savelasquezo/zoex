@@ -35,7 +35,7 @@ const SupportModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         const parsedInfo = JSON.parse(storedInfo);
         setInfo(parsedInfo);
       } catch (error) {
-        console.error('Error parsing stored info data:', error);
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
       }
     }
     return () => {};
@@ -68,7 +68,7 @@ const SupportModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         setRegistrationSuccess(true);
       }
     } catch (error) {
-      return NextResponse.json({ error: 'There was an error with the network request' });
+      return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
     setLoading(false);
   };

@@ -67,7 +67,7 @@ const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModal> = ({ clos
         setChangePasswordSuccess(true);
         updateForgotPasswordModalState(false);
         setSuccess('¡Contraseña Actualizada!');
-        NextResponse.json({ success: 'Password reset successfully' });
+        NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
       }
 
     } catch (error) {

@@ -36,15 +36,16 @@ export const fetchInfo = async () => {
       },
     );
 
-    if (!res.ok) {
-      return NextResponse.json({ error: 'Server responded with an error' });
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('infoData', JSON.stringify(data));
+      NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
+      return data;
     }
 
-    const data = await res.json();
-    localStorage.setItem('infoData', JSON.stringify(data));
-    return data;
+
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -74,7 +75,7 @@ const Footer: React.FC<SessionInfo> = ({ session  }) => {
           localStorage.setItem('infoData', JSON.stringify(data));
         })
         .catch((error) => {
-          console.error('¡Server responded with an error! ', error);
+          NextResponse.json({ error: 'Server responded with an error' });
         });
     }, []);
 

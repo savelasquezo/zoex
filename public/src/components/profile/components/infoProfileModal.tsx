@@ -54,7 +54,7 @@ const InfoProfileModal: React.FC<InfoProfileModalProps & { formData: any }> = ({
         }
       }
     } catch (error) {
-      return NextResponse.json({ error: 'There was an error with the network request' });
+      return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
     }
     setLoading(false);
   };

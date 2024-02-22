@@ -28,7 +28,7 @@ export const fetchRefresh = async (accessToken: any) => {
     const data = await res.json();
     return data;
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' });
+    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   }
 }
 
@@ -71,7 +71,7 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
           localStorage.setItem('bitcoinPrice', JSON.stringify(newBitcoinPrice));
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
       }
     };
   

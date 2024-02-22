@@ -46,10 +46,11 @@ const AuthModal: React.FC<ModalFunction> = ({ closeModal }) => {
         });
         if (res.status === 204) {
           setActivated(true);
+          NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
         }
         
       } catch (error) {
-        return NextResponse.json({ error: 'There was an error with the network request' });
+        return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
   
       } finally {
         setLoading(false);

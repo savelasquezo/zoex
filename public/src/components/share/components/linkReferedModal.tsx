@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { NextResponse } from 'next/server';
 import { SessionModal, InfoType } from '@/lib/types/types';
 
 import { LuCopyCheck } from "react-icons/lu";
@@ -15,7 +15,7 @@ const LinkReferedModal: React.FC<SessionModal>  = ({closeModal, session }) => {
             const parsedInfo = JSON.parse(storedInfo);
             setInfo(parsedInfo);
           } catch (error) {
-            console.error('Error parsing stored info data:', error);
+            NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
           }
         }
         return () => {};

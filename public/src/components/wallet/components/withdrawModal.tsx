@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CircleLoader from 'react-spinners/CircleLoader';
-
+import { NextResponse } from 'next/server';
 import { SessionModal } from '@/lib/types/types';
 
 import { FiDollarSign } from "react-icons/fi";
@@ -54,18 +54,23 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
           }),
         });
         const data = await res.json();
-        if (!data.error) {
-          setSuccess('¡Facturacion Exitosa!');
-          setRegistrationSuccess(true);
-          setWithdraw(data.apiWithdraw);
-          if (session && session.user) {
-            session.user.balance = data.newBalance;
-          }
+        if (data.error) {
+          setError('¡Error en Facturacion! Intentelo Nuevamente');
+          return NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
         }
+
+        setSuccess('¡Facturacion Exitosa!');
+        setRegistrationSuccess(true);
+        setWithdraw(data.apiWithdraw);
+        if (session && session.user) {session.user.balance = data.newBalance;}
+        return NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
+
       } catch (error) {
-        console.error('RequestWithdraw Error:', error);
-      }
-      setLoading(false);
+        NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+      } finally {
+        setLoading(false);
+    }
+      
     };
   
 
