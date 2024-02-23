@@ -167,12 +167,8 @@ class makeTicketGiveaway(generics.GenericAPIView):
         ticket = objTicket.ticket
         obj = Giveaway.objects.get(id=giveawayId)
         url = obj.mfile.url if rsize else obj.file.url
-
-        myurl = str(settings.MEDIA_ROOT)[:-1] + url
-        with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
-            f.write("myurl makeTicketGiveaway {}".format(myurl))
-
-        image = Image.open(str(settings.MEDIA_ROOT)[:-1] + url)
+        
+        image = Image.open(os.path.join(settings.MEDIA_ROOT)[:-7] + url)
         if image.mode != 'RGB':
             image = image.convert('RGB')
         draw = ImageDraw.Draw(image)
