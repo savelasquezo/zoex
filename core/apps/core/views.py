@@ -44,8 +44,6 @@ class sendMessage(generics.GenericAPIView):
 
             email_template_name = 'email/message.html'
 
-            print(f'{subject}{requestEmail}{requestMessaje}')
-
             c = {
                 "send": requestEmail,
                 "message": requestMessaje,

@@ -133,12 +133,12 @@ class fetchAllTicketsGiveaway(generics.ListAPIView):
     """
     serializer_class = TicketsGiveawaySerializer
     permission_classes = [IsAuthenticated]
-    def get_queryset(self, request):
-        return TicketsGiveaway.objects.filter(email=request.user).order_by("-id")
+    def get_queryset(self):
+        return TicketsGiveaway.objects.filter(email=self.request.user).order_by("-id")
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = self.get_queryset(request)
+            queryset = self.get_queryset()
             serialized_data = self.serializer_class(queryset, many=True).data
             serialized_data = sorted(serialized_data, key=lambda x: x['id'], reverse=True)
 

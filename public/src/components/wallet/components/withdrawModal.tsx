@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { NextResponse } from 'next/server';
+import { useRouter } from 'next/navigation';
 import { SessionModal } from '@/lib/types/types';
 
 import { FiDollarSign } from "react-icons/fi";
@@ -8,6 +9,8 @@ import { RiBankCardFill } from "react-icons/ri";
 
 
 const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
+
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -36,7 +39,7 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         return;
       }
   
-      if (session?.user.billing && session.user.billing.trim() === '') {
+      if (session?.user.billing && session.user.billing.trim().length < 1) {
         setError('¡Error - Informacion bancaria incorrecta');
         setLoading(false);
         return;
@@ -71,8 +74,13 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         setLoading(false);
     }
       
-    };
-  
+  };
+
+  const openProfile = async () => {
+    closeModal()
+    await new Promise(resolve => setTimeout(resolve, 100));
+    router.push('/?profile=True');
+  };
 
   return (
     <form method="POST" onSubmit={onSubmit} className="relative h-full w-full text-gray-500">
@@ -115,7 +123,7 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
           <input className="w-full indent-8 text-gray-200 rounded-sm border border-gray-700 bg-transparent px-3 py-3 !pr-9 text-[0.7rem] outline outline-0 transition-all focus:outline-0 disabled:border-0 lg:text-xs"
             type="text"
             name="location"
-            value={session?.user.billing ?? "Agregar Direccion"}
+            value={session?.user.billing ?? "Informacion Bancaria"}
             onChange={(e) => onChange(e)}
             required
             readOnly={true}
@@ -131,9 +139,15 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
               <CircleLoader loading={loading} size={25} color="#1c1d1f" />
             </p>
           ) : (
+          session?.user.billing ? (
             <button type="submit" className="w-full h-8 flex items-center justify-center text-center text-sm text-white font-semibold uppercase bg-blue-500 hover:bg-blue-600 rounded-sm py-2 px-4 md:mt-2">
               Solicitar
             </button>
+            ) : (
+            <span onClick={openProfile} className="w-full h-8 flex items-center justify-center text-center text-sm text-white font-semibold uppercase bg-yellow-500 hover:bg-yellow-600 rounded-sm py-2 px-4 md:mt-2">
+              Actualizar
+            </span>
+            )
           )
         )}
       </div>

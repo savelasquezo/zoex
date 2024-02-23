@@ -84,6 +84,9 @@ class fetchWithdrawals(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response([], status=status.HTTP_200_OK)
+
         if queryset:
             serialized_data = self.serializer_class(queryset, many=True).data
             for item in serialized_data:
@@ -102,6 +105,9 @@ class fetchInvoices(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response([], status=status.HTTP_200_OK)
+        
         if queryset:
             serialized_data = self.serializer_class(queryset, many=True).data
             for item in serialized_data:
@@ -142,7 +148,6 @@ class requestWithdraw(generics.GenericAPIView):
             return Response({'detail': 'The requested amount is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            print(method)
             obj, created = Withdrawals.objects.update_or_create(account=user,state='pending', method=method)
             obj.amount = amount if created else obj.amount + amount
             obj.method = method
@@ -162,41 +167,6 @@ class requestWithdraw(generics.GenericAPIView):
 
         except Exception as e:
             return Response({'detail': 'NotFound Lottery.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-class refreshInvoices(generics.GenericAPIView):
-    def get(self, request, *args, **kwargs):
-        try:
-            account= request.user
-            list_invoices_bold = Invoice.objects.filter(account=account,state="pending",method="bold")
-            list_invoices_crypto = Invoice.objects.filter(account=account,state="pending",method="crypto")
-
-            if list_invoices_crypto.exists():
-                headers = {'Content-Type': 'application/json',
-                            'Authorization': f'Bearer {CONFIRMO}'}
-                
-                for obj in list_invoices_crypto:
-                    response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
-                    currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
-                    if currentStatus == "paid":
-                        obj.state = "done"
-                        obj.save()
-
-
-            if list_invoices_bold.exists():
-                headers = {'Content-Type': 'application/json',
-                            'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
-                
-                for obj in list_invoices_crypto:
-                    response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
-                    currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
-                    if currentStatus == "APPROVED":
-                        obj.state = "done"
-                        obj.save()
-
-            return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'detail': 'NotFound CryptoInvoices!'}, status=status.HTTP_404_NOT_FOUND)
         
 
 
@@ -341,3 +311,38 @@ class notifyInvoiceBold(generics.GenericAPIView):
             with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
                 f.write("notifyInvoiceBold {} referenceID {} --> Error: {}\n".format(eDate, reference_id,str(e)))
             return Response({'error': 'NotFound Invoice.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class refreshInvoices(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            account= request.user
+            list_invoices_bold = Invoice.objects.filter(account=account,state="pending",method="bold")
+            list_invoices_crypto = Invoice.objects.filter(account=account,state="pending",method="crypto")
+
+            if list_invoices_crypto.exists():
+                headers = {'Content-Type': 'application/json',
+                            'Authorization': f'Bearer {CONFIRMO}'}
+                
+                for obj in list_invoices_crypto:
+                    response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
+                    currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
+                    if currentStatus == "paid":
+                        obj.state = "done"
+                        obj.save()
+
+
+            if list_invoices_bold.exists():
+                headers = {'Content-Type': 'application/json',
+                            'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
+                
+                for obj in list_invoices_crypto:
+                    response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
+                    currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
+                    if currentStatus == "APPROVED":
+                        obj.state = "done"
+                        obj.save()
+
+            return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail': 'NotFound CryptoInvoices!'}, status=status.HTTP_404_NOT_FOUND)

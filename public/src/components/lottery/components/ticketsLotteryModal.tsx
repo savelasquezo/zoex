@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useRef  } from 'react';
-
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import Image from 'next/image';
 import CircleLoader from 'react-spinners/CircleLoader';
-import { imageLoader } from '@/utils/imageConfig';
 
 import { getRandomTickets } from '@/utils/getRandomTickets'
 import { SessionModal, LotteryData } from '@/lib/types/types';
