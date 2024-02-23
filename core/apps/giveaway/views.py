@@ -168,10 +168,9 @@ class makeTicketGiveaway(generics.GenericAPIView):
         obj = Giveaway.objects.get(id=giveawayId)
         url = obj.mfile.url if rsize else obj.file.url
 
-        image = Image.open((str(settings.MEDIA_ROOT) + url))
+        image = Image.open(os.path.join(str(settings.MEDIA_ROOT) + url))
         if image.mode != 'RGB':
             image = image.convert('RGB')
-            
         draw = ImageDraw.Draw(image)
 
         pndX = 110 if rsize else 80
