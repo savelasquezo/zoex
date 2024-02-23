@@ -20,8 +20,6 @@ from apps.user.models import UserAccount
 from apps.core.functions import xlsxSave, sendEmailTicket
 
 
-PATCH = settings.MEDIA_ROOT
-
 class fetchLottery(generics.GenericAPIView):
     """
     Endpoint to retrieve details of the currently active lottery.
@@ -179,10 +177,8 @@ class makeTicketLottery(generics.GenericAPIView):
         obj = Lottery.objects.get(is_active=True)
         url = obj.mfile.url if rsize else obj.file.url
 
-        image = Image.open(os.path.join(settings.MEDIA_ROOT, url))
-        
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
+        absoluteURL = os.path.join(str(settings.MEDIA_BASE) + url)
+        image = Image.open(absoluteURL)
         draw = ImageDraw.Draw(image)
 
         pndX = 110 if rsize else 80

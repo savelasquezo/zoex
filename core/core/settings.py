@@ -229,6 +229,8 @@ STATICFILES_DIRS = [BASE_DIR/"static"]
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/'
 
+MEDIA_BASE = os.path.join(BASE_DIR, '')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -310,6 +312,7 @@ if not DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
     MEDIA_URL = '/media/'
+    MEDIA_BASE = '/var/www/zoex'
     MEDIA_ROOT = '/var/www/zoex/media/'
 
 
