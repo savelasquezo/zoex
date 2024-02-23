@@ -179,7 +179,7 @@ class makeTicketLottery(generics.GenericAPIView):
         obj = Lottery.objects.get(is_active=True)
         url = obj.mfile.url if rsize else obj.file.url
 
-        image = Image.open(os.path.join(str(settings.MEDIA_ROOT) + url))
+        image = Image.open(os.path.join(str(settings.MEDIA_ROOT)[:-1] + url))
         if image.mode != 'RGB':
             image = image.convert('RGB')
         draw = ImageDraw.Draw(image)
