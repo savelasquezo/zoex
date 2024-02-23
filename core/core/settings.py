@@ -309,7 +309,7 @@ if not DEBUG:
     #CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://217.196.63.210:3000","https://zoexbet.com",]
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-    MEDIA_URL = ''
+    MEDIA_URL = '/media/'
     MEDIA_ROOT = '/var/www/zoex/media/'
 
 
