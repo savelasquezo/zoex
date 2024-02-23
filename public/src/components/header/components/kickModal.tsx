@@ -41,7 +41,7 @@ const KickModal: React.FC = () => {
         {info?.stream && info.stream.trim().length > 1 && (
         <div className="fixed bottom-16 right-4 flex items-center justify-center z-40">
             <button onClick={openModal} className="bg-slate-950 rounded-full border-2 p-4 border-lime-400 hover:border-lime-500 hover:scale-105 transition duration-300">
-                <Image priority width={400} height={400} src={"/assets/image/kick.webp"} className="h-8 w-auto object-fit self-start z-10" alt="" />
+                <Image priority width={400} height={400} src={"/assets/image/kick00.webp"} className="h-8 w-auto object-fit self-start z-10" alt="" />
             </button>
         </div>
         )}
