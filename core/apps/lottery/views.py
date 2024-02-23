@@ -20,6 +20,8 @@ from apps.user.models import UserAccount
 from apps.core.functions import xlsxSave, sendEmailTicket
 
 
+PATCH = settings.MEDIA_ROOT
+
 class fetchLottery(generics.GenericAPIView):
     """
     Endpoint to retrieve details of the currently active lottery.
