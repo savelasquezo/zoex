@@ -74,7 +74,7 @@ class InvoiceInline(admin.StackedInline):
     )
 
     radio_fields = {'state': admin.HORIZONTAL}
-    readonly_fields = ('method','amount','date','state','voucher')
+    readonly_fields = ('method','amount','date','voucher')
     def has_add_permission(self, request, obj=None):
         return False
 
@@ -106,7 +106,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         self.inlines = [FeesInvoiceInline]
         return fieldsets
 
-    readonly_fields=['account','method','amount','date','state','voucher']
+    readonly_fields=['account','method','amount','date','voucher']
     def has_add_permission(self, request):
          return False
 
