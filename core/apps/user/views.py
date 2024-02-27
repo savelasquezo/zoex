@@ -325,23 +325,23 @@ class refreshInvoices(generics.GenericAPIView):
                             'Authorization': f'Bearer {CONFIRMO}'}
                 
                 for obj in list_invoices_crypto:
-                    response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
-                    currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
-                    if currentStatus == "paid":
-                        obj.state = "done"
-                        obj.save()
+                    #response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
+                    #currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
+                    #if currentStatus == "paid":
+                    obj.state = "done"
+                    obj.save()
 
 
             if list_invoices_bold.exists():
                 headers = {'Content-Type': 'application/json',
                             'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
                 
-                for obj in list_invoices_crypto:
-                    response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
-                    currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
-                    if currentStatus == "APPROVED":
-                        obj.state = "done"
-                        obj.save()
+                for obj in list_invoices_bold:
+                    #response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
+                    #currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
+                    #if currentStatus == "APPROVED":
+                    obj.state = "done"
+                    obj.save()
 
             return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
         except Exception as e:
