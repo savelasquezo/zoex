@@ -63,7 +63,7 @@ const InfoProfileModal: React.FC<InfoProfileModalProps & { formData: any }> = ({
   return (
     <form method="POST" onSubmit={onSubmit} className="relative w-full h-full flex flex-col gap-2 justify-start items-center px-2 lg:flex-row">
       <div className='flex flex-col items-center justify-center -mt-6'>
-        <Image onClick={handleFramenClick} width={480} height={480} src={`/assets/demo/xFrame${session?.user.frame}.webp`} className="h-40 w-auto object-contain rounded-md z-0 cursor-pointer" alt=""/>
+        <Image onClick={handleFramenClick} width={480} height={480} src={`/assets/demo/ape-bored/xFrame${session?.user.frame}.webp`} className="h-40 w-auto object-contain rounded-md z-0 cursor-pointer" alt=""/>
         {registrationSuccess ? (
           <p onClick={closeModal} className="w-36 h-6 lg:w-28 flex items-center justify-center bg-green-500 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 mt-2 lg:-mt-4 z-10">
             <BiCheck/>

@@ -185,7 +185,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-1 md:my-2">
                     <input type="checkbox" id="checkbox"onChange={toggleAgreed} readOnly={registrationSuccess}/>
-                    <p className="text-[0.5rem] md:text-xs text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos.</p>
+                    <p className="text-[0.45rem] md:text-[0.55rem] text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos.</p>
                 </div>
                 {registrationSuccess ? (
                   <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">

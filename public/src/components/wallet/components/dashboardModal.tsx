@@ -47,6 +47,9 @@ const DashboardModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     fetchRefresh(session?.user?.accessToken)
       .then((data) => {
+        if (session && session.user) {
+          session.user.balance = data.refreshBalance;
+        }
         setLoading(false);
       })
       .catch((error) => {

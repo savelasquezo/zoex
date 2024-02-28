@@ -73,7 +73,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
 
                     const combinedList = withdrawalData.concat(invoiceData);
                     combinedList.sort((a: any, b: any) => {
-                        return b.id - a.id;
+                        return b.date - a.date;
                     });
     
                     setHistoryList(combinedList);

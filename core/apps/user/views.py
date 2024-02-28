@@ -1,4 +1,4 @@
-import os, requests, uuid
+import os, requests, uuid, time
 import hashlib
 
 from django.utils import timezone
@@ -320,6 +320,8 @@ class refreshInvoices(generics.GenericAPIView):
             list_invoices_bold = Invoice.objects.filter(account=account,state="pending",method="bold")
             list_invoices_crypto = Invoice.objects.filter(account=account,state="pending",method="crypto")
 
+
+            refreshBalance = account.balance
             if list_invoices_crypto.exists():
                 headers = {'Content-Type': 'application/json',
                             'Authorization': f'Bearer {CONFIRMO}'}
@@ -328,6 +330,7 @@ class refreshInvoices(generics.GenericAPIView):
                     #response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
                     #currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
                     #if currentStatus == "paid":
+                    refreshBalance = account.balance + obj.amount
                     obj.state = "done"
                     obj.save()
 
@@ -340,9 +343,11 @@ class refreshInvoices(generics.GenericAPIView):
                     #response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
                     #currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
                     #if currentStatus == "APPROVED":
+                    refreshBalance = account.balance + obj.amount
                     obj.state = "done"
                     obj.save()
 
-            return Response({'detail': 'Invoices Refresh!'}, status=status.HTTP_200_OK)
+            return Response({'refreshBalance': refreshBalance}, status=status.HTTP_200_OK)
+
         except Exception as e:
             return Response({'detail': 'NotFound CryptoInvoices!'}, status=status.HTTP_404_NOT_FOUND)

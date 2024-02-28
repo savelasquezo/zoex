@@ -38,9 +38,15 @@ const WithdrawModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
         setLoading(false);
         return;
       }
-  
+
+      if (session?.user.balance && session.user.balance < parseInt(amount, 0)) {
+        setError('¡Error - Fondos Insuficiente!');
+        setLoading(false);
+        return;
+      }
+
       if (session?.user.billing && session.user.billing.trim().length < 1) {
-        setError('¡Error - Informacion bancaria incorrecta');
+        setError('¡Error - Informacion bancaria incorrecta!');
         setLoading(false);
         return;
       }
