@@ -4,19 +4,18 @@ from django.conf import settings
 
 import pandas as pd
 
-from django.core.mail import EmailMessage, send_mail
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
 
-def sendEmailTicket(Template, requestSubject, requestEmail, ticket, requestImage):
+def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
     try:
-        email = render_to_string(Template, {"ticket": ticket})
-        msg = EmailMessage(requestSubject,email,'noreply@zoexbet.com',[requestEmail])
-        msg.attach(f'{ticket}.jpg', requestImage, "image/jpeg")
-        msg.send(fail_silently=False)
+        email = render_to_string(Template, {"imageTicket": requestImage})
+        send_mail(requestSubject, message=None, from_email='noreply@zoexbet.com',
+                    recipient_list=[requestEmail], fail_silently=False, html_message=email)
         
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
