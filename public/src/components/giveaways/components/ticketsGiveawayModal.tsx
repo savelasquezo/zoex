@@ -269,7 +269,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                   <p className='text-gray-400 text-xs'>Disponibles: {giveaway.tickets - giveaway.sold}/{giveaway.tickets}</p>
                   <p className='text-gray-400 text-xs'>Premio: {giveaway.prize}</p>
                 </div >
-                <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
+                <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquiérelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
                 <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>

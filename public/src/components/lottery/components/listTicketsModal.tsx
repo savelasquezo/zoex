@@ -110,8 +110,8 @@ const ListTicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                 ) : (
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
-                        <p>¡Aun No has adquirido ningun ticket para esta Loteria!</p>
-                        <p>Adquierlo ahora y participa en el siguiente Sorteo</p>
+                        <p>¡Aun no has adquirido ningún ticket para esta lotería!</p>
+                        <p>Adquiérelo ahora y participa en el siguiente sorteo.</p>
                     </span>
                 </div>
                 )

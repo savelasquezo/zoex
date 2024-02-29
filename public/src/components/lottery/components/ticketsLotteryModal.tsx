@@ -264,7 +264,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                   <p className='text-gray-400 text-xs'>Disponibles: {lottery.tickets - lottery.sold}/{lottery.tickets}</p>
                   <p className='text-gray-400 text-xs'>Acumulado: ${lottery.prize}</p>
                 </div >
-                <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquierelo Ahora! Tu Boleta sera validad para este sorteo hasta que este tenga un ganador, compra ahora tus numeros de la suerte.</p>
+                <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquiérelo Ahora! Tu Boleta sera validad para este sorteo hasta que este tenga un ganador, compra ahora tus numeros de la suerte.</p>
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
                 <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 </div>

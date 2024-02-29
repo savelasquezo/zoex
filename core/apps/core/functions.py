@@ -1,28 +1,22 @@
-import os, html2text
-from email.mime.image import MIMEImage
-
+import os
 from django.utils import timezone
 from django.conf import settings
+
+import pandas as pd
+
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.core.mail import send_mail, EmailMessage
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
-import pandas as pd
 
 def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
     try:
-        email_content = render_to_string(Template, {})
-        email_content_text = html2text.html2text(email_content)
-        msg = EmailMessage(requestSubject, email_content_text, 'noreply@zoexbet.com', [requestEmail])
-
-        image = MIMEImage(requestImage, name="ticket.jpg")
-        image.add_header('Content-ID', '<ticket.jpg>')
-        msg.attach(image)
-
-        msg.send(fail_silently=False)
-
+        email = render_to_string(Template, {"imageTicket": requestImage})
+        send_mail(requestSubject, message=None, from_email='noreply@zoexbet.com',
+                    recipient_list=[requestEmail], fail_silently=False, html_message=email)
+        
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
         with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:

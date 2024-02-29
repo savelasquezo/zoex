@@ -107,7 +107,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> 
                 <div className='w-full h-full flex flex-col justify-start items-center'>
                     <span className='text-center text-gray-300 my-4 text-[0.55rem] md:text-xs'>
                         <p>¡Aun no has adquirido ningún ticket para esta lotería!</p>
-                        <p>Adquierlo ahora y participa en el siguiente sorteo.</p>
+                        <p>Adquiérelo ahora y participa en el siguiente sorteo.</p>
                     </span>
                 </div>
                 )
