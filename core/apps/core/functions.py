@@ -7,6 +7,7 @@ import pandas as pd
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, EmailMessage
 from email.mime.image import MIMEImage
+from django.utils.html import strip_tags
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
@@ -14,7 +15,9 @@ from openpyxl import load_workbook
 def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
     try:
         email_content = render_to_string(Template, {})
-        msg = EmailMessage(requestSubject,email_content,'noreply@zoexbet.com',[requestEmail],)
+        email_content_text = strip_tags(email_content)
+        msg = EmailMessage(requestSubject, email_content_text, 'noreply@zoexbet.com', [requestEmail])
+
         image = MIMEImage(requestImage, name="ticket.jpg")
         image.add_header('Content-ID', '<ticket.jpg>')
         msg.attach(image)
