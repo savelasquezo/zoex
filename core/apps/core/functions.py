@@ -11,11 +11,17 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 
 
+from django.core.mail import EmailMessage
+import base64
+
 def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
     try:
-        email = render_to_string(Template, {"imageTicket": requestImage})
-        send_mail(requestSubject, message=None, from_email='noreply@zoexbet.com',
-                    recipient_list=[requestEmail], fail_silently=False, html_message=email)
+        image_data = base64.b64decode(requestImage)
+        email = EmailMessage(requestSubject, "", 'noreply@zoexbet.com', [requestEmail])
+        email.attach('ticket_image.jpg', image_data, 'image/jpeg')
+        email_body = render_to_string(Template, {"imageTicket": requestImage})
+        email.attach_alternative(email_body, "text/html")
+        email.send()
         
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
