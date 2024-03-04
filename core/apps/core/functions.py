@@ -11,20 +11,31 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 
 
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
 import base64
 
 def sendEmailTicket(Template, requestSubject, requestEmail, requestImage):
     try:
+        # Decodificar la imagen base64
         image_data = base64.b64decode(requestImage)
-        email = EmailMessage(requestSubject, "", 'noreply@zoexbet.com', [requestEmail])
+
+        # Crear un objeto EmailMultiAlternatives
+        email = EmailMultiAlternatives(requestSubject, '', 'noreply@zoexbet.com', [requestEmail])
+
+        # Adjuntar la imagen al correo
         email.attach('ticket_image.jpg', image_data, 'image/jpeg')
+
+        # Obtener la representación en HTML del correo (con la imagen incrustada)
         email_body = render_to_string(Template, {"imageTicket": requestImage})
-        email.attach_alternative(email_body, "text/html")
+
+        # Adjuntar el contenido HTML del correo (con la imagen incrustada)
+        email.attach_alternative(email_body, 'text/html')
+
+        # Enviar el correo
         email.send()
         
     except Exception as e:
-        eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+        eDate = timezone.now().strftime('%Y-%m-%d %H:%M')
         with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
             f.write("TicketEmailError {} --> Error: {}\n".format(eDate, str(e)))
 
