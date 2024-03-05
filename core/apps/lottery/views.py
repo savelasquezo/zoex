@@ -13,8 +13,8 @@ from rest_framework.response import Response
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .models import Lottery, TicketsLottery
-from .serializers import LotterySerializer, TicketsLotterySerializer
+from .models import Lottery, TicketsLottery, HistoryLottery
+from .serializers import LotterySerializer, TicketsLotterySerializer, HistoryLotterySerializer
 
 from apps.user.models import UserAccount
 from apps.core.functions import xlsxSave, sendEmailTicket
@@ -146,10 +146,10 @@ class fetchHistoryLottery(generics.ListAPIView):
     Endpoint to retrieve a list of history lottery by the any user.
     Requires no authentication.
     """
-    serializer_class = LotterySerializer
+    serializer_class = HistoryLotterySerializer
     permission_classes = [AllowAny]
     def get_queryset(self):
-        return Lottery.objects.filter(is_active=False).order_by("-id")
+        return HistoryLottery.objects.all().order_by("-id")
 
     def get(self, request, *args, **kwargs):
         try:

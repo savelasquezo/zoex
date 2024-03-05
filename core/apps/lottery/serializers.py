@@ -1,5 +1,5 @@
 from rest_framework import serializers
-import apps.lottery.models as models
+from apps.lottery.models import Lottery, TicketsLottery, HistoryLottery
 
 class LotterySerializer(serializers.ModelSerializer):
 
@@ -16,10 +16,15 @@ class LotterySerializer(serializers.ModelSerializer):
         return None
 
     class Meta:
-        model = models.Lottery
+        model = Lottery
         fields = '__all__'
 
 class TicketsLotterySerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.TicketsLottery
+        model = TicketsLottery
+        fields = '__all__'
+
+class HistoryLotterySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HistoryLottery
         fields = '__all__'

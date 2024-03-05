@@ -36,8 +36,10 @@ def signalGiveaway(sender, instance, **kwargs):
     try:
         getWinner = TicketsGiveaway.objects.filter(giveaway=instance,ticket=instance.winner, state=True)
         if instance.winner is not None and getWinner.exists():
+            stream = Core.objects.get(default="ZoeXConfig").stream
+
             instance.is_active = False
-            instance.stream = Core.objects.all().first().stream
+            instance.stream = stream
             instance.date_results = timezone.now()
 
             instance.save()

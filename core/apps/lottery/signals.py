@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-from .models import Lottery, TicketsLottery
+from .models import Lottery, TicketsLottery, HistoryLottery
 from apps.user.models import UserAccount
 from apps.core.models import Core
 from apps.core.functions import sendEmailTicket
@@ -37,10 +37,18 @@ def signalLottery(sender, instance, **kwargs):
 
     try:
         getWinner = TicketsLottery.objects.filter(lottery=instance,ticket=instance.winner)
-        if instance.winner is not None and getWinner.exists():
+        stream = Core.objects.get(default="ZoeXConfig").stream
+
+        data = {'winner':instance.winner,'price':instance.price,'sold':instance.sold,'total':instance.total,'stream':stream}
+
+        if instance.winner:
+            obj = HistoryLottery.objects.create(lottery=instance.lottery,**data)
+
+        if getWinner.exists():
+
             #Disable Current Lottery
             instance.is_active = False
-            instance.stream = Core.objects.all().first().stream
+            instance.stream = stream
             instance.total = instance.amount - instance.prize
             instance.date_results = timezone.now()
             instance.save()
@@ -55,11 +63,14 @@ def signalLottery(sender, instance, **kwargs):
 
             #Create New Lottery
             Lottery.objects.create(file=instance.file,mfile=instance.mfile)
+            obj.is_active = True
+            obj.save()
 
             #SendMail Winner
             image64 = base64.b64encode(instance.file).decode('utf-8')
             sendEmailTicket('email/congratulations.html',f'¡Felicidades! {instance.winner} - Ticket Ganador!', user.email, image64)
 
+            
     except Exception as e:
         eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
         with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:

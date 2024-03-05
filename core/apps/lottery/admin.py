@@ -86,4 +86,6 @@ class LotteryAdmin(admin.ModelAdmin):
         super(LotteryAdmin, self).save_model(request, obj, form, change)
 
 
+
 admin.site.register(Lottery, LotteryAdmin)
+

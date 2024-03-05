@@ -91,3 +91,25 @@ class TicketsLottery(models.Model):
         indexes = [models.Index(fields=['lottery']),]
         verbose_name = _("Ticket")
         verbose_name_plural = _("Tickets")
+
+
+class HistoryLottery(models.Model):
+    lottery = models.CharField(_("ID"), max_length=128, unique=True, null=False, blank=False)
+
+    winner = models.CharField (_("Ticket"), max_length=4, null=True, blank=True, help_text="#Ticket Ganador")
+
+    price = models.IntegerField(_("Valor"), null=False, default=1, blank=False, help_text="$Ticket (USD)",
+        validators=[MaxValueValidator(limit_value=100, message='Max. $100 USD')])
+    sold = models.SmallIntegerField (_("Vendidos"), default=0, null=False, blank=False, help_text="#Tickets Totales")
+    total = models.IntegerField(_("Total"), default=0, null=False, blank=False, help_text="$Total (USD)")
+
+    stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
+    date_results = models.DateField(_("Fecha"), default=timezone.now)
+    is_active = models.BooleanField(_("¿Estado?"),default=False)
+
+    def __str__(self):
+        return f"{self.lottery}"
+
+    class Meta:
+        verbose_name = _("Historial")
+        verbose_name_plural = _("Hisotrial")
