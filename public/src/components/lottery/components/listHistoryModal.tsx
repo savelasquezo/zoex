@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { SessionModal, LotteryData } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+import { GiCheckMark , GiCrossMark } from "react-icons/gi";
 import { FaLink } from "react-icons/fa6";
 
 export const fetchLotteryHistory = async () => {
@@ -64,6 +65,7 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                                 <th scope="col" className=" px-6 py-2 hidden sm:table-cell">Fecha</th>
                                 <th scope="col" className=" px-6 py-2">Ticket</th>
                                 <th scope="col" className=" px-6 py-2">Link</th>
+                                <th scope="col" className=" px-6 py-2"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +76,9 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                                     <td className="whitespace-nowrap px-6 py-2">{obj.winner}</td>
                                     <td className="whitespace-nowrap px-6 py-2 flex justify-center">
                                         <a href={obj.stream ?? "#"} target='blank' className='hover:text-blue-500 transition-colors duration-300'><FaLink /></a>
+                                    </td>
+                                    <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">
+                                        {obj.is_active ? <p className='text-green-300'><GiCheckMark  /></p> : <p className='text-red-500'><GiCrossMark /></p>}
                                     </td>
                                 </tr>
                             ))}

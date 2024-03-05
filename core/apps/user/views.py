@@ -327,12 +327,12 @@ class refreshInvoices(generics.GenericAPIView):
                             'Authorization': f'Bearer {CONFIRMO}'}
                 
                 for obj in list_invoices_crypto:
-                    #response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
-                    #currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
-                    #if currentStatus == "paid":
-                    refreshBalance = account.balance + obj.amount
-                    obj.state = "done"
-                    obj.save()
+                    response = requests.get(f'https://confirmo.net/api/v3/invoices/{obj.voucher}', headers=headers)
+                    currentStatus = response.json().get('status') if response.status_code == 200 else "pending"
+                    if currentStatus == "paid":
+                        refreshBalance = account.balance + obj.amount
+                        obj.state = "done"
+                        obj.save()
 
 
             if list_invoices_bold.exists():
@@ -340,12 +340,12 @@ class refreshInvoices(generics.GenericAPIView):
                             'Authorization': f'x-api-key {BOLD_PUBLIC_KEY}'}
                 
                 for obj in list_invoices_bold:
-                    #response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
-                    #currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
-                    #if currentStatus == "APPROVED":
-                    refreshBalance = account.balance + obj.amount
-                    obj.state = "done"
-                    obj.save()
+                    response = requests.get(f'https://payments.api.bold.co/v2/payment-voucher/{obj.voucher}', headers=headers)
+                    currentStatus = response.json().get('payment_status') if response.status_code == 200 else "pending"
+                    if currentStatus == "APPROVED":
+                        refreshBalance = account.balance + obj.amount
+                        obj.state = "done"
+                        obj.save()
 
             return Response({'refreshBalance': refreshBalance}, status=status.HTTP_200_OK)
 
