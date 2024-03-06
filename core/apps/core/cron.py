@@ -15,7 +15,7 @@ from django.utils import timezone
 from django_cron import CronJobBase, Schedule
 from apps.core.models import Core
 
-APILAYER = settings.APILAYER_KEY
+APILAYER_KEY = settings.APILAYER_KEY
 
 class UpdateCurrency(CronJobBase):
     RUN_EVERY_MINS = 720
@@ -42,7 +42,7 @@ class UpdateCurrency(CronJobBase):
         try:
             url = "https://api.apilayer.com/fixer/latest?base=USD&symbols=COP"
             headers = {
-                'apikey': f'{APILAYER}'
+                'apikey': f'{APILAYER_KEY}'
             }
             response = requests.get(url, headers=headers)
             if response.status_code == 200:
