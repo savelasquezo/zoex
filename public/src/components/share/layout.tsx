@@ -4,6 +4,4 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
         {children}
       </section>
     );
-  }
-  
-  
+}
