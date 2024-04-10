@@ -10,6 +10,7 @@ import Header from '@/components/header/index';
 import Footer from '@/components/footer/index';
 import Slider from '@/components/slider/index';
 import Lottery from '@/components/lottery/index';
+import MiniLottery from '@/components/minilottery/index';
 import Giveaways from '@/components/giveaways/index';
 import History from '@/components/history/index';
 
@@ -22,6 +23,7 @@ export default function Home() {
         <Slider />
         <div className="w-full flex flex-col gap-y-4 p-8">
           <Lottery />
+          <MiniLottery />
           <Giveaways />
         </div>
         <div className='mb-10'>

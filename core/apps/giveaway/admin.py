@@ -82,6 +82,9 @@ class GiveawayAdmin(admin.ModelAdmin):
             username = UserAccount.objects.get(email=getWinner.first().email).username
             messages.warning(request, f'¡Advertencia! ¡El Usuario {username} ha Ganado!')
 
+        else:
+            messages.success(request, f'¡El Sorteo no ha seleccionado ningun ganador!')
+
         super(GiveawayAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Giveaway, GiveawayAdmin)

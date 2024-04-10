@@ -18,6 +18,8 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
   const [success, setSuccess] = useState<string>('');
   const [loading, setLoading] = useState(false);
 
+  const [stateNumber, setStateNumber] = useState(true);
+
   const router = useRouter();
   
   const [giveaway, setGiveaway] = useState<GiveawayData>();
@@ -86,6 +88,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStateNumber(true);
     setLoading(true);
     setSuccess('');
     setError('');
@@ -130,6 +133,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
 
     if (!aviableTickets.includes(ticket)) {
       setError('¡Numero no Disponible!');
+      setStateNumber(false);
       setLoading(false);
       return;
     }
@@ -214,7 +218,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
-            <form method="POST" onClick={handleSubmit} className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
+            <form method="POST" className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
               <div className='relative flex flex-col w-full h-32 justify-start items-center lg:h-52 lg:justify-center'>
                 <div className='absolute -top-12 right-0 lg:hidden'>
                   <span className='relative h-full w-full flex items-center'>
@@ -222,7 +226,9 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                     <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${giveaway.price}</p>
                   </span>
                 </div>
-                <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
+                <Image width={400} height={400} className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0" alt="" 
+                  src={stateNumber ? "/assets/image/ball.webp" : "/assets/image/ballX.webp"}
+                />
                 <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
                   type="text"
                   name="ticket"
@@ -234,13 +240,12 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                   readOnly={ticketsSuccess}
                   required
                 />
-
               </div>
               {loading ? (
                 <button type="button" className='w-full h-8 flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'><CircleLoader loading={loading} size={16} color="#1c1d1f" /></button>
               ) : (
                 session && session?.user? (
-                  <input type="submit" value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
+                  <input type="submit" onClick={handleSubmit} value="Comprar" className='w-full h-8 text-gray-900 bg-zinc-300 hover:bg-zinc-200 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase lg:w-40'/>
                   ) : (
                   <span onClick={openLogin} className="w-full h-8 flex justify-center items-center bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-1 px-2 rounded transition-colors duration-300 lg:w-40">Ingresar</span>
                 )

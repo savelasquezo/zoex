@@ -6,12 +6,12 @@ import Image from 'next/image';
 import CircleLoader from 'react-spinners/CircleLoader';
 
 import { getRandomTickets } from '@/utils/getRandomTickets'
-import { SessionModal, LotteryData } from '@/lib/types/types';
+import { SessionModal, MiniLotteryData } from '@/lib/types/types';
 
 import { LuRefreshCw } from "react-icons/lu";
 
 
-const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
+const TicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
 
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
@@ -19,7 +19,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
 
   const router = useRouter();
 
-  const [lottery, setLottery] = useState<LotteryData>();
+  const [minilottery, setMiniLottery] = useState<MiniLotteryData>();
   const [imageTicket1, setImageTicket1] = useState<string | null>(null);
   const [imageTicket2, setImageTicket2] = useState<string | null>(null);
 
@@ -43,7 +43,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
   };
 
   useEffect(() => {
-    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/app/ws/tickets_lottery/`;
+    const websocketURL = `${process.env.NEXT_PUBLIC_WEBSOCKET_APP}/app/ws/tickets_minilottery/`;
     const client = new W3CWebSocket(websocketURL);
 
     client.onmessage = (message) => {
@@ -58,7 +58,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
         if (generateNewNumbers) {
           const randomTickets = getRandomTickets(data.tickets, 5);
           setAviableTickets(data.tickets);
-          setLottery(data.lottery);
+          setMiniLottery(data.minilottery);
           setListTickets(randomTickets.map(String));
           setGenerateNewNumbers(false);
         }
@@ -107,13 +107,13 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
       return;
     }
 
-    if (!lottery) {
+    if (!minilottery) {
       setError('¡Error Inesperado! Intentelo Nuevamente');
       setLoading(false);
       return;
     }
 
-    if ((session.user.balance < lottery.price) && (session.user.credits < lottery.price)) {
+    if ((session.user.balance < minilottery.price) && (session.user.credits < minilottery.price)) {
       setError('¡Saldo Insuficiente!');
       setLoading(false);
       return;
@@ -133,7 +133,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/request-ticketlottery/`, 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/request-ticketminilottery/`, 
       {
         method: 'POST',
         headers: {
@@ -158,7 +158,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             'Authorization': `JWT ${session?.user?.accessToken}`,
           }
         };
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=false`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery/?voucher=${data.apiVoucher}&rsize=false`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
@@ -174,7 +174,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
         });
 
 
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/lottery/make-ticket-lottery/?voucher=${data.apiVoucher}&rsize=true`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery/?voucher=${data.apiVoucher}&rsize=true`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
@@ -206,7 +206,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
 
   return (
     <div className='w-full h-[22rem]'>
-      {(!ticketsSuccess && lottery )? (
+      {(!ticketsSuccess && minilottery )? (
         <div className='w-full h-[22rem] flex flex-col py-2'>
           {listTickets.length > 0 ? (
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
@@ -215,7 +215,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                 <div className='absolute -top-12 right-0 lg:hidden'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
-                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${lottery?.price}</p>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${minilottery?.price}</p>
                   </span>
                 </div>
                 <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
@@ -254,15 +254,15 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                   <button onClick={handleGenerateNewNumbers} className='p-1 h-5 text-xs absolute scale-75 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base lg:scale-100 '><LuRefreshCw /></button>
                 )}
               </div>
-              {lottery? (
+              {minilottery? (
               <div className='relative w-full h-36 gap-y-0.5 px-4 my-4 hidden lg:flex lg:flex-col lg:justify-start'>
                 <div className='flex flex-row justify-between items-center'>
-                  <p className='text-gray-400 text-xs'>Loteria: {lottery.lottery}</p>
-                  <p className='text-gray-400 text-xs'>Fecha: {lottery.date_lottery}</p>
+                  <p className='text-gray-400 text-xs'>Loteria: {minilottery.minilottery}</p>
+                  <p className='text-gray-400 text-xs'>Fecha: {minilottery.date_minilottery}</p>
                 </div >
                 <div className='flex flex-row justify-between items-center'>
-                  <p className='text-gray-400 text-xs'>Disponibles: {lottery.tickets - lottery.sold}/{lottery.tickets}</p>
-                  <p className='text-gray-400 text-xs'>Acumulado: ${lottery.prize}</p>
+                  <p className='text-gray-400 text-xs'>Disponibles: {minilottery.tickets - minilottery.sold}/{minilottery.tickets}</p>
+                  <p className='text-gray-400 text-xs'>Acumulado: ${minilottery.prize}</p>
                 </div >
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquiérelo Ahora! Tu Boleta sera validad para este sorteo hasta que este tenga un ganador, compra ahora tus numeros de la suerte.</p>
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
@@ -271,7 +271,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
-                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${lottery.price}</p>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${minilottery.price}</p>
                   </span>
                 </div>
               </div>
@@ -285,7 +285,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             </div>
           </div>
           ) : (
-            lottery? (
+            minilottery? (
             <div className='w-full h-full flex flex-col justify-start items-center mt-8'>
               <span className='text-center text-gray-300 my-4 text-sm'>
                   <p>¡No hay Tickets disponibles para este Sorteo!</p>
@@ -297,7 +297,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
             )
           )}
         </div>
-      ) : (ticketsSuccess && lottery)? (
+      ) : (ticketsSuccess && minilottery)? (
         <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
           {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='hidden lg:block'/>}
           {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='block lg:hidden'/>}
@@ -311,4 +311,4 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
   );
 };
 
-export default TicketsLotteryModal;
+export default TicketsMiniLotteryModal;

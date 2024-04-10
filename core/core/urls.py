@@ -20,12 +20,13 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path("app/admin/", admin.site.urls),
     path("app/auth/", include("djoser.urls")),
     path("app/auth/", include("djoser.urls.jwt")),
     path("app/auth/", include("djoser.social.urls")),
     path("app/user/", include("apps.user.urls")),
     path("app/core/", include("apps.core.urls")),
     path("app/lottery/", include("apps.lottery.urls")),
+    path("app/minilottery/", include("apps.minilottery.urls")),
     path("app/giveaway/", include("apps.giveaway.urls")),
-    path("app/admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

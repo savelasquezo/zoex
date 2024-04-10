@@ -89,7 +89,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         )
 
     list_filter = ['date','state']
-    search_fields = ['voucher']
+    search_fields = ['account','voucher']
 
     radio_fields = {'state': admin.HORIZONTAL}
     es_formats.DATETIME_FORMAT = "d M Y"
@@ -106,9 +106,13 @@ class InvoiceAdmin(admin.ModelAdmin):
         self.inlines = [FeesInvoiceInline]
         return fieldsets
 
-    readonly_fields=['account','method','amount','date','voucher']
     def has_add_permission(self, request):
          return False
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.state == "done":
+            return [field.name for field in self.model._meta.fields]
+        return ['account','method','amount','date','voucher']
 
 class WithdrawalsAdmin(admin.ModelAdmin):
     list_display = (
@@ -120,7 +124,7 @@ class WithdrawalsAdmin(admin.ModelAdmin):
         )
 
     list_filter = ['date','state']
-    search_fields = ['voucher']
+    search_fields = ['account','voucher']
 
     radio_fields = {'state': admin.HORIZONTAL}
     es_formats.DATETIME_FORMAT = "d M Y"
@@ -132,10 +136,13 @@ class WithdrawalsAdmin(admin.ModelAdmin):
         )}),
     )
 
-    readonly_fields=['account','uuid','method','amount','date','voucher']
     def has_add_permission(self, request):
          return False
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.state == "done":
+            return [field.name for field in self.model._meta.fields]
+        return ['account','uuid','method','amount','date','voucher']
 
 class UserAccountAdmin(BaseUserAdmin):
     list_display = ('username', 'email','phone','balance')
@@ -165,7 +172,7 @@ class UserAccountAdmin(BaseUserAdmin):
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None):
-        return ['username','email','uuid','phone','referred','location','billing']
+        return ['username','email','uuid','balance','credits','phone','referred','location','billing']
 
 
 admin.site.register(models.UserAccount, UserAccountAdmin)

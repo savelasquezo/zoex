@@ -58,6 +58,36 @@ export type LotteryTicketDetails = {
     is_active: boolean;
 };
 
+
+export type MiniLotteryData = {
+    id: any;
+    file: string;
+    mfile: string;
+    minilottery: string;
+    prize: number;
+    tickets: number;
+    price: number;
+    winner: string | null | undefined;
+    date_minilottery: string;
+    sold: number;
+    date_results: string;
+    stream: string | null | undefined;
+    amount: number;
+    is_active: boolean
+};
+
+export type MiniLotteryTicketDetails = {
+    id:number;
+    uuid: string;
+    ticket: string;
+    date: string;
+    voucher: string;
+    minilottery: number;
+    email: any;
+    minilotteryID: string;
+    is_active: boolean;
+};
+
 export type GiveawayData = {
     id: any;
     file: string;
@@ -121,5 +151,5 @@ export type InfoProfile = {
 export type SessionModal = SessionInfo & ModalFunction;
 export type ForgotPasswordConfirmModal = ForgotPasswordConfirmProps & ModalFunction;
 
-export type InfoProfileModalProps = SessionModal & InfoProfile
+export type InfoProfileModalProps = SessionModal & InfoProfile;
 export type SelectFrameModalProps = SessionModal & SelectFrame

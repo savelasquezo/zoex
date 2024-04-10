@@ -85,6 +85,7 @@ CORE_APPS = [
     'apps.core',
     'apps.user',
     'apps.lottery',
+    'apps.minilottery',
     'apps.giveaway',
 ]
 

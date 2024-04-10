@@ -3,11 +3,11 @@ import { NextResponse } from 'next/server';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CircleLoader from 'react-spinners/CircleLoader';
 import { validatePassword } from "@/utils/passwordValidation";
-import { ForgotPasswordConfirmModal } from '@/lib/types/types';
+import type { ForgotPasswordConfirmModal as ForgotPasswordConfirmModalType } from '@/lib/types/types';
 
 import {FiLock} from 'react-icons/fi'
 
-const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModal> = ({ closeModal, updateForgotPasswordModalState }) => {
+const ForgotPasswordConfirmModal: React.FC<ForgotPasswordConfirmModalType> = ({ closeModal, updateForgotPasswordModalState }) => {
 
   const searchParams = useSearchParams();
   const router = useRouter();

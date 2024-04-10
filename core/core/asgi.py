@@ -15,12 +15,13 @@ from django.core.asgi import get_asgi_application
 
 from apps.core.routing import websocket_urlpatterns as core_websocket
 from apps.lottery.routing import websocket_urlpatterns as lottery_websocket
+from apps.minilottery.routing import websocket_urlpatterns as minilottery_websocket
 from apps.giveaway.routing import websocket_urlpatterns as giveaway_websocket
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 application = get_asgi_application()
 
-async_websocket_urlpatterns = (core_websocket + lottery_websocket + giveaway_websocket)
+async_websocket_urlpatterns = (core_websocket + lottery_websocket + minilottery_websocket + giveaway_websocket)
 
 application = ProtocolTypeRouter({
     "http": application,
