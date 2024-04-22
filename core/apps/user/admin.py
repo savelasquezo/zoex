@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.conf.locale.es import formats as es_formats
-
+from django.contrib.auth.models import Group
 import apps.user.models as models
 
 class FeesAccountInline(admin.StackedInline):
@@ -55,9 +55,12 @@ class WithdrawalsInline(admin.StackedInline):
     )
 
     radio_fields = {'state': admin.HORIZONTAL}
-    readonly_fields = ('method','amount','date','voucher')
+    readonly_fields = ('method','amount','date','voucher','state')
+
     def has_add_permission(self, request, obj=None):
         return False
+    
+
 
 class InvoiceInline(admin.StackedInline):
     
@@ -74,7 +77,7 @@ class InvoiceInline(admin.StackedInline):
     )
 
     radio_fields = {'state': admin.HORIZONTAL}
-    readonly_fields = ('method','amount','date','voucher')
+    readonly_fields = ('method','amount','date','voucher','state')
     def has_add_permission(self, request, obj=None):
         return False
 
@@ -110,7 +113,7 @@ class InvoiceAdmin(admin.ModelAdmin):
          return False
 
     def get_readonly_fields(self, request, obj=None):
-        if obj and obj.state == "done":
+        if obj and obj.state != "pending":
             return [field.name for field in self.model._meta.fields]
         return ['account','method','amount','date','voucher']
 
@@ -140,9 +143,11 @@ class WithdrawalsAdmin(admin.ModelAdmin):
          return False
 
     def get_readonly_fields(self, request, obj=None):
-        if obj and obj.state == "done":
+        if obj and obj.state != "pending":
             return [field.name for field in self.model._meta.fields]
         return ['account','uuid','method','amount','date','voucher']
+
+
 
 class UserAccountAdmin(BaseUserAdmin):
     list_display = ('username', 'email','phone','balance')
@@ -154,6 +159,7 @@ class UserAccountAdmin(BaseUserAdmin):
             ('username','phone','referred'),
             ('balance','credits'),
             ('location','billing'),
+            ('groups',),
         )}),
     )
 

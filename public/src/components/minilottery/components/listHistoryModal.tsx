@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NextResponse } from 'next/server';
 import ReactPaginate from 'react-paginate';
-
 import { SessionModal, MiniLotteryData } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";

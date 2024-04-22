@@ -132,7 +132,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
     }
 
     if (!aviableTickets.includes(ticket)) {
-      setError('¡Numero no Disponible!');
+      setError('¡Lamentablemente el Numero ya ha sido Adquirido!');
       setStateNumber(false);
       setLoading(false);
       return;
@@ -302,9 +302,9 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           )}
         </div>
       ) : (ticketsSuccess && giveaway)? (
-        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
-          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='hidden lg:block'/>}
-          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='block lg:hidden'/>}
+        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8 pb-8'>
+          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-auto overflow-hidden'/>}
+          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 hidden lg:hidden w-full h-auto overflow-hidden'/>}
           <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
               <button type="button" onClick={handleSubmit} className='w-full h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>

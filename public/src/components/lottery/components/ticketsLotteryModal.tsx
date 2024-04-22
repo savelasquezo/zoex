@@ -16,6 +16,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [stateNumber, setStateNumber] = useState(true);
 
   const router = useRouter();
 
@@ -128,6 +129,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
 
     if (!aviableTickets.includes(ticket)) {
       setError('¡Lamentablemente el Numero ya ha sido Adquirido!');
+      setStateNumber(false);
       setLoading(false);
       return;
     }
@@ -218,7 +220,9 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                     <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${lottery?.price}</p>
                   </span>
                 </div>
-                <Image width={400} height={400} src={"/assets/image/ball.webp"} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"/>
+                <Image width={400} height={400} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"
+                  src={stateNumber ? "/assets/image/ball.webp" : "/assets/image/ballX.webp"}
+                />
                 <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
                   type="text"
                   name="ticket"
@@ -298,9 +302,9 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
           )}
         </div>
       ) : (ticketsSuccess && lottery)? (
-        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8'>
-          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='hidden lg:block'/>}
-          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='block lg:hidden'/>}
+        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8 pb-8'>
+          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-auto overflow-hidden'/>}
+          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 hidden lg:hidden w-full h-auto overflow-hidden'/>}
           <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
             <button type="button" onClick={handleSubmit} className='w-full h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
           </div>

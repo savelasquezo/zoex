@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@use-it/interval": "^1.0.0",
     "animate.css": "^4.1.1",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.5",

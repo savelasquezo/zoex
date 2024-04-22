@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
+import useInterval from '@use-it/interval';
 
 import { SessionModal, LotteryTicketDetails } from '@/lib/types/types';
-
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-
 
 export const fetchLotteryTickets = async (accessToken: any) => {
   try {
@@ -65,8 +64,24 @@ const ListTicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
         router.push('/?login=True');
     };
 
+    useInterval(() => {
+        const fetchData = async () => {
+            if (session) {
+                const accessToken = session?.user?.accessToken;
+                try {
+                    const TicketsList = await fetchLotteryTickets(accessToken);
+                    setTicketList(TicketsList || []);
+                    
+                } catch (error) {
+                    NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+                }
+            }
+        };
+        fetchData();
+    }, 3000);
+
     return (
-        <div className='w-full h-full mt-10'>
+        <div className='relative w-full h-full mt-10'>
             <div className="relative h-[calc(100%-4rem)] w-full text-gray-500">
                 {session && session?.user? (
                 ticketList.length > 0 ? (

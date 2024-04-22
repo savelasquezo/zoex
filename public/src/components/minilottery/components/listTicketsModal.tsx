@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/navigation';
 import { NextResponse } from 'next/server';
-
+import useInterval from '@use-it/interval';
 import { SessionModal, MiniLotteryTicketDetails } from '@/lib/types/types';
 
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
@@ -64,6 +64,22 @@ const ListTicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, sessi
         closeModal()
         router.push('/?login=True');
     };
+
+    useInterval(() => {
+        const fetchData = async () => {
+            if (session) {
+                const accessToken = session?.user?.accessToken;
+                try {
+                    const TicketsList = await fetchMiniLotteryTickets(accessToken);
+                    setTicketList(TicketsList || []);
+                    
+                } catch (error) {
+                    NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+                }
+            }
+        };
+        fetchData();
+    }, 3000);
 
     return (
         <div className='w-full h-full mt-10'>
