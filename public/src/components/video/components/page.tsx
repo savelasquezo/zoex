@@ -2,15 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ReactModal from 'react-modal';
 import ReactPlayer from 'react-player';
 import { NextResponse } from 'next/server';
-
 import { InfoType } from '@/lib/types/types';
-
 import { MdQuestionMark } from 'react-icons/md';
-
-
-import { Tooltip } from 'react-tooltip'
-import 'react-tooltip/dist/react-tooltip.css'
-
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 export const fetchInfo = async () => {
   try {
@@ -27,19 +22,23 @@ export const fetchInfo = async () => {
     if (res.ok) {
       const data = await res.json();
       localStorage.setItem('infoData', JSON.stringify(data));
-      NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
+      NextResponse.json(
+        { success: 'The request has been processed successfully.' },
+        { status: 200 }
+      );
       return data;
     }
-
-
   } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'There was an error with the network request' },
+      { status: 500 }
+    );
   }
-}
+};
 
-const VideoModal: React.FC= () => {
+const VideoModal: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [videoUrl, setVideo] = useState<string>("");
+  const [videoUrl, setVideo] = useState<string>('');
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -68,8 +67,17 @@ const VideoModal: React.FC= () => {
 
   return (
     <div>
-      <button className="fixed left-[0.85rem] bottom-16 bg-gray-300 text-black border border-gray-600 rounded-full p-2" onClick={openModal}>
-        <MdQuestionMark size={24} data-tooltip-id="VideoModal" data-tooltip-content="Tutorial" data-tooltip-place="top" /><Tooltip id="VideoModal"/>
+      <button
+        className="fixed left-[0.85rem] bottom-16 bg-gray-300 text-black border border-gray-600 rounded-full p-2"
+        onClick={openModal}
+      >
+        <MdQuestionMark
+          size={24}
+          data-tooltip-id="VideoModal"
+          data-tooltip-content="Tutorial"
+          data-tooltip-place="top"
+        />
+        <Tooltip id="VideoModal" />
       </button>
       <ReactModal
         isOpen={modalIsOpen}
@@ -85,12 +93,16 @@ const VideoModal: React.FC= () => {
             right: 'auto',
             bottom: 'auto',
             marginRight: '-50%',
-            padding: '30px',
             overflow: 'hidden',
+            padding: '0 10px 50px 10px',
             transform: 'translate(-50%, -50%)',
             backgroundColor: '#000',
             color: '#fff',
             border: 'none',
+            width: '90%', // Ancho del modal
+            height: '90%', // Altura del modal
+            maxWidth: '600px', // Ancho máximo del modal
+            maxHeight: '40vh', // Altura máxima del modal
           },
         }}
       >
@@ -106,13 +118,15 @@ const VideoModal: React.FC= () => {
         >
           ×
         </button>
-        <ReactPlayer 
-          url={videoUrl}
-          playing 
-          controls
-          width="1280px"
-          height="720px"
-        />
+        <div style={{ width: '100%', height: '100%' }}>
+          <ReactPlayer
+            url={videoUrl}
+            playing
+            controls
+            width="100%"
+            height="100%"
+          />
+        </div>
       </ReactModal>
     </div>
   );
