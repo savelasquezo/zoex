@@ -103,7 +103,7 @@ const ListHistoryWalletModal: React.FC<SessionModal> = ({ closeModal, session  }
                         <tbody>
                             {historyList?.slice(pageNumber * withdrawPerPage, (pageNumber + 1) * withdrawPerPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                    <td className="whitespace-nowrap px-4 py-2 font-Courier font-semibold">{obj.type == "Invoice" ? "ADD" :obj.type == "Withdraw" ? "OUT": "N/A"}</td>
+                                    <td className="whitespace-nowrap px-4 py-2 font-courier font-semibold">{obj.type == "Invoice" ? "ADD" :obj.type == "Withdraw" ? "OUT": "N/A"}</td>
                                     <td className="whitespace-nowrap px-4 py-2">${obj.amount}</td>
                                     <td className="whitespace-nowrap px-4 py-2">{obj.date}</td>
                                     <td className="whitespace-nowrap px-4 py-2 text-[0.65rem] hidden lg:table-cell">{obj.voucher}</td>

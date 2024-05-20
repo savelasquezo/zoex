@@ -10,11 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'Animace': ['Animace', 'sans-serif'],
-        'Roboto': ['Roboto', 'sans-serif'],
-        'Montserrat': ['Montserrat', 'sans-serif'],
-        'Courier': ['Courier', 'sans-serif'],
-        'Poppins': ['Poppins', 'sans-serif'],
+        animeace: ['Animeace', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        courier: ['Courier', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

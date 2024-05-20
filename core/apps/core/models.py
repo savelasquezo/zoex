@@ -16,9 +16,11 @@ class Core(models.Model):
     email = models.EmailField(_("Correo"), max_length=254, blank=True, null=True)
     address = models.CharField(_("Address"), max_length=64, blank=True, null=True)
 
-    twitter = models.URLField(_("Twitter"), max_length=128, blank=True, null=True)
-    facebook = models.URLField(_("Facebook"), max_length=128, blank=True, null=True)
-    instagram = models.URLField(_("Instagram"), max_length=128, blank=True, null=True)
+    twitter = models.URLField(_("Twitter"), max_length=256, blank=True, null=True)
+    facebook = models.URLField(_("Facebook"), max_length=256, blank=True, null=True)
+    instagram = models.URLField(_("Instagram"), max_length=256, blank=True, null=True)
+
+    video = models.URLField(_("MediaFile"), max_length=256, blank=True, null=True)
 
     bonusPercent = models.FloatField(_("%Bonificacion"),default=15, null=True, blank=True, 
         help_text="Porcentaje Adicional en la Primera Recarga (%) ")

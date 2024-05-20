@@ -99,7 +99,7 @@ const ListTicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, sessi
                         <tbody>
                             {ticketList?.slice(pageNumber * TicketsPage, (pageNumber + 1) * TicketsPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.ticket}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 font-courier font-semibold">{obj.ticket}</td>
                                     <td className="whitespace-nowrap px-6 py-2 hidden lg:table-cell">{obj.minilotteryID}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.voucher}</td>
                                     <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date}</td>

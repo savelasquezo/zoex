@@ -146,6 +146,11 @@ export type InfoProfile = {
     updateFormData: (data: any) => void,
     toggleSelectFrame: (value: boolean) => void;
 };
+
+
+export interface VideoModalProps {
+    videoUrl: string;
+};
   
 
 export type SessionModal = SessionInfo & ModalFunction;

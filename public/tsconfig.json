@@ -33,6 +33,7 @@
   },
   "include": [
     "src/lib/types/next-auth.d.ts",
+    "src/lib/types/react-whatsapp-chat-widget.d.ts",
     "src/lib/types/types.d.ts",
     "**/*.ts",
     "**/*.tsx",

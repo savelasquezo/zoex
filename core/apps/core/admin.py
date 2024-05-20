@@ -38,7 +38,7 @@ class CoreAdmin(admin.ModelAdmin):
 
     fConfig = {"fields": (
         ("stream","hashtag"),
-        ("idx","phone"),
+        ("idx","phone","video"),
         ("email","address"),
         ("bonusPercent","referredPercent"),
         )}

@@ -60,14 +60,14 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
         setError('');
     
         await new Promise(resolve => setTimeout(resolve, 1000));
-        //const usernamePattern = /^[a-zA-Z0-9]+$/;
-        //if (!usernamePattern.test(username)) {
-        //  setError('¡Email invalido! Unicamente Alfanuméricos');
-        //  setLoading(false);
-        //  return;
-        //} else {
-        //  setError('');
-        //}
+        const usernamePattern = /^[a-zA-Z0-9]+$/;
+        if (!usernamePattern.test(username)) {
+          setError('¡Email invalido! Unicamente Alfanuméricos');
+          setLoading(false);
+          return;
+        } else {
+          setError('');
+        }
 
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         if (!emailPattern.test(email)) {
@@ -78,14 +78,14 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
           setError('');
         }
 
-        const passwordValidationResult = validatePassword(password);
-        if (passwordValidationResult) {
-          setError(passwordValidationResult);
-          setLoading(false);
-          return;
-        } else {
-          setError('');
-        }
+        //const passwordValidationResult = validatePassword(password);
+        //if (passwordValidationResult) {
+        //  setError(passwordValidationResult);
+        //  setLoading(false);
+        //  return;
+        //} else {
+        //  setError('');
+        //}
 
         if (!agreed) {
           setError('¡Acepta los Términos del Servicio!');

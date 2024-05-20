@@ -201,9 +201,9 @@ class makeTicketMiniLottery(generics.GenericAPIView):
 
         requestImage = image_buffer.getvalue()
         if not rsize and not objTicket.send:
-            emailTicket = obj.minilottery
+            emailTicket = obj.prize
             image64 = base64.b64encode(requestImage).decode('utf-8')
-            sendEmailTicket('email/ticket.html',f'MiniLoteria {emailTicket} - Ticket!', request.user.email, image64, emailTicket)
+            sendEmailTicket('email/ticket.html',f'MiniLoteria {emailTicket}-USD - Ticket!', request.user.email, image64, emailTicket)
 
             objTicket.send = True
             objTicket.save()

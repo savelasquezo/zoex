@@ -80,7 +80,7 @@ const ListTicketsGiveawayModal: React.FC<SessionModal>  = ({closeModal, session 
                       {giveawayTickets?.slice(pageNumber * ticketsPerPage, (pageNumber + 1) * ticketsPerPage).map((obj: any, index: number) => (
                           <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white justify-center">
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">{obj.ticket}</td>
-                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 font-Courier font-semibold">{obj.uuid}</td>
+                              <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 font-courier font-semibold">{obj.uuid}</td>
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden lg:table-cell">{obj.voucher}</td>
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6 hidden sm:table-cell">{obj.date}</td>
                               <td className="text-center align-middle whitespace-nowrap py-2 px-4 lg:px-6">

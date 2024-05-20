@@ -71,7 +71,7 @@ const ListHistoryLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                         <tbody>
                             {hisotryList?.slice(pageNumber * HisotryPage, (pageNumber + 1) * HisotryPage).map((obj, index) => (
                                 <tr key={index} className="border-b border-slate-700 uppercase text-xs text-white">
-                                    <td className="whitespace-nowrap px-6 py-2 font-Courier font-semibold">{obj.lottery}</td>
+                                    <td className="whitespace-nowrap px-6 py-2 font-courier font-semibold">{obj.lottery}</td>
                                     <td className="whitespace-nowrap px-6 py-2 hidden sm:table-cell">{obj.date_results}</td>
                                     <td className="whitespace-nowrap px-6 py-2">{obj.winner}</td>
                                     <td className="whitespace-nowrap px-6 py-2 flex justify-center">
