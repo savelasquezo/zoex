@@ -33,7 +33,7 @@ const LinkReferedModal: React.FC<SessionModal>  = ({closeModal, session }) => {
       <div className="h-full w-full flex flex-col justify-center items-center">
           <p className='mt-4 text-[0.65rem] md:text-xs font-thin text-center text-gray-300'>Genera ingresos de forma pasiva compartiendo el Link de referido con tus amigos, gana el {info?.referredPercent}% de todas las recargas que realicen, puedes usar este saldo o retirarlo a tu cuenta bancaria.</p>
           <div className='relative w-4/5 h-14 bg-slate-950 rounded-lg cursor-copy mt-4 px-4 flex flex-col justify-center items-center'>
-            <span onClick={handleCopyClick} className='text-gray-300 flex items-center h-10'>{session?.user?.uuid || ''}</span>
+            <span onClick={handleCopyClick} className='text-gray-300 flex items-center h-10'>{`https://zoexbet.com/?singup=True&uuid=${session?.user?.uuid || ''}`}</span>
             {copySuccess !== null && (<span className={`absolute right-2 ml-2 p-2 h-6 uppercase text-xs font-semibold ${copySuccess ? 'text-green-500' : ''}`}>{copySuccess ? <LuCopyCheck /> : ''}</span>)}
           </div>
           <p className='mt-4 text-[0.5rem] md:text-xs font-thin text-center text-gray-300'>Usando tu link de registro, tus amigos o seguidores. 
