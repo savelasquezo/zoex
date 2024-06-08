@@ -301,9 +301,12 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 if not DEBUG:
     #SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
     CORS_ALLOW_ALL_ORIGINS = False
     ALLOWED_HOSTS = ['zoexbet.com', 'localhost', '127.0.0.1']
     CORS_ALLOWED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net']
+    CSRF_TRUSTED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net']
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = 'smtp.hostinger.com'
     EMAIL_HOST_USER = 'noreply@zoexbet.com'
