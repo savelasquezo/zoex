@@ -178,7 +178,7 @@ class UserAccountAdmin(BaseUserAdmin):
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None):
-        return ['username','email','uuid','balance','credits','phone','referred','location','billing']
+        return ['username','email','uuid','phone','referred','location','billing']
 
 
 admin.site.register(models.UserAccount, UserAccountAdmin)

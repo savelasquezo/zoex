@@ -78,7 +78,7 @@ def signalLottery(sender, instance, **kwargs):
 
     finally:
         #Delete current ticket without winner
-        if instance.winner is not None and not getWinner.exists():
+        if not getWinner.exists():
             instance.winner = ""
             instance.save()
         post_save.connect(signalLottery, sender=Lottery)
