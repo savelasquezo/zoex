@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.conf.locale.es import formats as es_formats
 from django.contrib.auth.models import Group
+from simple_history.admin import SimpleHistoryAdmin
 import apps.user.models as models
 
 class FeesAccountInline(admin.StackedInline):
@@ -149,7 +150,7 @@ class WithdrawalsAdmin(admin.ModelAdmin):
 
 
 
-class UserAccountAdmin(BaseUserAdmin):
+class UserAccountAdmin(BaseUserAdmin, SimpleHistoryAdmin):
     list_display = ('username', 'email','phone','balance')
     search_fields = ('username', 'email')
 

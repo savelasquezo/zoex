@@ -3,7 +3,9 @@ import uuid
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 from django.utils.translation import gettext_lazy as _
+
 
 def LogoUploadTo(instance, filename):
     return f"uploads/{instance.username}/logo/{filename}"
@@ -49,6 +51,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("¿Staff?"),default=False)
 
     objects = UserAccountManager()
+    history = HistoricalRecords()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','phone','referred']

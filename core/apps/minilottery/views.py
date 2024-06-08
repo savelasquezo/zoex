@@ -190,7 +190,7 @@ class makeTicketMiniLottery(generics.GenericAPIView):
         draw.rounded_rectangle([(boxX0, boxY0), (boxX1, boxY1)], radius=1, fill='white', outline='blue')
 
         font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
-        text = f"{ticket} - {voucher}"
+        text = f"Ticket #{ticket}"
         txtW, txtH = draw.textsize(text, font=font)
         txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
         draw.text((txtX, txtY), text, fill='black', font=font)
@@ -200,7 +200,7 @@ class makeTicketMiniLottery(generics.GenericAPIView):
         image_buffer.seek(0)
 
         requestImage = image_buffer.getvalue()
-        if not rsize and not objTicket.send:
+        if rsize and not objTicket.send:
             emailTicket = obj.prize
             image64 = base64.b64encode(requestImage).decode('utf-8')
             sendEmailTicket('email/ticket.html',f'MiniLoteria {emailTicket}-USD - Ticket!', request.user.email, image64, voucher)
