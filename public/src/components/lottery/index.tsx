@@ -7,7 +7,7 @@ export default function Page() {
   const { data: session } = useSession();
   return (
     <section>
-      <p className='w-full text-center text3xl md:text-7xl font-animeace text-gray-200 mt-8 mb-12'>Loterias</p>
+      <p className='w-full text-center text3xl md:text-7xl font-wintermouse text-gray-200 mt-8 mb-12'>Loterias</p>
       <Lottery session={session} />
     </section>
   );

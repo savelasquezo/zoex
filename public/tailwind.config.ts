@@ -15,6 +15,7 @@ const config: Config = {
         montserrat: ['Montserrat', 'sans-serif'],
         courier: ['Courier', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
+        wintermouse: ['Wintermouse', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
