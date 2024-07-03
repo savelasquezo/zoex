@@ -1,9 +1,13 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django_ckeditor_5.fields import CKEditor5Field
 
 def ImageUploadTo(instance, id):
     return f"uploads/files/{id}"
+
+def FilesUploadTo(instance, id):
+    return f"uploads/items/{id}"
 
 class Core(models.Model):
     default = models.CharField(_("ZoeXConfig"), max_length=32, unique=True, blank=True, null=True, default="ZoeXConfig")
@@ -30,6 +34,8 @@ class Core(models.Model):
     
     latestUSD = models.FloatField(_("USD->COP"),default=4000, null=True, blank=True)
     latestBTC = models.FloatField(_("BTC->USD"),default=50000, null=True, blank=True)
+    
+    terms = CKEditor5Field(_("Terminos & Condiciones"), config_name='extends')
 
     def __str__(self):
         return f"{self.default}"

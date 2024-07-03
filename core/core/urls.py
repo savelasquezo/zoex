@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path("app/admin/", admin.site.urls),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
     path("app/auth/", include("djoser.urls")),
     path("app/auth/", include("djoser.urls.jwt")),
     path("app/auth/", include("djoser.social.urls")),

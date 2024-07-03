@@ -20,6 +20,7 @@ export type InfoType = {
     twitter: string;
     instagram: string;
     hashtag: string;
+    terms: string;
     bonusPercent: number;
     referredPercent: number;
 };

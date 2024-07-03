@@ -78,3 +78,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.custom-placeholder::placeholder {
+  color: green;
+  font-weight: bold;
+  font-size: 3.5rem;
+  position: relative;
+}

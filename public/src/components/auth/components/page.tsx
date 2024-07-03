@@ -106,7 +106,7 @@ const Auth: React.FC<SessionInfo> = ({ session  }) => {
                       <button onClick={() => openModal('forgot-password')} className="hover:underline text-xs text-blue-500">¿Olvidaste la contraseña?</button>
                     </div>
                     <div style={{ display: activeTab === 'singup' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'singup' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'login' ? 'hidden' : ''}`}>
-                      <RegisterModal closeModal={closeModal}/>
+                      <RegisterModal closeModal={closeModal} />
                       <div className="inline-flex gap-x-2 items-center">
                         <p className="text-xs text-gray-300">¿Ya tienes una cuenta?</p>
                         <button onClick={() => openModal('login')} className="cursor-pointer text-red-500 hover:text-pink-600 transition-colors duration-300 -mt-1">Ingresar</button>

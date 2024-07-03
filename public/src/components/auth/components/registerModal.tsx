@@ -11,15 +11,21 @@ import { ModalFunction } from '@/lib/types/types';
 import {AiOutlineUser} from 'react-icons/ai'
 import {CiMail} from 'react-icons/ci'
 import {FiLock} from 'react-icons/fi'
+import { IoArrowBackCircle } from "react-icons/io5";
+
+import { InfoType } from '@/lib/types/types';
   
 const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
     const searchParams = useSearchParams();
     const [infoRefered, setInfoRefered] = useState(false);
+    const [info, setInfo] = useState<InfoType | undefined>(undefined);
   
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [phone, setPhone] = useState<string | undefined>('');
+
+    const [activeTab, setActiveTab] = useState('registerModal');
 
     const handlePhoneChange = (value: string, country: string, e: React.ChangeEvent<HTMLInputElement>, formattedValue: string) => {
       setPhone(formattedValue);
@@ -47,6 +53,16 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
       if (searchParams.get('uuid')) {
         setInfoRefered(true);
       }
+      const storedInfo = localStorage.getItem('infoData');
+      if (storedInfo) {
+        try {
+          const parsedInfo = JSON.parse(storedInfo);
+          setInfo(parsedInfo);
+        } catch (error) {
+          NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
+        }
+      }
+
     }, [searchParams]);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -128,8 +144,13 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
         
     };
 
+    const openModal = (tab: string) => {
+      setActiveTab(tab);
+    };
+
     return (
         <div className="">
+          <div className={`h-full my-4 ${activeTab === 'registerModal' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'legalModal' ? 'hidden' : ''}`}>
             <form method="POST" onSubmit={onSubmit} className="relative flex flex-col gap-y-4 p-2">
                 <div className="bg-gray-800 text-gray-400 border border-gray-700 px-2 rounded-lg">
                   <PhoneInput
@@ -185,7 +206,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
                 </div>
                 <div className="inline-flex items-start gap-x-2 my-1 md:my-2">
                     <input type="checkbox" id="checkbox"onChange={toggleAgreed} readOnly={registrationSuccess}/>
-                    <p className="text-[0.45rem] md:text-[0.55rem] text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los Términos del servicio y Tratamiento de datos.</p>
+                    <p onClick={() => openModal('legalModal')} className="text-[0.55rem] md:text-[0.6rem] text-gray-300">Confirmo que tengo 18 años y que he leído y aceptado todos los<span className="text-[0.55rem] md:text-[0.6rem] text-green-400 hover:text-blue-400 transition-colors duration-300"> Términos del servicio y Tratamiento de datos.</span></p>
                 </div>
                 {registrationSuccess ? (
                   <p onClick={closeModal} className="h-10 bg-green-500 text-white font-semibold rounded-md py-2 px-4 w-full text-sm text-center uppercase">
@@ -211,6 +232,11 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
             { error && (<div className="text-red-400 text-xs md:text-sm mt-0 md:mt-2">{error}</div>)}
             { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas ayuda? support@zoexbet.com</div>)}
         </div>
+        <div className={`h-[65vh] w-full overflow-scroll overflow-x-hidden mb-4 ${activeTab === 'legalModal' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'registerModal' ? 'hidden' : ''}`}>
+          {info && (<div className="text-xs text-gray-500 pr-4" dangerouslySetInnerHTML={{ __html: info.terms }} />)}
+          <button onClick={() => openModal('registerModal')} className="absolute bottom-6 right-8 text-4xl text-gray-400 hover:text-gray-300 transition-colors duration-300"><IoArrowBackCircle/></button>
+        </div>
+      </div>
     );
 };
 

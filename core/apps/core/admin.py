@@ -41,12 +41,13 @@ class CoreAdmin(admin.ModelAdmin):
         ("idx","phone","video"),
         ("email","address"),
         ("bonusPercent","referredPercent"),
+        "terms"
         )}
 
     fSocial = {"fields": (
         "twitter",
         "facebook",
-        "instagram",
+        "instagram"
         )}
 
     fieldsets = (

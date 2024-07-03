@@ -229,13 +229,14 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                 <Image width={400} height={400} className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0" alt="" 
                   src={stateNumber ? "/assets/image/ball.webp" : "/assets/image/ballX.webp"}
                 />
-                <input className='absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
+                <input className='custom-placeholder absolute !bg-transparent text-gray-600 font-semibold text-5xl text-center border-none appearance-none outline-0 z-20'
                   type="text"
                   name="ticket"
                   id="ticket"
                   minLength={enteredLength}
                   maxLength={enteredLength}
                   value={ticket}
+                  placeholder='?'
                   onChange={(e) => onChange(e)}
                   readOnly={ticketsSuccess}
                   required
@@ -253,6 +254,8 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
             </form>
             <div className='w-full flex flex-col justify-start items-center gap-y-2 my-4 lg:w-3/5 lg:my-10'>
               <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
+                <p className='absolute -top-10 text-gray-400 text-xs text-center'>Ingresa un número o selecciona de la lista uno aleatorio de la lista, solo podras selecionar numeros que aun no se han adquirido.</p>
+                
                 {listTickets.map((obj, i) => (
                   <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-4 md:p-6'>
                     <p className='absolute h-full w-full flex justify-center items-center text-xs md:text-lg uppercase font-normal md:font-semibold underline'>{obj}</p>
@@ -279,7 +282,8 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
-                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${giveaway.price}</p>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800 top-4'>${giveaway.price}</p>
+                    <p className='absolute text-center z-20 right-5 font-semibold text-slate-800 bottom-3'>USD</p>
                   </span>
                 </div>
               </div>
