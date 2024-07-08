@@ -216,7 +216,8 @@ const TicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                 <div className='absolute -top-12 right-0 lg:hidden'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
-                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800'>${minilottery?.price}</p>
+                    <p className='absolute text-center text-3xl z-20 right-1/4 font-semibold text-slate-800 -mt-4'>${minilottery?.price}</p>
+                    <p className='absolute text-center z-20 right-5 font-semibold text-slate-800 bottom-3'>USD</p>
                   </span>
                 </div>
                 <Image width={400} height={400} alt="" className="absolute h-40 w-auto object-cover z-10 -mt-12 lg:h-48 lg:mt-0"
@@ -245,18 +246,18 @@ const TicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
                 )
               )}
             </form>
-            <div className='w-full flex flex-col justify-start items-center gap-y-2 my-4 lg:w-3/5 lg:my-10'>
+            <div className='w-full flex flex-col justify-start items-center gap-y-2 my-12 lg:w-3/5 lg:my-10'>
               <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
-                <p className='absolute -top-10 text-gray-400 text-xs text-center'>Ingresa un número o selecciona de la lista uno aleatorio de la lista, solo podras selecionar numeros que aun no se han adquirido.</p>
+                <p className='absolute -top-10 text-gray-400 text-[0.65rem] sm:text-xs text-center'>Digita un número o selecciona uno aleatorio de la lista, solo podras selecionar numeros que aun no se han adquirido.</p>
                 {listTickets.map((obj, i) => (
-                  <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-4 md:p-6'>
-                    <p className='absolute h-full w-full flex justify-center items-center text-xs md:text-lg uppercase font-normal md:font-semibold underline'>{obj}</p>
+                  <button key={i} onClick={() => setNumber(obj)} className='relative inline-flex justify-center items-center text-slate-900 bg-gradient-to-b from-yellow-200 to-yellow-500 rounded-full p-5 lg:p-6'>
+                    <p className='absolute h-full w-full flex justify-center items-center text-xs lg:text-lg uppercase font-normal md:font-semibold underline'>{obj}</p>
                   </button>
                 ))}
                 {generateNewNumbers ? (
-                  <button type="button" className='p-1 h-5 text-xs absolute scale-75 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base lg:scale-100 '><CircleLoader size={16} /></button>
+                  <button type="button" className='p-1 h-5 text-xs absolute top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base'><CircleLoader size={16} /></button>
                 ) : (
-                  <button onClick={handleGenerateNewNumbers} className='p-1 h-5 text-xs absolute scale-75 top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base lg:scale-100 '><LuRefreshCw /></button>
+                  <button onClick={handleGenerateNewNumbers} className='p-1 h-5 text-xs absolute top-1 md:top-2 right-1 md:right-2 bg-green-500 hover:bg-green-700 opacity-80 transition-colors duration-300 rounded-full text-white lg:h-6 lg:text-base'><LuRefreshCw /></button>
                 )}
               </div>
               {minilottery? (

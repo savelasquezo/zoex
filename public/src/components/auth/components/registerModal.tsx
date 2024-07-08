@@ -232,7 +232,7 @@ const RegisterModal: React.FC<ModalFunction> = ({ closeModal }) => {
             { error && (<div className="text-red-400 text-xs md:text-sm mt-0 md:mt-2">{error}</div>)}
             { !error && !success && (<div className="text-gray-400 text-xs mt-0 md:mt-2 h-6">¿Necesitas ayuda? support@zoexbet.com</div>)}
         </div>
-        <div className={`h-[65vh] w-full overflow-scroll overflow-x-hidden mb-4 ${activeTab === 'legalModal' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'registerModal' ? 'hidden' : ''}`}>
+        <div className={`h-[40vh] lg:h-[64vh] w-full overflow-scroll overflow-x-hidden mb-4 ${activeTab === 'legalModal' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'registerModal' ? 'hidden' : ''}`}>
           {info && (<div className="text-xs text-gray-500 pr-4" dangerouslySetInnerHTML={{ __html: info.terms }} />)}
           <button onClick={() => openModal('registerModal')} className="absolute bottom-6 right-8 text-4xl text-gray-400 hover:text-gray-300 transition-colors duration-300"><IoArrowBackCircle/></button>
         </div>
