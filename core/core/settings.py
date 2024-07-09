@@ -394,8 +394,8 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CORS_ALLOW_ALL_ORIGINS = False
     ALLOWED_HOSTS = ['zoexbet.com', 'localhost', '127.0.0.1']
-    CORS_ALLOWED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net']
-    CSRF_TRUSTED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net']
+    CORS_ALLOWED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net','https://analytics.google.com']
+    CSRF_TRUSTED_ORIGINS = ['https://zoexbet.com','https://checkout.bold.co','https://payments.api.bold.co','https://confirmo.net','https://analytics.google.com']
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = 'smtp.hostinger.com'
     EMAIL_HOST_USER = 'noreply@zoexbet.com'
@@ -407,6 +407,3 @@ if not DEBUG:
     MEDIA_URL = '/media/'
     MEDIA_BASE = '/var/www/zoex'
     MEDIA_ROOT = '/var/www/zoex/media/'
-
-
-
