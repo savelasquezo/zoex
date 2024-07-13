@@ -67,12 +67,12 @@ const Auth: React.FC<SessionInfo> = ({ session  }) => {
         <main className="inline-flex items-center h-full ml-5 gap-x-3 lg:w-2/5 lg:justify-end lg:ml-0 ">
             {session && session?.user? (
               <div className='inline-flex gap-x-4'>
-                <div className='bg-gray-950 shadow-inner rounded-full py-1 px-4 inline-flex items-center justify-between w-40'>
+                <div className='bg-gray-950 shadow-inner rounded-full py-1 px-4 inline-flex items-center justify-between w-52'>
                   <span className='text-2xl text-gray-100 opacity-80 flex flex-row items-center gap-x-2'>
                     <GiTwoCoins/>
-                    <p className='text-base'>$</p>
+                    <p className='text-base'>$ Saldo:</p>
                   </span>
-                  <p className='text-gray-100'>{session?.user? (session.user.balance + session.user.credits).toLocaleString() : "0"}</p>
+                  <p className='text-gray-100'>{session?.user? (session.user.balance + session.user.credits).toLocaleString() : "0"} </p>
                 </div>
                 <button onClick={() => {signOut();}} className="bg-pink-700 hover:bg-pink-900 text-white uppercase text-xs font-semibold p-2 rounded transition-colors duration-300">Salir</button>
               </div>

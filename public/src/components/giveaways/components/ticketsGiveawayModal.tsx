@@ -132,7 +132,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
     }
 
     if (!aviableTickets.includes(ticket)) {
-      setError('¡Lamentablemente el Numero ya ha sido Adquirido!');
+      setError('¡Lamentablemente ya ha sido Adquirido!');
       setStateNumber(false);
       setLoading(false);
       return;
@@ -213,9 +213,9 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
   };
 
   return (
-    <div className='w-full h-[22rem]'>
+    <div className='w-full h-full'>
       {(!ticketsSuccess && giveaway)? (
-        <div className='w-full h-[22rem] flex flex-col py-2'>
+        <div className='w-full h-full flex flex-col py-2'>
           {listTickets.length > 0 ? (
           <div className='w-full flex flex-col-reverse items-start justify-start lg:flex-row lg:justify-center animate-fade-in animate__animated animate__fadeIn'>
             <form method="POST" className='w-full flex flex-col justify-start items-start gap-y-2 my-6 py-6 lg:w-2/5 lg:items-center'>
@@ -253,7 +253,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                 )
               )}
             </form>
-            <div className='w-full flex flex-col justify-start items-center gap-y-2 my-12 lg:w-3/5 lg:my-10'>
+            <div className='w-full h-full flex flex-col justify-start items-center gap-y-2 my-12 lg:w-3/5 lg:my-10'>
               <div className='relative w-full h-auto flex flex-row gap-x-2 md:gap-x-4 justify-center bg-gray-900 shadow-current py-4 px-8 rounded-sm'>
                 <p className='absolute -top-10 text-gray-400 text-[0.65rem] sm:text-xs text-center'>Digita un número o selecciona uno aleatorio de la lista, solo podras selecionar numeros que aun no se han adquirido.</p>
                 {listTickets.map((obj, i) => (
@@ -278,7 +278,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                   <p className='text-gray-400 text-xs'>Premio: {giveaway.prize}</p>
                 </div >
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquiérelo Ahora! El sorteo se realizra una vez se agoten los boletos, asegura tus numeros de la suerte Ahora</p>
-                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
+                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? (<span>{error}<br />¡Porfavor selecciona otro numero!</span>) : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>
                     <Image width={256} height={256} src={"/assets/image/glump.webp"} alt="" className="w-auto h-20"/>
@@ -291,7 +291,7 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
                 null
               )}
               </div>
-              <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden bg-blue-200 z-50'>
+              <div className='flex absolute bottom-3 left-0 items-center h-6 w-full sm:bottom-1 lg:hidden z-50'>
                 {error && (<p className="text-red-400 text-xs mt-2 h-6 text-center w-full">{error}</p>)}
                 {!error && !success && (<p className="text-gray-400 text-xs mt-2 h-6 text-center w-full">¿Necesitas Ayuda? support@zoexbet.com</p>)}
               </div>
@@ -306,9 +306,13 @@ const TicketsGiveawayModal: React.FC<SessionModal & { giveawayId: string }> = ({
           )}
         </div>
       ) : (ticketsSuccess && giveaway)? (
-        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8 pb-8'>
-          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-auto overflow-hidden'/>}
-          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 hidden lg:hidden w-full h-auto overflow-hidden'/>}
+        <div className='relative w-full h-96 lg:h-80 flex flex-col items-center justify-start mt-8 pb-8 text-center'>
+          <div className='flex flex-col text-center mb-2 -mt-4 bg-gray-950 w-full rounded-lg py-2 px-4'>
+            <p className='text-gray-100 uppercase text-base lg:text-xl font-semibold'>¡Compra exitosa!</p>
+            <p className='text-gray-300 text-xs lg:text-sm leading-3'>Enviamos tus tickets al correo electronico registrado</p>
+          </div>
+          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-80 overflow-hidden'/>}
+          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 block lg:hidden w-full h-80 overflow-hidden'/>}
           <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
               <button type="button" onClick={handleSubmit} className='w-full h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
             </div>

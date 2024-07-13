@@ -128,7 +128,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
     }
 
     if (!aviableTickets.includes(ticket)) {
-      setError('¡Lamentablemente el Numero ya ha sido Adquirido!');
+      setError('¡Lamentablemente ya ha sido Adquirido!');
       setStateNumber(false);
       setLoading(false);
       return;
@@ -274,7 +274,7 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
                 </div >
                 <p className='text-gray-400 text-xs mt-4 text-justify'>¡Adquiérelo Ahora! Tu Boleta sera valida para este sorteo hasta que este tenga un ganador, compra ahora tus numeros de la suerte.</p>
                 <div className='absolute w-full bottom-0 flex items-center h-6'>
-                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? error : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
+                <span className={`mt-2 h-6 ${error ? 'text-red-400 text-sm' : 'text-gray-400 text-xs'}`}>{error ? (<span>{error}<br />¡Porfavor selecciona otro numero!</span>) : '¿Necesitas Ayuda? support@zoexbet.com'}</span>
                 </div>
                 <div className='absolute -bottom-8 right-4'>
                   <span className='relative h-full w-full flex items-center'>
@@ -307,9 +307,13 @@ const TicketsLotteryModal: React.FC<SessionModal> = ({ closeModal, session  }) =
           )}
         </div>
       ) : (ticketsSuccess && lottery)? (
-        <div className='relative w-full h-80 flex flex-col items-center justify-start mt-8 pb-8'>
-          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-auto overflow-hidden'/>}
-          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 hidden lg:hidden w-full h-auto overflow-hidden'/>}
+        <div className='relative w-full h-96 lg:h-80 flex flex-col items-center justify-start mt-8 pb-8'>
+          <div className='flex flex-col text-center mb-2 -mt-4 bg-gray-950 w-full rounded-lg py-2 px-4'>
+            <p className='text-gray-100 uppercase text-base lg:text-xl font-semibold'>¡Compra exitosa!</p>
+            <p className='text-gray-300 text-xs lg:text-sm leading-3'>Enviamos tus tickets al correo electronico registrado</p>
+          </div>
+          {imageTicket1 && <Image width={1440} height={600} src={imageTicket1} alt="" className='pb-4 hidden lg:block w-full h-80 overflow-hidden'/>}
+          {imageTicket2 && <Image width={760} height={640} src={imageTicket2} alt="" className='pb-4 block lg:hidden w-full h-80 overflow-hidden'/>}
           <div className="absolute flex flex-col bottom-2 w-full justify-center items-center gap-y-4">
             <button type="button" onClick={handleSubmit} className='w-full h-8 text-white bg-green-600 hover:bg-green-700 transition duration-300 focus:outline-none font-medium rounded-sm text-sm px-5 py-1 text-center uppercase'>Aceptar</button>
           </div>

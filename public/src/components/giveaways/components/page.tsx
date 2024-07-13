@@ -78,7 +78,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
                         <div className='h-full w-full flex  bg-white transition-all duration-200' style={{ width: `${itemGiveaway.progress}%` }} />
                         </div>
                     </div>
-                    <button onClick={() => openModal('buyTicket', itemGiveaway.id)} className="absolute bottom-5 right-2 flex items-center justify-between gap-x-2 bg-gray-800 hover:bg-gray-900  border-slate-950 transition-colors duration-300 px-4 py-2 rounded border-b-2">
+                    <button onClick={() => openModal('buyTicket', itemGiveaway.id)} className="z-10 scale-110 absolute bottom-3 right-3 flex items-center justify-between bg-green-600 hover:bg-green-700 border-slate-950 transition duration-300 px-2 rounded border-b-2 overflow-hidden">
                       <span className='text-white font-semibold text-base'><AiOutlineShoppingCart /></span>
                       <span className="text-white shadow-inner text-xs uppercase font-semibold hidden md:block">
                         Comprar
@@ -97,7 +97,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
                     <div className={`${activeTab === 'buyTicket' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'hidden animate-fade-out animate__animated animate__fadeOut'}`}>
                         <TicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
                     </div>
-                    <div style={{ display: activeTab === 'lstTicket' ? 'block' : 'none' }} className={`h-full my-4 ${activeTab === 'lstTicket' ? 'animate-fade-in animate__animated animate__fadeIn' : 'animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'buyTicket' ? 'hidden' : ''}`}>
+                    <div className={`h-full my-4 ${activeTab === 'lstTicket' ? 'block animate-fade-in animate__animated animate__fadeIn' : 'none animate-fade-out animate__animated animate__fadeOut'} ${activeTab === 'buyTicket' ? 'hidden' : ''}`}>
                         <ListTicketsGiveawayModal closeModal={closeModal} session={session} giveawayId={giveawayId}/>
                     </div>
                   </div>

@@ -115,12 +115,18 @@ const InvoiceModal: React.FC<SessionModal> = ({ closeModal, session  }) => {
               <BeatLoader color="#ffff" loading margin={20} size={20} speedMultiplier={0.5}/>
             </div>
             ) : (
-            <div className='w-full flex flex-col gap-y-4 items-start justify-center md:justify-start'>
-              <div className="w-full flex flex-row gap-x-2">
-                <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto0.webp"} className="object-fit w-40 h-8 md:w-44 md:h-10 shadow-lg rounded-full" alt="" /></button>
-                <button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold0.webp"} className="object-fit w-40 h-8 md:w-44 md:h-10 shadow-lg rounded-full" alt="" /></button>
+            <div className='w-full flex flex-col gap-y-2 -mt-1 items-start justify-center md:justify-start'>
+              <div className="w-full flex flex-row gap-x-2 items-center justify-between">
+                <div className='flex flex-col items-center justify-center'>
+                  <p className='text-gray-400 text-[0.65rem] text-center leading-3 mb-1'>Criptomonedas <br />Bitcoin-Litecoin-Ethereum-Tether</p>
+                  <button onClick={(e) => onSubmit(e, "crypto")} className=""><Image width={405} height={200} src={"/assets/image/crypto0.webp"} className="object-fit w-40 h-8 md:w-44 md:h-10 shadow-lg rounded-full" alt="" /></button>
+                </div>
+                <div className='flex flex-col items-center justify-center gap-y-1'>
+                  <p className='text-gray-400 text-[0.65rem] text-center leading-3 mb-1'>Tarjetas-Tranferencia-Bancolombia<br />Nequi-Daviplata</p>
+                  <button onClick={(e) => onSubmit(e, "bold")} className=""><Image width={405} height={200} src={"/assets/image/bold0.webp"} className="object-fit w-40 h-8 md:w-44 md:h-10 shadow-lg rounded-full" alt="" /></button>
+                </div>
               </div>
-              <div className='flex flex-col items-start justify-center'>
+              <div className='flex flex-col items-start justify-center gap-y-1'>
                 <p className='text-[0.55rem] text-justify text-gray-400'>Importante recordar que el saldo puede experimentar una breve demora antes de reflejarse en tu cuenta.
                   <span className='hidden md:inline'> Actualiza tu saldo desde tu wallet para obtener el estado actualizado de tus facturas</span>
                 </p>

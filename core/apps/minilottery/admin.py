@@ -26,8 +26,8 @@ class TicketsMiniLotteryInline(admin.StackedInline):
     def has_add_permission(self, request, obj=None):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    #def has_delete_permission(self, request, obj=None):
+    #    return False
 
 class MiniLotteryAdmin(admin.ModelAdmin):
 
@@ -78,6 +78,7 @@ class MiniLotteryAdmin(admin.ModelAdmin):
         return False if MiniLottery.objects.filter(is_active=True).exists() else True
 
     def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
         getWinner = TicketsMiniLottery.objects.filter(minilottery=obj,ticket=obj.winner, state=True)
         if getWinner.exists():
             username = UserAccount.objects.get(email=getWinner.first().email).username
@@ -87,7 +88,6 @@ class MiniLotteryAdmin(admin.ModelAdmin):
             messages.success(request, f'¡El Sorteo no ha seleccionado ningun ganador!')
 
         super(MiniLotteryAdmin, self).save_model(request, obj, form, change)
-
 
 
 admin.site.register(MiniLottery, MiniLotteryAdmin)

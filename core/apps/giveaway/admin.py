@@ -25,8 +25,8 @@ class TicketsGiveawayInline(admin.StackedInline):
     def has_add_permission(self, request, obj=None):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    #def has_delete_permission(self, request, obj=None):
+    #    return False
 
 class GiveawayAdmin(admin.ModelAdmin):
 
@@ -77,14 +77,13 @@ class GiveawayAdmin(admin.ModelAdmin):
         return fieldsets
 
     def save_model(self, request, obj, form, change):
-        getWinner = TicketsGiveaway.objects.filter(giveaway=obj,ticket=obj.winner, state=True)
+        super().save_model(request, obj, form, change)
+        getWinner = TicketsGiveaway.objects.filter(giveaway=obj, ticket=obj.winner, state=True)
+
         if getWinner.exists():
             username = UserAccount.objects.get(email=getWinner.first().email).username
             messages.warning(request, f'¡Advertencia! ¡El Usuario {username} ha Ganado!')
-
         else:
             messages.success(request, f'¡El Sorteo no ha seleccionado ningun ganador!')
-
-        super(GiveawayAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(Giveaway, GiveawayAdmin)
