@@ -78,7 +78,7 @@ const Giveaways: React.FC<SessionInfo> = ({ session  }) => {
                         <div className='h-full w-full flex  bg-white transition-all duration-200' style={{ width: `${itemGiveaway.progress}%` }} />
                         </div>
                     </div>
-                    <button onClick={() => openModal('buyTicket', itemGiveaway.id)} className="z-10 scale-110 absolute bottom-3 right-3 flex items-center justify-between bg-green-600 hover:bg-green-700 border-slate-950 transition duration-300 px-2 rounded border-b-2 overflow-hidden">
+                    <button onClick={() => openModal('buyTicket', itemGiveaway.id)} className="absolute scale-110 bottom-5 right-2 flex items-center justify-between gap-x-2 bg-green-600 hover:bg-green-900  border-slate-950 transition-colors duration-300 px-4 py-2 rounded border-b-2">
                       <span className='text-white font-semibold text-base'><AiOutlineShoppingCart /></span>
                       <span className="text-white shadow-inner text-xs uppercase font-semibold hidden md:block">
                         Comprar
