@@ -14,40 +14,11 @@ import SupportModal from '@/components/support/index';
 import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
-
-import { InfoType } from '@/lib/types/types';
-
 import {FaUser} from 'react-icons/fa';
 import {HiShare} from 'react-icons/hi';
 import {IoMdHelp} from 'react-icons/io';
 import {IoTicket} from 'react-icons/io5';
 import {AiOutlineClose} from 'react-icons/ai';
-
-
-export const fetchInfo = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/fetch-info/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-
-    if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem('infoData', JSON.stringify(data));
-      NextResponse.json({ success: 'The request has been processed successfully.' }, { status: 200 });
-      return data;
-    }
-
-
-  } catch (error) {
-    return NextResponse.json({ error: 'There was an error with the network request' }, { status: 500 });
-  }
-}
 
 const Footer: React.FC<SessionInfo> = ({ session  }) => {
     const searchParams = useSearchParams();
@@ -75,21 +46,12 @@ const Footer: React.FC<SessionInfo> = ({ session  }) => {
     };
 
     useEffect(() => {
-
       if (searchParams.get('profile')) {
         if (session?.user) {
           setShowModal(true);
           setActiveTab("profile");
         }
       }
-
-      fetchInfo()
-        .then((data: InfoType) => {
-          localStorage.setItem('infoData', JSON.stringify(data));
-        })
-        .catch((error) => {
-          NextResponse.json({ error: 'Server responded with an error' });
-        });
     }, [searchParams]);
 
     return (
