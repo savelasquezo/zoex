@@ -23,7 +23,7 @@ import { InfoType } from '@/lib/types/types';
 
 
 
-export const fetchInfo = async () => {
+const fetchInfo = async () => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_API_URL}/app/core/fetch-info/`,
