@@ -36,7 +36,7 @@ django-ckeditor==6.5.1
 django-ckeditor-5==0.2.13
 django-cors-headers==3.13.0
 django-cron==0.6.0
-django-environ==0.11.1
+django-environ==0.11.2
 django-js-asset==2.1.0
 django-nextjs==2.3.1
 django-picklefield==3.1
@@ -82,7 +82,7 @@ numpy==1.26.4
 oauthlib==3.2.2
 openpyxl==3.1.2
 pandas==2.2.0
-Pillow==9.2.0
+Pillow==10.4.0
 platformdirs==2.5.1
 psycopg2-binary==2.9.9
 pyasn1==0.5.0
