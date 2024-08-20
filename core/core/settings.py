@@ -151,7 +151,7 @@ ASGI_APPLICATION = "core.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "dbpostgresql",
+        "NAME": os.getenv('DATABASE'),
         "USER": "postgres",
         "PASSWORD": "4oPn2655Lmn",
         "HOST": "localhost",
