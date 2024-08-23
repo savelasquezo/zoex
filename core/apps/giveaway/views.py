@@ -185,7 +185,11 @@ class makeTicketGiveaway(generics.GenericAPIView):
 
             font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
             text = f"Ticket #{ticket}"
-            txtW, txtH = draw.textsize(text, font=font)
+            
+            text_bbox = draw.textbbox((0, 0), text, font=font)
+            txtW = text_bbox[2] - text_bbox[0]
+            txtH = text_bbox[3] - text_bbox[1]
+            
             txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
             draw.text((txtX, txtY), text, fill='black', font=font)
 
