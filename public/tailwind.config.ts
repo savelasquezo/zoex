@@ -16,6 +16,8 @@ const config: Config = {
         courier: ['Courier', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
         wintermouse: ['Wintermouse', 'sans-serif'],
+        cocogoose: ['Cocogoose', 'sans-serif'],
+        azonix: ['Azonix', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

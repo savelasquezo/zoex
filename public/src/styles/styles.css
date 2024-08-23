@@ -46,25 +46,18 @@
   font-style: normal;
 }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --animate-duration: 0.5s; /* animate.css default animate duration (1s)*/
+@font-face {
+  font-family: 'Cocogoose';
+  src: url('/fonts/Cocogoose.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+@font-face {
+  font-family: 'Azonix';
+  src: url('/fonts/Azonix.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 input {color: rgb(229 231 235 / var(--tw-text-opacity));}::-ms-reveal {filter: invert(50%); outline: none;border: none;}
