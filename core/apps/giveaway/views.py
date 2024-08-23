@@ -202,7 +202,7 @@ class makeTicketGiveaway(generics.GenericAPIView):
             if rsize and not objTicket.send:
                 emailTicket = obj.prize
                 image64 = base64.b64encode(requestImage).decode('utf-8')
-                sendEmailTicket('email/ticket.html',f'Sorteo {emailTicket} - Ticket!', request.user.email, image64, voucher)
+                sendEmailTicket('email/ticket.html',f'Sorteo {emailTicket} - Ticket!', request.user.email, image64, ticket)
 
                 objTicket.send = True
                 objTicket.save()

@@ -68,7 +68,7 @@ def signalMiniLottery(sender, instance, **kwargs):
 
             #SendMail Winner
             image64 = base64.b64encode(instance.file).decode('utf-8')
-            sendEmailTicket('email/congratulations.html',f'¡Felicidades! {instance.winner} - Ticket Ganador!', user.email, image64)
+            sendEmailTicket('email/congratulations.html',f'¡Felicidades! {instance.winner} - Ticket Ganador!', user.email, image64, 0)
 
             
     except Exception as e:
