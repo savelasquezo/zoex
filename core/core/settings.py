@@ -159,6 +159,10 @@ DATABASES = {
     }
 }
 
+CRON_CLASSES = [
+    "apps.core.cron.UpdateCurrency",
+]
+
 
 CACHES = {
     "default": {
@@ -169,11 +173,6 @@ CACHES = {
         }
     }
 }
-
-CRON_CLASSES = [
-    "apps.core.cron.UpdateCurrency",
-]
-
 
 CHANNEL_LAYERS = {
     'default': {

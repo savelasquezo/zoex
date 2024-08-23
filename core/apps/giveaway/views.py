@@ -157,50 +157,55 @@ class fetchAllTicketsGiveaway(generics.ListAPIView):
 class makeTicketGiveaway(generics.GenericAPIView):
     
     def get(self, request, *args, **kwargs):
-        giveawayId = request.GET.get('giveawayId')
-        voucher = request.GET.get('voucher')
-        rsize = request.GET.get('rsize')
+        try:
+            giveawayId = request.GET.get('giveawayId')
+            voucher = request.GET.get('voucher')
+            rsize = request.GET.get('rsize')
 
-        rsize = True if rsize == "true" else False
+            rsize = True if rsize == "true" else False
 
-        objTicket = TicketsGiveaway.objects.get(voucher=voucher)
-        ticket = objTicket.ticket
-        obj = Giveaway.objects.get(id=giveawayId)
-        url = obj.mfile.url if rsize else obj.file.url
+            objTicket = TicketsGiveaway.objects.get(voucher=voucher)
+            ticket = objTicket.ticket
+            obj = Giveaway.objects.get(id=giveawayId)
+            url = obj.mfile.url if rsize else obj.file.url
 
-        absoluteURL = os.path.join(str(settings.MEDIA_BASE) + url)
-        image = Image.open(absoluteURL)
-        
-        if image.mode != 'RGB':
-            image = image.convert('RGB')
-        draw = ImageDraw.Draw(image)
+            absoluteURL = os.path.join(str(settings.MEDIA_ROOT) + url)
+            image = Image.open(absoluteURL)
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+            draw = ImageDraw.Draw(image)
 
-        pndX = 110 if rsize else 80
-        pndY = 150 if rsize else 20
+            pndX = 110 if rsize else 80
+            pndY = 150 if rsize else 20
 
-        boxX1, boxY1 = image.size[0]-pndX, image.size[1]-pndY
-        boxWX, boxHX = boxX1//2, boxY1//8
-        boxX0, boxY0 = boxX1 - boxWX, boxY1 - boxHX
-        draw.rounded_rectangle([(boxX0, boxY0), (boxX1, boxY1)], radius=1, fill='white', outline='blue')
+            boxX1, boxY1 = image.size[0]-pndX, image.size[1]-pndY
+            boxWX, boxHX = boxX1//2, boxY1//8
+            boxX0, boxY0 = boxX1 - boxWX, boxY1 - boxHX
+            draw.rounded_rectangle([(boxX0, boxY0), (boxX1, boxY1)], radius=1, fill='white', outline='blue')
 
-        font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
-        text = f"Ticket #{ticket}"
-        txtW, txtH = draw.textsize(text, font=font)
-        txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
-        draw.text((txtX, txtY), text, fill='black', font=font)
+            font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
+            text = f"Ticket #{ticket}"
+            txtW, txtH = draw.textsize(text, font=font)
+            txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
+            draw.text((txtX, txtY), text, fill='black', font=font)
 
-        image_buffer = BytesIO()
-        image.save(image_buffer, format='JPEG')
-        image_buffer.seek(0)
+            image_buffer = BytesIO()
+            image.save(image_buffer, format='JPEG')
+            image_buffer.seek(0)
 
-        requestImage = image_buffer.getvalue()
+            requestImage = image_buffer.getvalue()
 
-        if rsize and not objTicket.send:
-            emailTicket = obj.prize
-            image64 = base64.b64encode(requestImage).decode('utf-8')
-            sendEmailTicket('email/ticket.html',f'Sorteo {emailTicket} - Ticket!', request.user.email, image64, voucher)
+            if rsize and not objTicket.send:
+                emailTicket = obj.prize
+                image64 = base64.b64encode(requestImage).decode('utf-8')
+                sendEmailTicket('email/ticket.html',f'Sorteo {emailTicket} - Ticket!', request.user.email, image64, voucher)
 
-            objTicket.send = True
-            objTicket.save()
+                objTicket.send = True
+                objTicket.save()
 
-        return HttpResponse(requestImage, content_type='image/jpeg')
+            return HttpResponse(requestImage, content_type='image/jpeg')
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("fetchHistoryMiniLottery {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound List MiniLottery.'}, status=status.HTTP_404_NOT_FOUND)

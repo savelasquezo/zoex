@@ -167,45 +167,54 @@ class fetchHistoryLottery(generics.ListAPIView):
 class makeTicketLottery(generics.GenericAPIView):
     
     def get(self, request, *args, **kwargs):
-        voucher = request.GET.get('voucher')
-        rsize = request.GET.get('rsize')
+        try:
+            voucher = request.GET.get('voucher')
+            rsize = request.GET.get('rsize')
 
-        rsize = True if rsize == "true" else False
+            rsize = True if rsize == "true" else False
 
-        objTicket = TicketsLottery.objects.get(voucher=voucher)
-        ticket = objTicket.ticket
-        obj = Lottery.objects.get(is_active=True)
-        url = obj.mfile.url if rsize else obj.file.url
+            objTicket = TicketsLottery.objects.get(voucher=voucher)
+            ticket = objTicket.ticket
+            obj = Lottery.objects.get(is_active=True)
+            url = obj.mfile.url if rsize else obj.file.url
 
-        absoluteURL = os.path.join(str(settings.MEDIA_BASE) + url)
-        image = Image.open(absoluteURL)
-        draw = ImageDraw.Draw(image)
+            absoluteURL = os.path.join(str(settings.MEDIA_ROOT) + url)
+            image = Image.open(absoluteURL)
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+            draw = ImageDraw.Draw(image)
 
-        pndX = 110 if rsize else 80
-        pndY = 150 if rsize else 20
 
-        boxX1, boxY1 = image.size[0]-pndX, image.size[1]-pndY
-        boxWX, boxHX = boxX1//2, boxY1//8
-        boxX0, boxY0 = boxX1 - boxWX, boxY1 - boxHX
-        draw.rounded_rectangle([(boxX0, boxY0), (boxX1, boxY1)], radius=1, fill='white', outline='blue')
+            pndX = 110 if rsize else 80
+            pndY = 150 if rsize else 20
 
-        font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
-        text = f"Ticket #{ticket}"
-        txtW, txtH = draw.textsize(text, font=font)
-        txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
-        draw.text((txtX, txtY), text, fill='black', font=font)
+            boxX1, boxY1 = image.size[0]-pndX, image.size[1]-pndY
+            boxWX, boxHX = boxX1//2, boxY1//8
+            boxX0, boxY0 = boxX1 - boxWX, boxY1 - boxHX
+            draw.rounded_rectangle([(boxX0, boxY0), (boxX1, boxY1)], radius=1, fill='white', outline='blue')
 
-        image_buffer = BytesIO()
-        image.save(image_buffer, format='JPEG')
-        image_buffer.seek(0)
+            font = ImageFont.truetype("DejaVuSans-Bold.ttf", 48)
+            text = f"Ticket #{ticket}"
+            txtW, txtH = draw.textsize(text, font=font)
+            txtX, txtY = boxX1 - boxWX + (boxWX - txtW) // 2, boxY1 - boxHX + (boxHX - txtH) // 2
+            draw.text((txtX, txtY), text, fill='black', font=font)
 
-        requestImage = image_buffer.getvalue()
-        if rsize and not objTicket.send:
-            emailTicket = obj.prize
-            image64 = base64.b64encode(requestImage).decode('utf-8')
-            sendEmailTicket('email/ticket.html',f'Loteria {emailTicket}-USD - Ticket!', request.user.email, image64, voucher)
+            image_buffer = BytesIO()
+            image.save(image_buffer, format='JPEG')
+            image_buffer.seek(0)
 
-            objTicket.send = True
-            objTicket.save()
+            requestImage = image_buffer.getvalue()
+            if rsize and not objTicket.send:
+                emailTicket = obj.prize
+                image64 = base64.b64encode(requestImage).decode('utf-8')
+                sendEmailTicket('email/ticket.html',f'Loteria {emailTicket}-USD - Ticket!', request.user.email, image64, voucher)
 
-        return HttpResponse(requestImage, content_type='image/jpeg')
+                objTicket.send = True
+                objTicket.save()
+
+            return HttpResponse(requestImage, content_type='image/jpeg')
+        except Exception as e:
+            eDate = timezone.now().strftime("%Y-%m-%d %H:%M")
+            with open(os.path.join(settings.BASE_DIR, 'logs/core.log'), 'a') as f:
+                f.write("fetchHistoryMiniLottery {} --> Error: {}\n".format(eDate, str(e)))
+            return Response({'error': 'NotFound List MiniLottery.'}, status=status.HTTP_404_NOT_FOUND)

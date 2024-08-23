@@ -19,7 +19,7 @@ def getMiniLottery():
 def getTickets(minilottery):
     return list(TicketsMiniLottery.objects.filter(minilottery=minilottery).values_list('ticket', flat=True))
 
-def geAviableTickets(lottery):
+def geAviableTickets(minilottery):
     minilottery = getMiniLottery()
     aviable_tickets = [str(i).zfill(len(str(minilottery.tickets))) for i in range((minilottery.tickets+1))]
     queryset = getTickets(minilottery)
