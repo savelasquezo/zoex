@@ -178,7 +178,7 @@ class makeTicketMiniLottery(generics.GenericAPIView):
             obj = MiniLottery.objects.get(is_active=True)
             url = obj.mfile.url if rsize else obj.file.url
 
-            absoluteURL = os.path.join(str(settings.MEDIA_ROOT) + url)
+            absoluteURL = os.path.join(str(settings.MEDIA_BASE) + url)
             image = Image.open(absoluteURL)
             if image.mode != 'RGB':
                 image = image.convert('RGB')
