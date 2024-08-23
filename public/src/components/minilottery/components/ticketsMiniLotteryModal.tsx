@@ -159,7 +159,7 @@ const TicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
             'Authorization': `JWT ${session?.user?.accessToken}`,
           }
         };
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery/?voucher=${data.apiVoucher}&rsize=false`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery?voucher=${data.apiVoucher}&rsize=false`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
@@ -175,7 +175,7 @@ const TicketsMiniLotteryModal: React.FC<SessionModal> = ({ closeModal, session  
         });
 
 
-        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery/?voucher=${data.apiVoucher}&rsize=true`, requestOptions)
+        await fetch(`${process.env.NEXT_PUBLIC_APP_API_URL}/app/minilottery/make-ticket-minilottery?voucher=${data.apiVoucher}&rsize=true`, requestOptions)
           .then(response => {
             if (!response.ok) {
               throw new Error('Error al hacer la solicitud');
