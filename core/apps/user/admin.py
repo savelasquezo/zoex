@@ -179,7 +179,7 @@ class UserAccountAdmin(BaseUserAdmin, SimpleHistoryAdmin):
         return fieldsets
 
     def get_readonly_fields(self, request, obj=None):
-        return ['username','email','uuid','phone','referred','location','billing']
+        return ['uuid','phone','referred','location','billing']
 
 
 admin.site.register(models.UserAccount, UserAccountAdmin)
