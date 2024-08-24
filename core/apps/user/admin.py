@@ -178,8 +178,8 @@ class UserAccountAdmin(BaseUserAdmin, SimpleHistoryAdmin):
         self.inlines = [WithdrawalsInline, InvoiceInline,FeesAccountInline]
         return fieldsets
 
-    def get_readonly_fields(self, request, obj=None):
-        return ['uuid','phone','referred','location','billing']
+    # def get_readonly_fields(self, request, obj=None):
+    #     return ['uuid','phone','referred','location','billing']
 
 
 admin.site.register(models.UserAccount, UserAccountAdmin)
