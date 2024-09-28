@@ -62,7 +62,8 @@ def signalMiniLottery(sender, instance, **kwargs):
             user.save()
 
             #Create New Lottery
-            MiniLottery.objects.create(file=instance.file,mfile=instance.mfile)
+            newMiniLottery = "X0" + str(101 + instance.id)
+            MiniLottery.objects.create(minilottery=newMiniLottery,file=instance.file,mfile=instance.mfile)
             obj.is_active = True
             obj.save()
 

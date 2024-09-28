@@ -14,7 +14,7 @@ class TicketsMiniLotteryInline(admin.StackedInline):
     fieldsets = (
         (" ", {"fields": (
             ('uuid','ticket','email'),
-            ('date','voucher'),
+            ('date','voucher','state'),
                 )
             }
         ),
@@ -79,15 +79,9 @@ class MiniLotteryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        getWinner = TicketsMiniLottery.objects.filter(minilottery=obj,ticket=obj.winner, state=True)
+        getWinner = TicketsMiniLottery.objects.filter(minilottery=obj,ticket=obj.winner)
         if getWinner.exists():
             username = UserAccount.objects.get(email=getWinner.first().email).username
             messages.warning(request, f'¡Advertencia! ¡El Usuario {username} ha Ganado!')
-
-        else:
-            messages.success(request, f'¡El Sorteo no ha seleccionado ningun ganador!')
-
-        super(MiniLotteryAdmin, self).save_model(request, obj, form, change)
-
 
 admin.site.register(MiniLottery, MiniLotteryAdmin)

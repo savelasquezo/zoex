@@ -74,47 +74,46 @@ export default function Home() {
 
   return (
     <SessionProvider >
-      <Header />
-      <main className='w-full h-full overflow-x-hidden bg-slate-800'>
-        <Slider />
-        <div className="w-full flex flex-col gap-y-4 p-8">
-          <Lottery />
-          <MiniLottery />
-          <Giveaways />
-        </div>
-        <div className='mb-10'>
-          {/* <History /> */}
-        </div>
-      </main>
-      <Video/>
-      <WhatsAppWidget
-            phoneNo={`57${info?.phone}`}
-            position="left"
-            widgetWidth="360px"
-            widgetWidthMobile="360px"
-            autoOpen={false}
-            autoOpenTimer={5000}
-            messageBox={true}
-            messageBoxTxt="Hola Zoexbet, Necesito Informacion"
-            iconSize="40"
-            iconColor="white"
-            iconBgColor="#25d366"
-            headerIcon={`/assets/image/logoX.webp`}
-            headerIconColor="red"
-            headerTxtColor="black"
-            headerBgColor="#25d366"
-            headerTitle="ZoexBet"
-            headerCaption="Online"
-            bodyBgColor="#ffff"
-            chatPersonName="Support"
-            chatMessage={<>¡Bienvenido a Zoexbet! 👋 <br /><br /> ¿Como puedo ayudarte?</>}
-            footerBgColor="#999"
-            placeholder="Escribe un Mensaje"
-            btnBgColor="#25d366"
-            btnTxt="Chatear Ahora"
-            btnTxtColor="black"
-        />
-      <Footer />
+      <div>
+        <Header />
+        <section className='w-full h-full overflow-x-hidden bg-slate-800'>
+          <Slider />
+          <div className="w-full flex flex-col gap-y-4 p-8">
+            <Lottery />
+            <MiniLottery />
+            <Giveaways />
+          </div>
+        </section>
+        <Video/>
+        <WhatsAppWidget
+              phoneNo={`57${info?.phone}`}
+              position="left"
+              widgetWidth="360px"
+              widgetWidthMobile="360px"
+              autoOpen={false}
+              autoOpenTimer={5000}
+              messageBox={true}
+              messageBoxTxt="Hola Zoexbet, Necesito Informacion"
+              iconSize="40"
+              iconColor="white"
+              iconBgColor="#25d366"
+              headerIcon={`/assets/image/logoX.webp`}
+              headerIconColor="red"
+              headerTxtColor="black"
+              headerBgColor="#25d366"
+              headerTitle="ZoexBet"
+              headerCaption="Online"
+              bodyBgColor="#ffff"
+              chatPersonName="Support"
+              chatMessage={<>¡Bienvenido a Zoexbet! 👋 <br /><br /> ¿Como puedo ayudarte?</>}
+              footerBgColor="#999"
+              placeholder="Escribe un Mensaje"
+              btnBgColor="#25d366"
+              btnTxt="Chatear Ahora"
+              btnTxtColor="black"
+          />
+        <Footer />
+      </div>
     </SessionProvider>
   );
 }

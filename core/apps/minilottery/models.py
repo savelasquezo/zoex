@@ -15,7 +15,7 @@ def ImageUploadTo(instance, filename):
 class MiniLottery(models.Model):
 
     minilottery = models.CharField(_("ID"), max_length=128, unique=True, null=False, blank=False)
-    prize = models.IntegerField(_("Acumulado"), default=500, null=False, blank=False, help_text="$Acumulado Valor (USD)")
+    prize = models.IntegerField(_("Acumulado"), default=250, null=False, blank=False, help_text="$Acumulado Valor (USD)")
 
     file = models.ImageField(_("Banner"), upload_to=ImageUploadTo, max_length=32, null=False, blank=False, 
             help_text="Width-(1440px) - Height-(600px)")
@@ -94,7 +94,7 @@ class TicketsMiniLottery(models.Model):
 
 
 class HistoryMiniLottery(models.Model):
-    minilottery = models.CharField(_("ID"), max_length=128, unique=True, null=False, blank=False)
+    minilottery = models.CharField(_("ID"), max_length=128, null=False, blank=False)
 
     winner = models.CharField (_("Ticket"), max_length=4, null=True, blank=True, help_text="#Ticket Ganador")
 
@@ -105,7 +105,6 @@ class HistoryMiniLottery(models.Model):
 
     stream = models.URLField(_("Link-Stream"), max_length=128, blank=True, null=True)
     date_results = models.DateField(_("Fecha"), default=timezone.now)
-    is_active = models.BooleanField(_("¿Estado?"),default=False)
 
     def __str__(self):
         return f"{self.minilottery}"

@@ -180,6 +180,8 @@ class makeTicketMiniLottery(generics.GenericAPIView):
 
             absoluteURL = os.path.join(str(settings.MEDIA_BASE) + url)
             image = Image.open(absoluteURL)
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
             draw = ImageDraw.Draw(image)
 
             pndX = 110 if rsize else 80

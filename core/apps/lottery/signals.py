@@ -62,7 +62,8 @@ def signalLottery(sender, instance, **kwargs):
             user.save()
 
             #Create New Lottery
-            Lottery.objects.create(file=instance.file,mfile=instance.mfile)
+            newLottery = "X0" + str(101 + instance.id)
+            Lottery.objects.create(lottery=newLottery,file=instance.file,mfile=instance.mfile)
             obj.is_active = True
             obj.save()
 
@@ -78,11 +79,10 @@ def signalLottery(sender, instance, **kwargs):
 
     finally:
         #Delete current ticket without winner
-        if not getWinner.exists():
+        if instance.winner is not None and not getWinner.exists():
             instance.winner = ""
             instance.save()
         post_save.connect(signalLottery, sender=Lottery)
-
 
 
 @receiver(post_save, sender=TicketsLottery)

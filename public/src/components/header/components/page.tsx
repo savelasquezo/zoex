@@ -9,7 +9,7 @@ import { SessionInfo } from '@/lib/types/types';
 
 const Header: React.FC<SessionInfo> = ({ session  }) => {
   return (
-    <header className="bg-gray-900 px-6 md:px-4 lg:px-2 py-2.5 h-14">
+    <section className="bg-gray-900 px-6 md:px-4 lg:px-2 py-2.5 h-14">
       <KickModal/>
       <div className="flex flex-row justify-between items-center">
         <Link href="#" className="inline-flex text-center justify-center items-center w-32">
@@ -19,7 +19,7 @@ const Header: React.FC<SessionInfo> = ({ session  }) => {
           <Auth session={session} />
         </Suspense>
       </div>
-  </header>
+  </section>
   );
 };
 

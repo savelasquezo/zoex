@@ -184,7 +184,6 @@ class makeTicketLottery(generics.GenericAPIView):
                 image = image.convert('RGB')
             draw = ImageDraw.Draw(image)
 
-
             pndX = 110 if rsize else 80
             pndY = 150 if rsize else 20
 
